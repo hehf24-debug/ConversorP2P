@@ -239,40 +239,30 @@
     const netDisplay = document.getElementById('netDisplay');
     const rateInfo = document.getElementById('rateInfo');
 
-    // --- CONFIGURACIÓN DE COTIZAVE ---
-    const COTIZAVE_API_KEY = "ctz_live_BBoYrN4yrqT9oawx2BvcGq1aFU1QYWt5crRnyX";
+    // --- CONFIGURACIÓN DEL SERVIDOR PRIVADO (TU WORKER) ---
+    // La clave ya NO está aquí. Está segura en Cloudflare.
+    const MI_PROXY = "https://conversor-proxy.hehf24.workers.dev/";
 
     async function fetchBinanceRate(currency) {
         try {
-            // Endpoint de Cotizave para tasas de Binance
-            const response = await fetch('https://api.cotizave.com/v1/fx/rates', {
-                headers: {
-                    'X-API-Key': COTIZAVE_API_KEY,
-                    'Accept': 'application/json'
-                }
-            });
+            // Hacemos la petición a tu Worker. Él se encarga de todo.
+            const response = await fetch(MI_PROXY);
 
             if (!response.ok) {
-                throw new Error("Error de conexión con Cotizave.");
+                throw new Error("Error de conexión con el servidor privado.");
             }
 
             const data = await response.json();
             
-            // Buscamos la tasa de Binance P2P (usualmente la mejor referencia)
-            // Nota: La estructura exacta puede variar, buscamos un objeto que contenga 'binance' y 'p2p'
+            // Buscamos la tasa de Binance de forma flexible
             const binanceRate = data.rates.find(r => 
-                r.market.toLowerCase().includes('binance') && 
-                r.type.toLowerCase().includes('p2p')
+                r.market && r.market.toLowerCase().includes('binance')
             );
             
             if (binanceRate && binanceRate.ask) {
-                // Usamos el precio de venta (ask) para saber a cuánto nos venden USDT
                 return { rate: binanceRate.ask, source: 'Cotizave (Binance P2P)' };
             } else {
-                // Si no encuentra 'binance' exacto, intenta con la primera tasa disponible de VES
-                const fallback = data.rates.find(r => r.currency === 'VES');
-                if(fallback) return { rate: fallback.ask, source: 'Cotizave (Fallback)' };
-                throw new Error("No se encontró la tasa en la respuesta.");
+                throw new Error("No se encontró la tasa de Binance en la respuesta.");
             }
         } catch (error) {
             console.error("Error detallado:", error);
