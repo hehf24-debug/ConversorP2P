@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Conversor P2P — Cambia fácil</title>
+    <meta name="theme-color" content="#1a1a1a">
+    <style>
+        :root {
+            --bg: #121212;
+            --card: #1e1e1e;
+            --accent: #22c55e; /* Verde para "acción" */
+            --text: #e0e0e0;
+            --muted: #a0a0a0;
+            --border: #333;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px;
+        }
+        .app-container {
+            width: 100%;
+            max-width: 400px;
+            background-color: var(--card);
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        .header {
+            background: linear-gradient(135deg, #1f2937, #111827);
+            padding: 25px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+            color: white;
+        }
+        .header p {
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+        .content {
+            padding: 20px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background-color: #2a2a2a;
+            color: white;
+            font-size: 1.1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .input-group input:focus {
+            border-color: var(--accent);
+        }
+        .row {
+            display: flex;
+            gap: 10px;
+        }
+        .row .input-group {
+            flex: 1;
+        }
+        .btn-main {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            background-color: var(--accent);
+            color: #000;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: opacity 0.2s;
+        }
+        .btn-main:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .result-card {
+            margin-top: 20px;
+            background-color: #0f172a;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #334155;
+            display: none;
+        }
+        .result-card h2 {
+            font-size: 0.9rem;
+            color: var(--muted);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+        .data-row span:last-child {
+            font-weight: 600;
+        }
+        .total-row {
+            border-top: 1px solid #334155;
+            padding-top: 15px;
+            margin-top: 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+        .rate-info {
+            font-size: 0.75rem;
+            color: var(--muted);
+            text-align: center;
+            margin-top: 10px;
+        }
+        .error-msg {
+            color: #f87171;
+            font-size: 0.85rem;
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+        }
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0,0,0,0.3);
+            border-radius: 50%;
+            border-top-color: #000;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="header">
+        <h1>Conversor P2P</h1>
+        <p>Calcula tus USDT al instante</p>
+    </div>
+    <div class="content">
+        <div class="input-group">
+            <label>¿Cuánto dinero quieres cambiar?</label>
+            <input type="number" id="amountInput" placeholder="Ej: 100" inputmode="decimal">
+        </div>
+        
+        <div class="row">
+            <div class="input-group">
+                <label>Moneda que tienes</label>
+                <select id="fromCurrency">
+                    <option value="USD">USD (Dólares)</option>
+                    <option value="VES" selected>VES (Bolívares)</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Quieres recibir</label>
+                <select id="toCurrency">
+                    <option value="USDT" selected>USDT</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="input-group" style="margin-top: 10px;">
+            <label>Comisión de servicio (Opcional)</label>
+            <input type="number" id="commissionInput" placeholder="Ej: 2" value="0" step="0.1">
+            <small style="color: var(--muted); font-size: 0.75rem; display: block; margin-top: 4px;">Porcentaje que se descuenta del total (ej: 2 para 2%).</small>
+        </div>
+
+        <button class="btn-main" id="calculateBtn">Calcular Tasa Real</button>
+        
+        <div id="errorMsg" class="error-msg"></div>
+
+        <div class="result-card" id="resultCard">
+            <h2>Resultado de la operación</h2>
+            <div class="data-row">
+                <span>Tasa Binance P2P:</span>
+                <span id="rateDisplay">-</span>
+            </div>
+            <div class="data-row">
+                <span>Total bruto:</span>
+                <span id="grossDisplay">-</span>
+            </div>
+            <div class="data-row">
+                <span>Comisión (<span id="commPercent">0</span>%):</span>
+                <span id="commissionDisplay">-</span>
+            </div>
+            <div class="data-row total-row">
+                <span>Recibes:</span>
+                <span id="netDisplay">-</span>
+            </div>
+            <div class="rate-info" id="rateInfo">Tasa actualizada</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const amountInput = document.getElementById('amountInput');
+    const fromCurrency = document.getElementById('fromCurrency');
+    const commissionInput = document.getElementById('commissionInput');
+    const calculateBtn = document.getElementById('calculateBtn');
+    const errorMsg = document.getElementById('errorMsg');
+    const resultCard = document.getElementById('resultCard');
+    
+    // Elementos de resultado
+    const rateDisplay = document.getElementById('rateDisplay');
+    const grossDisplay = document.getElementById('grossDisplay');
+    const commissionDisplay = document.getElementById('commissionDisplay');
+    const commPercent = document.getElementById('commPercent');
+    const netDisplay = document.getElementById('netDisplay');
+    const rateInfo = document.getElementById('rateInfo');
+
+    // --- CONFIGURACIÓN DE API ---
+    // 1. Si usas Cotizave (Recomendado), pon tu API Key aquí:
+    const COTIZAVE_API_KEY = ""; // <--- PON TU CLAVE AQUÍ
+    
+    // 2. Si no tienes Cotizave, usaremos un proxy público de respaldo para Binance.
+    const BINANCE_PROXY = "https://api.allorigins.win/raw?url=";
+
+    async function fetchBinanceRate(amount, currency) {
+        // Si el usuario tiene una API Key de Cotizave, la usamos (es más estable).
+        if (COTIZAVE_API_KEY) {
+            try {
+                const response = await fetch('https://api.cotizave.com/v1/fx/rates', {
+                    headers: { 'X-API-Key': COTIZAVE_API_KEY }
+                });
+                const data = await response.json();
+                // Buscamos la tasa de Binance P2P para VES
+                const binanceRate = data.rates.find(r => r.market === 'binance_p2p' && r.quote === 'VES');
+                if (binanceRate) {
+                    return { rate: binanceRate.ask, source: 'Cotizave API' };
+                }
+            } catch (e) {
+                console.warn("Falló Cotizave, usando respaldo Binance directo.");
+            }
+        }
+
+        // Respaldo: Consulta directa a Binance P2P (usando proxy para evitar CORS)
+        const tradeType = (currency === 'VES') ? 'BUY' : 'SELL'; // Si tienes VES, compras USDT (BUY).
+        // Nota: La API de Binance usa 'transAmount' para filtrar por monto exacto.
+        const url = `https://www.binance.com/bapi/c2c/v1/public/c2c/agent/ad-list?fiat=VES&asset=USDT&tradeType=${tradeType}&limit=1`;
+        
+        const response = await fetch(BINANCE_PROXY + encodeURIComponent(url));
+        const data = await response.json();
+        
+        if (data && data.data && data.data.length > 0) {
+            return { rate: parseFloat(data.data[0].adv.price), source: 'Binance P2P (Tiempo Real)' };
+        } else {
+            throw new Error("No se pudo obtener la tasa de Binance.");
+        }
+    }
+
+    calculateBtn.addEventListener('click', async () => {
+        const amount = parseFloat(amountInput.value);
+        const currency = fromCurrency.value;
+        const commission = parseFloat(commissionInput.value) || 0;
+
+        if (!amount || amount <= 0) {
+            errorMsg.textContent = "Por favor, ingresa un monto válido.";
+            errorMsg.style.display = 'block';
+            return;
+        }
+
+        errorMsg.style.display = 'none';
+        resultCard.style.display = 'none';
+        calculateBtn.disabled = true;
+        calculateBtn.innerHTML = '<span class="spinner"></span> Buscando tasa...';
+
+        try {
+            const rateData = await fetchBinanceRate(amount, currency);
+            const rate = rateData.rate;
+            
+            let grossUSDT = 0;
+            let displayRate = "";
+
+            if (currency === 'VES') {
+                // Si tengo VES, divido entre la tasa de compra de USDT
+                grossUSDT = amount / rate;
+                displayRate = `1 USDT = ${rate.toFixed(2)} VES`;
+            } else {
+                // Si tengo USD, asumimos que la tasa es 1:1 con USDT (o usamos la tasa de venta si es necesario)
+                // Para simplificar, si tienes USD, el bruto en USDT es el mismo monto.
+                grossUSDT = amount; 
+                displayRate = `1 USDT ≈ 1 USD (Tasa P2P: ${rate.toFixed(2)} VES)`;
+            }
+
+            const commissionAmount = grossUSDT * (commission / 100);
+            const netUSDT = grossUSDT - commissionAmount;
+
+            // Actualizar UI
+            rateDisplay.textContent = displayRate;
+            grossDisplay.textContent = `${grossUSDT.toFixed(2)} USDT`;
+            commPercent.textContent = commission;
+            commissionDisplay.textContent = `- ${commissionAmount.toFixed(2)} USDT`;
+            netDisplay.textContent = `${netUSDT.toFixed(2)} USDT`;
+            rateInfo.textContent = `Fuente: ${rateData.source} • Actualizado ahora`;
+
+            resultCard.style.display = 'block';
+
+        } catch (error) {
+            errorMsg.textContent = "Error al obtener la tasa. Revisa tu conexión o intenta de nuevo en un minuto.";
+            errorMsg.style.display = 'block';
+        } finally {
+            calculateBtn.disabled = false;
+            calculateBtn.textContent = 'Calcular Tasa Real';
+        }
+    });
+
+    // Actualizar automáticamente si cambian la moneda
+    fromCurrency.addEventListener('change', () => {
+        if (amountInput.value) {
+            calculateBtn.click();
+        }
+    });
+</script>
+</body>
+</html>
