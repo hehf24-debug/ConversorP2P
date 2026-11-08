@@ -14,7 +14,7 @@
             --muted: #a0a0a0;
             --border: #333;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent;}
         body {
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg);
@@ -24,6 +24,7 @@
             align-items: center;
             min-height: 100vh;
             padding: 15px;
+            padding-top: calc(15px + env(safe-area-inset-top));
         }
         .app-container {
             width: 100%;
@@ -72,7 +73,7 @@
             outline: none;
             transition: border-color 0.2s;
         }
-        .input-group input:focus {
+        .input-group input:focus, .input-group select:focus {
             border-color: var(--accent);
         }
         .row {
@@ -170,15 +171,15 @@
     <div class="content">
         <div class="input-group">
             <label>¿Cuánto dinero quieres cambiar?</label>
-            <input type="number" id="amountInput" placeholder="Ej: 100" inputmode="decimal">
+            <input type="number" id="amountInput" placeholder="Ej: 1000" inputmode="decimal">
         </div>
         
         <div class="row">
             <div class="input-group">
                 <label>Moneda que tienes</label>
                 <select id="fromCurrency">
-                    <option value="USD">USD (Dólares)</option>
                     <option value="VES" selected>VES (Bolívares)</option>
+                    <option value="USD">USD (Dólares)</option>
                 </select>
             </div>
             <div class="input-group">
@@ -217,7 +218,7 @@
                 <span>Recibes:</span>
                 <span id="netDisplay">-</span>
             </div>
-            <div class="rate-info" id="rateInfo">Tasa actualizada</div>
+            <div class="rate-info" id="rateInfo">Tasa actualizada en tiempo real</div>
         </div>
     </div>
 </div>
@@ -238,37 +239,23 @@
     const netDisplay = document.getElementById('netDisplay');
     const rateInfo = document.getElementById('rateInfo');
 
-    // --- CONFIGURACIÓN DE API ---
-    // 1. Si usas Cotizave (Recomendado), pon tu API Key aquí:
-    const COTIZAVE_API_KEY = ""; // <--- PON TU CLAVE AQUÍ
-    
-    // 2. Si no tienes Cotizave, usaremos un proxy público de respaldo para Binance.
-    const BINANCE_PROXY = "https://api.allorigins.win/raw?url=";
+    // --- CONFIGURACIÓN DE TU PUENTE PRIVADO ---
+    const MI_PROXY = "https://conversor-proxy.hehf24.workers.dev/?url=";
 
     async function fetchBinanceRate(amount, currency) {
-        // Si el usuario tiene una API Key de Cotizave, la usamos (es más estable).
-        if (COTIZAVE_API_KEY) {
-            try {
-                const response = await fetch('https://api.cotizave.com/v1/fx/rates', {
-                    headers: { 'X-API-Key': COTIZAVE_API_KEY }
-                });
-                const data = await response.json();
-                // Buscamos la tasa de Binance P2P para VES
-                const binanceRate = data.rates.find(r => r.market === 'binance_p2p' && r.quote === 'VES');
-                if (binanceRate) {
-                    return { rate: binanceRate.ask, source: 'Cotizave API' };
-                }
-            } catch (e) {
-                console.warn("Falló Cotizave, usando respaldo Binance directo.");
-            }
+        // Si el usuario tiene VES, quiere COMPRAR USDT (tradeType=BUY).
+        const tradeType = (currency === 'VES') ? 'BUY' : 'SELL'; 
+        
+        // API oficial de Binance P2P (limitada al mejor anuncio)
+        const targetUrl = `https://www.binance.com/bapi/c2c/v1/public/c2c/agent/ad-list?fiat=VES&asset=USDT&tradeType=${tradeType}&limit=1`;
+        
+        // Llamamos a nuestro puente privado
+        const response = await fetch(MI_PROXY + encodeURIComponent(targetUrl));
+        
+        if (!response.ok) {
+            throw new Error("Error de conexión con el puente.");
         }
 
-        // Respaldo: Consulta directa a Binance P2P (usando proxy para evitar CORS)
-        const tradeType = (currency === 'VES') ? 'BUY' : 'SELL'; // Si tienes VES, compras USDT (BUY).
-        // Nota: La API de Binance usa 'transAmount' para filtrar por monto exacto.
-        const url = `https://www.binance.com/bapi/c2c/v1/public/c2c/agent/ad-list?fiat=VES&asset=USDT&tradeType=${tradeType}&limit=1`;
-        
-        const response = await fetch(BINANCE_PROXY + encodeURIComponent(url));
         const data = await response.json();
         
         if (data && data.data && data.data.length > 0) {
@@ -306,10 +293,9 @@
                 grossUSDT = amount / rate;
                 displayRate = `1 USDT = ${rate.toFixed(2)} VES`;
             } else {
-                // Si tengo USD, asumimos que la tasa es 1:1 con USDT (o usamos la tasa de venta si es necesario)
-                // Para simplificar, si tienes USD, el bruto en USDT es el mismo monto.
+                // Si tengo USD, el bruto en USDT es el mismo monto (1:1 aprox)
                 grossUSDT = amount; 
-                displayRate = `1 USDT ≈ 1 USD (Tasa P2P: ${rate.toFixed(2)} VES)`;
+                displayRate = `1 USDT ≈ 1 USD`;
             }
 
             const commissionAmount = grossUSDT * (commission / 100);
@@ -321,12 +307,13 @@
             commPercent.textContent = commission;
             commissionDisplay.textContent = `- ${commissionAmount.toFixed(2)} USDT`;
             netDisplay.textContent = `${netUSDT.toFixed(2)} USDT`;
-            rateInfo.textContent = `Fuente: ${rateData.source} • Actualizado ahora`;
+            rateInfo.textContent = `Fuente: Tu servidor privado • Actualizado ahora`;
 
             resultCard.style.display = 'block';
 
         } catch (error) {
-            errorMsg.textContent = "Error al obtener la tasa. Revisa tu conexión o intenta de nuevo en un minuto.";
+            console.error(error);
+            errorMsg.textContent = "Error al obtener la tasa. Revisa tu conexión o intenta de nuevo.";
             errorMsg.style.display = 'block';
         } finally {
             calculateBtn.disabled = false;
