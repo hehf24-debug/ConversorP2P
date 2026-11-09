@@ -39,6 +39,7 @@
         .modal-content p { font-size: 0.9rem; color: var(--muted); margin-bottom: 15px; }
         .payment-data { background: #2a2a2a; padding: 15px; border-radius: 10px; margin-bottom: 15px; text-align: left; font-size: 0.9rem; line-height: 1.6;}
         .payment-data strong { color: white; }
+        .price-tag { color: var(--accent); font-size: 1.2rem; font-weight: bold; display: block; margin-bottom: 5px; }
         .btn-whatsapp { display: block; width: 100%; padding: 15px; background-color: #25D366; color: white; text-decoration: none; border-radius: 10px; font-weight: bold; margin-bottom: 10px; }
         .btn-close { background: transparent; border: none; color: var(--muted); cursor: pointer; font-size: 0.9rem; text-decoration: underline; }
     </style>
@@ -81,10 +82,11 @@
 
 <div class="modal-overlay" id="paymentModal">
     <div class="modal-content">
-        <h3>Desbloquear Consultas VIP</h3>
-        <p>Realiza tu pago por cualquiera de estos métodos y envía el comprobante:</p>
+        <h3>Acceso VIP (30 Días)</h3>
+        
         <div class="payment-data">
-            <p style="margin-bottom: 5px;"><strong>Pago Móvil:</strong></p>
+            <span class="price-tag">Precio: 4$ (Tasa BCV) o 3 USDT</span>
+            <p style="margin-top: 10px; margin-bottom: 5px;"><strong>Pago Móvil:</strong></p>
             <p style="margin-bottom: 10px;">
                 Teléfono: <b>04124166003</b><br>
                 C.I: <b>22.927.162</b><br>
@@ -92,10 +94,12 @@
                 • Venezuela (0102)<br>
                 • Banesco (0134)
             </p>
+            
             <p style="margin-bottom: 5px;"><strong>Binance Pay:</strong></p>
             <p>UID: <b>72597924</b></p>
         </div>
-        <a href="https://wa.me/584124166003?text=Hola,%20acabo%20de%20realizar%20el%20pago%20para%20desbloquear%20el%20modo%20VIP%20en%20ConversorP2P.%20Aqu%C3%AD%20est%C3%A1%20mi%20comprobante:" target="_blank" class="btn-whatsapp">
+        
+        <a href="https://wa.me/584124166003?text=Hola,%20quiero%20comprar%20el%20acceso%20VIP%20de%2030%20d%C3%ADas%20para%20ConversorP2P.%20Aqu%C3%AD%20env%C3%ADo%20mi%20comprobante:" target="_blank" class="btn-whatsapp">
             Enviar comprobante por WhatsApp
         </a>
         <button class="btn-close" id="closeModalBtn">Cerrar</button>
@@ -118,7 +122,7 @@
     let queriesUsed = parseInt(localStorage.getItem('conversor_queries') || '0');
     let isPremium = localStorage.getItem('conversor_premium') === 'true';
 
-    // --- CREACIÓN DEL ID ÚNICO DEL DISPOSITIVO ---
+    // --- ID ÚNICO DEL DISPOSITIVO ---
     let deviceId = localStorage.getItem('conversor_device_id');
     if (!deviceId) {
         deviceId = 'dev-' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
@@ -161,8 +165,6 @@
         codeBtn.disabled = true;
 
         try {
-            console.log("Enviando código y dispositivo:", code, deviceId); // Para debug
-            
             const response = await fetch(MI_PROXY + "/validar-codigo", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -174,12 +176,11 @@
             if (data.valido) {
                 isPremium = true;
                 localStorage.setItem('conversor_premium', 'true');
-                alert("¡Código correcto! Bienvenido al modo VIP. Ahora tienes consultas ilimitadas en este teléfono.");
+                alert("¡Código correcto! Bienvenido al modo VIP. Tienes 30 días de consultas ilimitadas en este teléfono.\n\n⚠️ IMPORTANTE: No borres los datos de navegación o perderás tu acceso.");
                 updateLimitUI();
                 paymentModal.style.display = 'none';
             } else {
-                // Muestra el error exacto del worker si existe
-                alert("Error: " + (data.error || "Código inválido. Verifica con el administrador."));
+                alert("Error: " + (data.error || "Código inválido."));
             }
         } catch (error) {
             alert("Error de conexión al validar el código. Intenta de nuevo.");
