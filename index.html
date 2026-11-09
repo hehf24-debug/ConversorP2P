@@ -24,7 +24,7 @@
         .btn-main:disabled { opacity: 0.5; cursor: not-allowed; background-color: #555; color: #aaa; }
         
         .limit-box { background-color: #2a2a2a; border-radius: 8px; padding: 10px; text-align: center; font-size: 0.8rem; color: #fbbf24; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
-        .unlock-btn { background: transparent; border: 1px solid #fbbf24; color: #fbbf24; padding: 5px 10px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; }
+        .unlock-btn { background: transparent; border: 1px solid #fbbf24; color: #fbbf24; padding: 5px 10px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; font-weight: bold;}
         
         .result-card { margin-top: 20px; background-color: #0f172a; border-radius: 12px; padding: 20px; border: 1px solid #334155; display: none; }
         .result-card h2 { font-size: 0.9rem; color: var(--muted); margin-bottom: 15px; text-transform: uppercase; }
@@ -47,7 +47,7 @@
         
         <div class="limit-box">
             <span id="limitText">Consultas gratis: 30/30</span>
-            <button class="unlock-btn" id="unlockBtn">Desbloquear</button>
+            <button class="unlock-btn" id="unlockBtn">Desbloquear VIP</button>
         </div>
 
         <div class="input-group">
@@ -71,10 +71,7 @@
             </div>
         </div>
 
-        <div class="input-group" style="margin-top: 10px;">
-            <label>Comisión de servicio (Opcional)</label>
-            <input type="number" id="commissionInput" placeholder="Ej: 2" value="0" step="0.1">
-        </div>
+        <!-- EL APARTADO DE COMISIÓN HA SIDO ELIMINADO -->
 
         <button class="btn-main" id="calculateBtn">Calcular Tasa Real</button>
         <div id="errorMsg" class="error-msg"></div>
@@ -82,8 +79,6 @@
         <div class="result-card" id="resultCard">
             <h2>Resultado de la operación</h2>
             <div class="data-row"><span>Tasa Binance P2P:</span><span id="rateDisplay">-</span></div>
-            <div class="data-row"><span>Total bruto:</span><span id="grossDisplay">-</span></div>
-            <div class="data-row"><span>Comisión (<span id="commPercent">0</span>%):</span><span id="commissionDisplay">-</span></div>
             <div class="data-row total-row"><span>Recibes:</span><span id="netDisplay">-</span></div>
         </div>
     </div>
@@ -92,29 +87,24 @@
 <script>
     const amountInput = document.getElementById('amountInput');
     const fromCurrency = document.getElementById('fromCurrency');
-    const commissionInput = document.getElementById('commissionInput');
     const calculateBtn = document.getElementById('calculateBtn');
     const errorMsg = document.getElementById('errorMsg');
     const resultCard = document.getElementById('resultCard');
     const rateDisplay = document.getElementById('rateDisplay');
-    const grossDisplay = document.getElementById('grossDisplay');
-    const commissionDisplay = document.getElementById('commissionDisplay');
-    const commPercent = document.getElementById('commPercent');
     const netDisplay = document.getElementById('netDisplay');
     
-    // Variables de control de límites
     const limitText = document.getElementById('limitText');
     const unlockBtn = document.getElementById('unlockBtn');
+    
     const MAX_FREE = 30;
     let queriesUsed = parseInt(localStorage.getItem('conversor_queries') || '0');
     let isPremium = localStorage.getItem('conversor_premium') === 'true';
 
-    const MI_PROXY = "https://conversor-proxy.hehf24.workers.dev/";
+    const MI_PROXY = "https://conversor-proxy.hehf24.workers.dev";
 
-    // Actualizar UI de límites
     function updateLimitUI() {
         if (isPremium) {
-            limitText.innerHTML = "✨ <b>Modo Premium Activado</b>";
+            limitText.innerHTML = "✨ <b>Modo VIP Activado</b>";
             limitText.style.color = "#22c55e";
             unlockBtn.style.display = 'none';
             calculateBtn.disabled = false;
@@ -129,16 +119,37 @@
         }
     }
 
-    unlockBtn.addEventListener('click', () => {
-        const code = prompt("Ingresa tu código de desbloqueo (Lo obtienes apoyando en Ko-fi):");
-        // CÓDIGO MAESTRO PARA VENDER
-        if (code === "CONVERSOR_PRO_2024") {
-            isPremium = true;
-            localStorage.setItem('conversor_premium', 'true');
-            alert("¡Código válido! Ahora tienes consultas ilimitadas.");
-            updateLimitUI();
-        } else if (code !== null) {
-            alert("Código inválido.");
+    // SISTEMA DE DESBLOQUEO CONECTADO AL WORKER
+    unlockBtn.addEventListener('click', async () => {
+        const code = prompt("Para consultas ilimitadas, realiza tu pago por Pago Móvil o Binance Pay al 0412-0000000 (Ejemplo) y recibe tu código VIP.\n\nIngresa tu código aquí:");
+        
+        if (!code || code.trim() === "") return;
+
+        unlockBtn.textContent = "Validando...";
+        unlockBtn.disabled = true;
+
+        try {
+            const response = await fetch(MI_PROXY + "/validar-codigo", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ codigo: code })
+            });
+
+            const data = await response.json();
+
+            if (data.valido) {
+                isPremium = true;
+                localStorage.setItem('conversor_premium', 'true');
+                alert("¡Código correcto! Bienvenido al modo VIP. Ahora tienes consultas ilimitadas.");
+                updateLimitUI();
+            } else {
+                alert("Código inválido o ya utilizado. Verifica con el administrador.");
+            }
+        } catch (error) {
+            alert("Error de conexión al validar el código. Intenta de nuevo.");
+        } finally {
+            unlockBtn.textContent = "Desbloquear VIP";
+            unlockBtn.disabled = false;
         }
     });
 
@@ -147,7 +158,6 @@
 
         const amount = parseFloat(amountInput.value);
         const currency = fromCurrency.value;
-        const commission = parseFloat(commissionInput.value) || 0;
 
         if (!amount || amount <= 0) {
             errorMsg.textContent = "Por favor, ingresa un monto válido.";
@@ -161,6 +171,7 @@
         calculateBtn.innerHTML = '<span class="spinner"></span> Buscando...';
 
         try {
+            // Petición a la ruta principal del Worker (la de las tasas)
             const response = await fetch(MI_PROXY);
             if (!response.ok) throw new Error("Error en puente");
             
@@ -171,18 +182,12 @@
 
             const rate = binanceRate.ask;
             let grossUSDT = currency === 'VES' ? (amount / rate) : amount;
-            const commissionAmount = grossUSDT * (commission / 100);
-            const netUSDT = grossUSDT - commissionAmount;
 
             rateDisplay.textContent = currency === 'VES' ? `1 USDT = ${rate.toFixed(2)} VES` : `1 USDT ≈ 1 USD`;
-            grossDisplay.textContent = `${grossUSDT.toFixed(2)} USDT`;
-            commPercent.textContent = commission;
-            commissionDisplay.textContent = `- ${commissionAmount.toFixed(2)} USDT`;
-            netDisplay.textContent = `${netUSDT.toFixed(2)} USDT`;
+            netDisplay.textContent = `${grossUSDT.toFixed(2)} USDT`;
 
             resultCard.style.display = 'block';
 
-            // Descontar consulta si no es premium
             if (!isPremium) {
                 queriesUsed++;
                 localStorage.setItem('conversor_queries', queriesUsed);
@@ -200,7 +205,6 @@
         }
     });
 
-    // Inicializar
     updateLimitUI();
 </script>
 </body>
