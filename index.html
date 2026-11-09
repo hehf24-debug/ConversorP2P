@@ -3,169 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Conversor P2P — Cambia fácil</title>
+    <title>Conversor P2P</title>
     <meta name="theme-color" content="#0b0f19">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <!-- CONEXIÓN CON LA APP EMPAQUETADA -->
+    <link rel="manifest" href="./manifest.json">
+    <link rel="icon" type="image/svg+xml" href="./icon.svg">
+    <link rel="apple-touch-icon" href="./icon.svg">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <style>
+        /* ... (El mismo CSS que ya tenías de la versión premium) ... */
         :root { 
-            --bg: #0b0f19; 
-            --card: #151b2b; 
-            --accent: #10b981; 
-            --accent-hover: #059669;
-            --text: #f8fafc; 
-            --muted: #94a3b8; 
-            --border: #2a3441; 
-            --warn: #ef4444; 
+            --bg: #0b0f19; --card: #151b2b; --accent: #10b981; --accent-hover: #059669;
+            --text: #f8fafc; --muted: #94a3b8; --border: #2a3441; --warn: #ef4444; 
         }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: 'Outfit', sans-serif;}
-        body { 
-            background-color: var(--bg); 
-            color: var(--text); 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: 100vh; 
-            padding: 15px; 
-            background-image: radial-gradient(circle at top, #1e293b 0%, #0b0f19 60%);
-        }
-        
-        .app-container { 
-            width: 100%; 
-            max-width: 400px; 
-            background-color: var(--card); 
-            border-radius: 24px; 
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); 
-            overflow: hidden; 
-            border: 1px solid var(--border); 
-            position: relative;
-        }
-
-        /* Panel Admin */
+        body { background-color: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 15px; padding-top: calc(15px + env(safe-area-inset-top)); background-image: radial-gradient(circle at top, #1e293b 0%, #0b0f19 60%); }
+        .app-container { width: 100%; max-width: 400px; background-color: var(--card); border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); overflow: hidden; border: 1px solid var(--border); position: relative; }
         .admin-panel { background-color: #1e1b4b; border-bottom: 2px solid #8b5cf6; padding: 12px; display: none; text-align: center; }
         .admin-panel h3 { color: #a78bfa; margin-bottom: 5px; font-size: 0.9rem; font-weight: 700;}
         .admin-panel p { color: white; font-size: 1.1rem; font-weight: 800; }
         .admin-panel small { color: #9ca3af; font-size: 0.7rem; }
-
-        .header { 
-            background: linear-gradient(135deg, #1e293b, #0f172a); 
-            padding: 30px 20px; 
-            text-align: center; 
-            border-bottom: 1px solid var(--border);
-        }
+        .header { background: linear-gradient(135deg, #1e293b, #0f172a); padding: 30px 20px; text-align: center; border-bottom: 1px solid var(--border); }
         .header h1 { font-size: 1.6rem; font-weight: 800; margin-bottom: 5px; color: white; letter-spacing: -0.5px;}
         .header p { font-size: 0.9rem; color: var(--muted); font-weight: 400;}
-        
         .content { padding: 25px 20px; }
         
-        .limit-box { 
-            background-color: rgba(245, 158, 11, 0.1); 
-            border: 1px solid rgba(245, 158, 11, 0.3);
-            border-radius: 12px; 
-            padding: 12px 15px; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            margin-bottom: 20px;
-        }
+        /* BOTÓN DE INSTALAR APP */
+        #installBtn { margin-left: auto; background:var(--accent); border:none; color:#000; padding:8px 13px; border-radius:10px; font-size:.78rem; font-weight:800; cursor:pointer; display: none;}
+        
+        .limit-box { background-color: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 12px; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .limit-box span { font-size: 0.85rem; color: #fbbf24; font-weight: 600;}
-        .unlock-btn { 
-            background: transparent; 
-            border: 1px solid #fbbf24; 
-            color: #fbbf24; 
-            padding: 6px 12px; 
-            border-radius: 8px; 
-            font-size: 0.75rem; 
-            font-weight: 700; 
-            cursor: pointer; 
-            transition: all 0.2s;
-        }
+        .unlock-btn { background: transparent; border: 1px solid #fbbf24; color: #fbbf24; padding: 6px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
         .unlock-btn:hover { background: #fbbf24; color: #000; }
-
         .input-group { margin-bottom: 20px; position: relative;}
         .input-group label { display: block; font-size: 0.8rem; color: var(--muted); margin-bottom: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;}
-        .input-group input { 
-            width: 100%; 
-            padding: 20px; 
-            border-radius: 16px; 
-            border: 2px solid var(--border); 
-            background-color: #0f172a; 
-            color: white; 
-            font-size: 1.5rem; 
-            font-weight: 700;
-            outline: none; 
-            transition: border-color 0.2s; 
-        }
+        .input-group input { width: 100%; padding: 20px; border-radius: 16px; border: 2px solid var(--border); background-color: #0f172a; color: white; font-size: 1.5rem; font-weight: 700; outline: none; transition: border-color 0.2s; }
         .input-group input:focus { border-color: var(--accent); }
-        
-        /* Badge de moneda dentro del input */
-        .currency-badge {
-            position: absolute;
-            right: 20px;
-            bottom: 20px;
-            font-size: 1rem;
-            color: var(--muted);
-            font-weight: 600;
-        }
-
-        .btn-main { 
-            width: 100%; 
-            padding: 18px; 
-            border: none; 
-            border-radius: 16px; 
-            background: linear-gradient(90deg, var(--accent), #34d399); 
-            color: #000; 
-            font-size: 1.1rem; 
-            font-weight: 800; 
-            cursor: pointer; 
-            transition: transform 0.1s, opacity 0.2s; 
-            box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.4);
-        }
+        .currency-badge { position: absolute; right: 20px; bottom: 20px; font-size: 1rem; color: var(--muted); font-weight: 600; }
+        .btn-main { width: 100%; padding: 18px; border: none; border-radius: 16px; background: linear-gradient(90deg, var(--accent), #34d399); color: #000; font-size: 1.1rem; font-weight: 800; cursor: pointer; transition: transform 0.1s, opacity 0.2s; box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.4); }
         .btn-main:active { transform: scale(0.98); }
         .btn-main:disabled { opacity: 0.5; cursor: not-allowed; background: #555; color: #aaa; box-shadow: none;}
-
-        .result-card { 
-            margin-top: 25px; 
-            background: #0f172a; 
-            border-radius: 16px; 
-            padding: 25px; 
-            border: 1px solid var(--border); 
-            display: none; 
-            animation: fadeIn 0.4s ease-out;
-        }
+        .result-card { margin-top: 25px; background: #0f172a; border-radius: 16px; padding: 25px; border: 1px solid var(--border); display: none; animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
         .result-card h2 { font-size: 0.75rem; color: var(--muted); margin-bottom: 15px; font-weight: 600; letter-spacing: 1px;}
         .data-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 0.95rem; color: var(--muted);}
         .data-row span:last-child { font-weight: 600; color: white;}
-        
-        .total-row { 
-            border-top: 1px solid var(--border); 
-            padding-top: 15px; 
-            margin-top: 15px; 
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+        .total-row { border-top: 1px solid var(--border); padding-top: 15px; margin-top: 15px; display: flex; flex-direction: column; align-items: center; }
         .total-row span:first-child { font-size: 0.9rem; color: var(--muted); margin-bottom: 5px;}
         .total-row span:last-child { font-size: 2.5rem; font-weight: 800; color: var(--accent); line-height: 1;}
-
         .error-msg { color: var(--warn); font-size: 0.85rem; text-align: center; margin-top: 15px; display: none; font-weight: 600;}
-        
         .spinner { display: inline-block; width: 20px; height: 20px; border: 3px solid rgba(0,0,0,0.2); border-radius: 50%; border-top-color: #000; animation: spin 1s linear infinite; vertical-align: middle; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        
-        /* Modal VIP */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; padding: 20px; z-index: 1000; }
         .modal-content { background: var(--card); border-radius: 24px; padding: 30px 25px; width: 100%; max-width: 400px; border: 1px solid var(--border); text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);}
         .modal-content h3 { color: white; font-size: 1.3rem; font-weight: 800; margin-bottom: 10px; }
         .modal-content p { font-size: 0.9rem; color: var(--muted); margin-bottom: 20px; }
-        
         .payment-data { background: #0f172a; padding: 20px; border-radius: 16px; margin-bottom: 20px; text-align: left; font-size: 0.9rem; line-height: 1.8; border: 1px solid var(--border);}
         .payment-data strong { color: white; font-weight: 700;}
         .price-tag { color: var(--accent); font-size: 1.4rem; font-weight: 800; display: block; margin-bottom: 10px; text-align: center; background: rgba(16, 185, 129, 0.1); padding: 10px; border-radius: 10px;}
-        
         .btn-whatsapp { display: flex; justify-content: center; align-items: center; gap: 10px; width: 100%; padding: 16px; background-color: #25D366; color: white; text-decoration: none; border-radius: 14px; font-weight: 700; font-size: 1rem; margin-bottom: 15px; border: none; cursor: pointer;}
         .btn-whatsapp:hover { background-color: #20b858; }
         .btn-close { background: transparent; border: none; color: var(--muted); cursor: pointer; font-size: 0.9rem; text-decoration: underline; font-weight: 600;}
@@ -174,7 +75,6 @@
 <body>
 
 <div class="app-container">
-    <!-- PANEL DE ADMINISTRADOR (Oculto por defecto) -->
     <div class="admin-panel" id="adminPanel">
         <h3>👑 Panel de Control (Admin)</h3>
         <p>Consultas a Cotizave: <span id="adminCalls">...</span> / 1,500</p>
@@ -217,29 +117,22 @@
     <div class="modal-content">
         <h3>Acceso VIP Ilimitado</h3>
         <p>Desbloquea consultas ilimitadas y apoya el proyecto.</p>
-        
         <div class="payment-data">
             <span class="price-tag">Precio: 4$ (BCV) o 3 USDT</span>
             <p><strong>Pago Móvil:</strong><br>
             Teléfono: <b>04124166003</b><br>
             C.I: <b>22.927.162</b><br>
             Bancos: <b>Venezuela (0102)</b> y <b>Banesco (0134)</b></p>
-            
             <p style="margin-top: 10px;"><strong>Binance Pay:</strong><br>
             UID: <b>72597924</b></p>
         </div>
-        
         <a href="https://wa.me/584124166003?text=Hola,%20quiero%20comprar%20el%20acceso%20VIP%20ilimitado%20para%20ConversorP2P.%20Aqu%C3%AD%20env%C3%ADo%20mi%20comprobante:" target="_blank" class="btn-whatsapp">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.885-9.885 9.885m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
             Enviar comprobante
         </a>
-        
         <div style="margin-top: 15px;">
-            <button id="codeBtn" style="background: transparent; border: 1px solid var(--border); color: var(--text); padding: 12px; width: 100%; border-radius: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s;">
-                Ya tengo mi código VIP
-            </button>
+            <button id="codeBtn" style="background: transparent; border: 1px solid var(--border); color: var(--text); padding: 12px; width: 100%; border-radius: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Ya tengo mi código VIP</button>
         </div>
-        
         <button class="btn-close" id="closeModalBtn" style="margin-top: 20px;">Cerrar</button>
     </div>
 </div>
@@ -269,17 +162,12 @@
 
     const MI_PROXY = "https://conversor-proxy.hehf24.workers.dev";
 
-    // Panel Admin
     if (window.location.search.includes('admin=true')) {
         document.getElementById('adminPanel').style.display = 'block';
         fetch(MI_PROXY + "/stats")
             .then(res => res.json())
-            .then(data => {
-                document.getElementById('adminCalls').textContent = data.cotizave_calls;
-            })
-            .catch(err => {
-                document.getElementById('adminCalls').textContent = "Error";
-            });
+            .then(data => { document.getElementById('adminCalls').textContent = data.cotizave_calls; })
+            .catch(err => { document.getElementById('adminCalls').textContent = "Error"; });
     }
 
     function updateLimitUI() {
@@ -334,7 +222,6 @@
 
     calculateBtn.addEventListener('click', async () => {
         if (queriesUsed >= MAX_FREE && !isPremium) return;
-
         const amount = parseFloat(amountInput.value);
         if (!amount || amount <= 0) {
             errorMsg.textContent = "Por favor, ingresa un monto válido.";
@@ -350,7 +237,6 @@
         try {
             const response = await fetch(MI_PROXY);
             if (!response.ok) throw new Error("Error de conexión");
-            
             const data = await response.json();
             if (!data.rate) throw new Error("No se recibió la tasa");
 
@@ -359,7 +245,6 @@
 
             rateDisplay.textContent = `${rate.toFixed(2)} VES`;
             netDisplay.textContent = `${grossUSDT.toFixed(2)} USDT`;
-
             resultCard.style.display = 'block';
 
             if (!isPremium) {
@@ -367,7 +252,6 @@
                 localStorage.setItem('conversor_queries', queriesUsed);
                 updateLimitUI();
             }
-
         } catch (error) {
             errorMsg.textContent = "Error de conexión. Intenta de nuevo.";
             errorMsg.style.display = 'block';
@@ -380,6 +264,39 @@
     });
 
     updateLimitUI();
+
+    // --- LÓGICA DE INSTALACIÓN (PWA) ---
+    let deferredPrompt;
+    window.addEventListener("beforeinstallprompt", e => {
+        e.preventDefault();
+        deferredPrompt = e;
+        
+        // Creamos el botón de instalar dinámicamente en el header
+        const header = document.querySelector('.header');
+        const installBtn = document.createElement('button');
+        installBtn.textContent = "📲 Instalar App";
+        installBtn.style = "background:var(--accent); color:#000; border:none; padding:8px 15px; border-radius:10px; font-weight:700; font-size:0.8rem; margin-top:15px; cursor:pointer; display:block; margin-left:auto; margin-right:auto;";
+        
+        installBtn.addEventListener('click', async () => {
+            if (!deferredPrompt) return;
+            deferredPrompt.prompt();
+            await deferredPrompt.userChoice;
+            deferredPrompt = null;
+            installBtn.style.display = 'none';
+        });
+        
+        header.appendChild(installBtn);
+    });
+
+    window.addEventListener("appinstalled", () => {
+        const btn = document.querySelector('.header button');
+        if(btn) btn.style.display = 'none';
+    });
+
+    // --- REGISTRO DEL SERVICE WORKER ---
+    if("serviceWorker" in navigator){
+        window.addEventListener("load", ()=> navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+    }
 </script>
 </body>
 </html>
