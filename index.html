@@ -205,18 +205,18 @@
         calculateBtn.disabled = true;
         calculateBtn.innerHTML = '<span class="spinner"></span> Buscando...';
 
-                try {
-            // Enviamos el monto exacto a nuestro Worker
+        try {
+            // AHORA ENVIAMOS EL MONTO EXACTO AL WORKER
             const response = await fetch(MI_PROXY + "?monto=" + amount);
             
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(errorData.error || "Error en el puente");
+                throw new Error(errorData.error || "Error de conexión");
             }
             
             const data = await response.json();
             
-            // Ahora la respuesta es directa { rate: 1038.70 }
+            // El Worker ahora responde con { rate: 1038.70 }
             if (!data.rate) throw new Error("No se recibió la tasa");
 
             const rate = data.rate;
@@ -226,11 +226,15 @@
             netDisplay.textContent = `${grossUSDT.toFixed(2)} USDT`;
 
             resultCard.style.display = 'block';
-            // ... (el resto del código de restar consultas sigue igual)
+
+            if (!isPremium) {
+                queriesUsed++;
+                localStorage.setItem('conversor_queries', queriesUsed);
+                updateLimitUI();
             }
 
         } catch (error) {
-            errorMsg.textContent = "Error de conexión. Intenta de nuevo.";
+            errorMsg.textContent = error.message || "Error de conexión. Intenta de nuevo.";
             errorMsg.style.display = 'block';
         } finally {
             if (queriesUsed < MAX_FREE || isPremium) {
