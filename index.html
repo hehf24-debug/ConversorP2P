@@ -8,7 +8,6 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
-    <!-- CONEXIÓN CON LA APP EMPAQUETADA -->
     <link rel="manifest" href="./manifest.json">
     <link rel="icon" type="image/svg+xml" href="./icon.svg">
     <link rel="apple-touch-icon" href="./icon.svg">
@@ -17,10 +16,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* ... (El mismo CSS que ya tenías de la versión premium) ... */
         :root { 
             --bg: #0b0f19; --card: #151b2b; --accent: #10b981; --accent-hover: #059669;
             --text: #f8fafc; --muted: #94a3b8; --border: #2a3441; --warn: #ef4444; 
+            --bcv: #3b82f6;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: 'Outfit', sans-serif;}
         body { background-color: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 15px; padding-top: calc(15px + env(safe-area-inset-top)); background-image: radial-gradient(circle at top, #1e293b 0%, #0b0f19 60%); }
@@ -34,9 +33,6 @@
         .header p { font-size: 0.9rem; color: var(--muted); font-weight: 400;}
         .content { padding: 25px 20px; }
         
-        /* BOTÓN DE INSTALAR APP */
-        #installBtn { margin-left: auto; background:var(--accent); border:none; color:#000; padding:8px 13px; border-radius:10px; font-size:.78rem; font-weight:800; cursor:pointer; display: none;}
-        
         .limit-box { background-color: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 12px; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .limit-box span { font-size: 0.85rem; color: #fbbf24; font-weight: 600;}
         .unlock-btn { background: transparent; border: 1px solid #fbbf24; color: #fbbf24; padding: 6px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
@@ -49,17 +45,37 @@
         .btn-main { width: 100%; padding: 18px; border: none; border-radius: 16px; background: linear-gradient(90deg, var(--accent), #34d399); color: #000; font-size: 1.1rem; font-weight: 800; cursor: pointer; transition: transform 0.1s, opacity 0.2s; box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.4); }
         .btn-main:active { transform: scale(0.98); }
         .btn-main:disabled { opacity: 0.5; cursor: not-allowed; background: #555; color: #aaa; box-shadow: none;}
+        
         .result-card { margin-top: 25px; background: #0f172a; border-radius: 16px; padding: 25px; border: 1px solid var(--border); display: none; animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
         .result-card h2 { font-size: 0.75rem; color: var(--muted); margin-bottom: 15px; font-weight: 600; letter-spacing: 1px;}
         .data-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 0.95rem; color: var(--muted);}
         .data-row span:last-child { font-weight: 600; color: white;}
+        
         .total-row { border-top: 1px solid var(--border); padding-top: 15px; margin-top: 15px; display: flex; flex-direction: column; align-items: center; }
         .total-row span:first-child { font-size: 0.9rem; color: var(--muted); margin-bottom: 5px;}
         .total-row span:last-child { font-size: 2.5rem; font-weight: 800; color: var(--accent); line-height: 1;}
+
+        /* NUEVA SECCIÓN BCV */
+        .bcv-card { 
+            margin-top: 15px; 
+            background: rgba(59, 130, 246, 0.1); 
+            border: 1px solid rgba(59, 130, 246, 0.3); 
+            border-radius: 12px; 
+            padding: 15px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
+        }
+        .bcv-title { font-size: 0.75rem; color: #93c5fd; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; font-weight: 600;}
+        .bcv-value { font-size: 1.4rem; font-weight: 800; color: #60a5fa; }
+        .bcv-rate-info { font-size: 0.7rem; color: var(--muted); margin-top: 5px; }
+
         .error-msg { color: var(--warn); font-size: 0.85rem; text-align: center; margin-top: 15px; display: none; font-weight: 600;}
         .spinner { display: inline-block; width: 20px; height: 20px; border: 3px solid rgba(0,0,0,0.2); border-radius: 50%; border-top-color: #000; animation: spin 1s linear infinite; vertical-align: middle; }
         @keyframes spin { to { transform: rotate(360deg); } }
+        
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; padding: 20px; z-index: 1000; }
         .modal-content { background: var(--card); border-radius: 24px; padding: 30px 25px; width: 100%; max-width: 400px; border: 1px solid var(--border); text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);}
         .modal-content h3 { color: white; font-size: 1.3rem; font-weight: 800; margin-bottom: 10px; }
@@ -83,7 +99,7 @@
 
     <div class="header">
         <h1>Conversor P2P</h1>
-        <p>Tasa real de Binance al instante</p>
+        <p>Compara tus bolívares al instante</p>
     </div>
     
     <div class="content">
@@ -98,16 +114,22 @@
             <span class="currency-badge">VES</span>
         </div>
         
-        <button class="btn-main" id="calculateBtn">Calcular Tasa Real</button>
+        <button class="btn-main" id="calculateBtn">Calcular Tasas</button>
         <div id="errorMsg" class="error-msg"></div>
 
         <div class="result-card" id="resultCard">
-            <h2>RESULTADO ESTIMADO</h2>
-            <div class="data-row"><span>Tasa de Referencia P2P</span><span id="rateDisplay">-</span></div>
-            <div class="data-row"><span>Comisión de red</span><span>0%</span></div>
+            <h2>RESULTADO CON BINANCE P2P</h2>
+            <div class="data-row"><span>Tasa Binance P2P</span><span id="rateDisplay">-</span></div>
             <div class="total-row">
-                <span>Recibes</span>
+                <span>Recibes en USDT</span>
                 <span id="netDisplay">0.00 USDT</span>
+            </div>
+
+            <!-- SECCIÓN BCV -->
+            <div class="bcv-card" id="bcvSection" style="display: none;">
+                <span class="bcv-title">Equivalente a Tasa Oficial BCV</span>
+                <span class="bcv-value" id="bcvDisplay">0.00 USD</span>
+                <span class="bcv-rate-info" id="bcvRateDisplay"></span>
             </div>
         </div>
     </div>
@@ -149,6 +171,11 @@
     const paymentModal = document.getElementById('paymentModal');
     const closeModalBtn = document.getElementById('closeModalBtn');
     const codeBtn = document.getElementById('codeBtn');
+
+    // Elementos BCV
+    const bcvSection = document.getElementById('bcvSection');
+    const bcvDisplay = document.getElementById('bcvDisplay');
+    const bcvRateDisplay = document.getElementById('bcvRateDisplay');
 
     const MAX_FREE = 30;
     let queriesUsed = parseInt(localStorage.getItem('conversor_queries') || '0');
@@ -231,20 +258,36 @@
 
         errorMsg.style.display = 'none';
         resultCard.style.display = 'none';
+        bcvSection.style.display = 'none';
         calculateBtn.disabled = true;
         calculateBtn.innerHTML = '<span class="spinner"></span> Buscando...';
 
         try {
             const response = await fetch(MI_PROXY);
             if (!response.ok) throw new Error("Error de conexión");
+            
             const data = await response.json();
-            if (!data.rate) throw new Error("No se recibió la tasa");
+            if (!data.binance_rate) throw new Error("No se recibió la tasa");
 
-            const rate = data.rate;
-            let grossUSDT = amount / rate;
+            // Cálculo Binance
+            const rateBinance = data.binance_rate;
+            let usdtBinance = amount / rateBinance;
 
-            rateDisplay.textContent = `${rate.toFixed(2)} VES`;
-            netDisplay.textContent = `${grossUSDT.toFixed(2)} USDT`;
+            rateDisplay.textContent = `${rateBinance.toFixed(2)} VES`;
+            netDisplay.textContent = `${usdtBinance.toFixed(2)} USDT`;
+
+            // Cálculo BCV (Si el Worker nos envió la tasa)
+            if (data.bcv_rate) {
+                const rateBCV = data.bcv_rate;
+                let usdBCV = amount / rateBCV;
+                
+                bcvDisplay.textContent = `${usdBCV.toFixed(2)} USD`;
+                bcvRateDisplay.textContent = `Tasa BCV: ${rateBCV.toFixed(2)} Bs/USD`;
+                bcvSection.style.display = 'flex'; // Mostramos la sección
+            } else {
+                bcvSection.style.display = 'none'; // Si no hay BCV, la ocultamos
+            }
+
             resultCard.style.display = 'block';
 
             if (!isPremium) {
@@ -258,25 +301,22 @@
         } finally {
             if (queriesUsed < MAX_FREE || isPremium) {
                 calculateBtn.disabled = false;
-                calculateBtn.textContent = 'Calcular Tasa Real';
+                calculateBtn.textContent = 'Calcular Tasas';
             }
         }
     });
 
     updateLimitUI();
 
-    // --- LÓGICA DE INSTALACIÓN (PWA) ---
+    // Lógica PWA
     let deferredPrompt;
     window.addEventListener("beforeinstallprompt", e => {
         e.preventDefault();
         deferredPrompt = e;
-        
-        // Creamos el botón de instalar dinámicamente en el header
         const header = document.querySelector('.header');
         const installBtn = document.createElement('button');
         installBtn.textContent = "📲 Instalar App";
         installBtn.style = "background:var(--accent); color:#000; border:none; padding:8px 15px; border-radius:10px; font-weight:700; font-size:0.8rem; margin-top:15px; cursor:pointer; display:block; margin-left:auto; margin-right:auto;";
-        
         installBtn.addEventListener('click', async () => {
             if (!deferredPrompt) return;
             deferredPrompt.prompt();
@@ -284,16 +324,12 @@
             deferredPrompt = null;
             installBtn.style.display = 'none';
         });
-        
         header.appendChild(installBtn);
     });
-
     window.addEventListener("appinstalled", () => {
         const btn = document.querySelector('.header button');
         if(btn) btn.style.display = 'none';
     });
-
-    // --- REGISTRO DEL SERVICE WORKER ---
     if("serviceWorker" in navigator){
         window.addEventListener("load", ()=> navigator.serviceWorker.register("./sw.js").catch(()=>{}));
     }
