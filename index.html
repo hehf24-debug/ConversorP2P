@@ -14,33 +14,17 @@
         .header h1 { font-size: 1.4rem; margin-bottom: 5px; color: white; }
         .header p { font-size: 0.85rem; color: var(--muted); }
         .content { padding: 20px; }
-        
         .input-group { margin-bottom: 15px; }
         .input-group label { display: block; font-size: 0.8rem; color: var(--muted); margin-bottom: 5px; font-weight: 600; }
         .input-group input { width: 100%; padding: 15px; border-radius: 10px; border: 1px solid var(--border); background-color: #2a2a2a; color: white; font-size: 1.1rem; outline: none; transition: border-color 0.2s; }
         .input-group input:focus { border-color: var(--accent); }
-        
         .row { display: flex; gap: 10px; margin-bottom: 15px; }
         .row .input-group { flex: 1; margin-bottom: 0; }
-        
-        .fixed-value { 
-            width: 100%; 
-            padding: 15px; 
-            border-radius: 10px; 
-            border: 1px solid var(--border); 
-            background-color: #1a1a1a; 
-            color: #888; 
-            font-size: 1.1rem; 
-            text-align: center;
-            font-weight: bold;
-        }
-
+        .fixed-value { width: 100%; padding: 15px; border-radius: 10px; border: 1px solid var(--border); background-color: #1a1a1a; color: #888; font-size: 1.1rem; text-align: center; font-weight: bold; }
         .btn-main { width: 100%; padding: 16px; border: none; border-radius: 12px; background-color: var(--accent); color: #000; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 10px; transition: opacity 0.2s; }
         .btn-main:disabled { opacity: 0.5; cursor: not-allowed; background-color: #555; color: #aaa; }
-        
         .limit-box { background-color: #2a2a2a; border-radius: 8px; padding: 10px; text-align: center; font-size: 0.8rem; color: #fbbf24; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
         .unlock-btn { background: transparent; border: 1px solid #fbbf24; color: #fbbf24; padding: 5px 10px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; font-weight: bold;}
-        
         .result-card { margin-top: 20px; background-color: #0f172a; border-radius: 12px; padding: 20px; border: 1px solid #334155; display: none; }
         .result-card h2 { font-size: 0.9rem; color: var(--muted); margin-bottom: 15px; text-transform: uppercase; }
         .data-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 1rem; }
@@ -49,8 +33,6 @@
         .error-msg { color: var(--warn); font-size: 0.85rem; text-align: center; margin-top: 10px; display: none; }
         .spinner { display: inline-block; width: 20px; height: 20px; border: 3px solid rgba(0,0,0,0.3); border-radius: 50%; border-top-color: #000; animation: spin 1s linear infinite; margin-right: 10px; vertical-align: middle; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        
-        /* Estilos para el modal de pago */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; padding: 20px; z-index: 1000; }
         .modal-content { background: var(--card); border-radius: 15px; padding: 25px; width: 100%; max-width: 400px; border: 1px solid var(--border); text-align: center; }
         .modal-content h3 { color: var(--accent); margin-bottom: 15px; }
@@ -69,17 +51,14 @@
         <p>Calcula tus USDT al instante</p>
     </div>
     <div class="content">
-        
         <div class="limit-box">
             <span id="limitText">Consultas gratis: 30/30</span>
             <button class="unlock-btn" id="unlockBtn">Desbloquear VIP</button>
         </div>
-
         <div class="input-group">
             <label>¿Cuántos Bolívares quieres cambiar?</label>
             <input type="number" id="amountInput" placeholder="Ej: 11000" inputmode="decimal">
         </div>
-        
         <div class="row">
             <div class="input-group">
                 <label>Moneda que tienes</label>
@@ -90,10 +69,8 @@
                 <div class="fixed-value">USDT</div>
             </div>
         </div>
-
         <button class="btn-main" id="calculateBtn">Calcular Tasa Real</button>
         <div id="errorMsg" class="error-msg"></div>
-
         <div class="result-card" id="resultCard">
             <h2>Resultado de la operación</h2>
             <div class="data-row"><span>Tasa Binance P2P:</span><span id="rateDisplay">-</span></div>
@@ -102,12 +79,10 @@
     </div>
 </div>
 
-<!-- MODAL DE PAGO HÍBRIDO -->
 <div class="modal-overlay" id="paymentModal">
     <div class="modal-content">
         <h3>Desbloquear Consultas VIP</h3>
         <p>Realiza tu pago por cualquiera de estos métodos y envía el comprobante:</p>
-        
         <div class="payment-data">
             <p style="margin-bottom: 5px;"><strong>Pago Móvil:</strong></p>
             <p style="margin-bottom: 10px;">
@@ -117,16 +92,12 @@
                 • Venezuela (0102)<br>
                 • Banesco (0134)
             </p>
-            
             <p style="margin-bottom: 5px;"><strong>Binance Pay:</strong></p>
             <p>UID: <b>72597924</b></p>
         </div>
-        
-        <!-- ENLACE ACTUALIZADO A TU WHATSAPP CORRECTO -->
         <a href="https://wa.me/584124166003?text=Hola,%20acabo%20de%20realizar%20el%20pago%20para%20desbloquear%20el%20modo%20VIP%20en%20ConversorP2P.%20Aqu%C3%AD%20est%C3%A1%20mi%20comprobante:" target="_blank" class="btn-whatsapp">
             Enviar comprobante por WhatsApp
         </a>
-        
         <button class="btn-close" id="closeModalBtn">Cerrar</button>
     </div>
 </div>
@@ -138,16 +109,21 @@
     const resultCard = document.getElementById('resultCard');
     const rateDisplay = document.getElementById('rateDisplay');
     const netDisplay = document.getElementById('netDisplay');
-    
     const limitText = document.getElementById('limitText');
     const unlockBtn = document.getElementById('unlockBtn');
-    
     const paymentModal = document.getElementById('paymentModal');
     const closeModalBtn = document.getElementById('closeModalBtn');
 
     const MAX_FREE = 30;
     let queriesUsed = parseInt(localStorage.getItem('conversor_queries') || '0');
     let isPremium = localStorage.getItem('conversor_premium') === 'true';
+
+    // --- CREACIÓN DEL ID ÚNICO DEL DISPOSITIVO ---
+    let deviceId = localStorage.getItem('conversor_device_id');
+    if (!deviceId) {
+        deviceId = 'dev-' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+        localStorage.setItem('conversor_device_id', deviceId);
+    }
 
     const MI_PROXY = "https://conversor-proxy.hehf24.workers.dev";
 
@@ -168,15 +144,9 @@
         }
     }
 
-    unlockBtn.addEventListener('click', () => {
-        paymentModal.style.display = 'flex';
-    });
+    unlockBtn.addEventListener('click', () => { paymentModal.style.display = 'flex'; });
+    closeModalBtn.addEventListener('click', () => { paymentModal.style.display = 'none'; });
 
-    closeModalBtn.addEventListener('click', () => {
-        paymentModal.style.display = 'none';
-    });
-
-    // Botón para ingresar código VIP dentro del modal
     const modalContent = document.querySelector('.modal-content');
     const codeBtn = document.createElement('button');
     codeBtn.textContent = "Ya tengo mi código VIP";
@@ -191,10 +161,12 @@
         codeBtn.disabled = true;
 
         try {
+            console.log("Enviando código y dispositivo:", code, deviceId); // Para debug
+            
             const response = await fetch(MI_PROXY + "/validar-codigo", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ codigo: code })
+                body: JSON.stringify({ codigo: code, deviceId: deviceId })
             });
 
             const data = await response.json();
@@ -202,11 +174,12 @@
             if (data.valido) {
                 isPremium = true;
                 localStorage.setItem('conversor_premium', 'true');
-                alert("¡Código correcto! Bienvenido al modo VIP. Ahora tienes consultas ilimitadas.");
+                alert("¡Código correcto! Bienvenido al modo VIP. Ahora tienes consultas ilimitadas en este teléfono.");
                 updateLimitUI();
                 paymentModal.style.display = 'none';
             } else {
-                alert("Código inválido o ya utilizado. Verifica con el administrador.");
+                // Muestra el error exacto del worker si existe
+                alert("Error: " + (data.error || "Código inválido. Verifica con el administrador."));
             }
         } catch (error) {
             alert("Error de conexión al validar el código. Intenta de nuevo.");
@@ -220,7 +193,6 @@
         if (queriesUsed >= MAX_FREE && !isPremium) return;
 
         const amount = parseFloat(amountInput.value);
-
         if (!amount || amount <= 0) {
             errorMsg.textContent = "Por favor, ingresa un monto válido.";
             errorMsg.style.display = 'block';
@@ -238,7 +210,6 @@
             
             const data = await response.json();
             const binanceRate = data.rates.find(r => r.market && r.market.toLowerCase().includes('binance'));
-            
             if (!binanceRate || !binanceRate.ask) throw new Error("No hay tasa");
 
             const rate = binanceRate.ask;
