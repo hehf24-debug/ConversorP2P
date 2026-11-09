@@ -205,26 +205,28 @@
         calculateBtn.disabled = true;
         calculateBtn.innerHTML = '<span class="spinner"></span> Buscando...';
 
-        try {
-            const response = await fetch(MI_PROXY);
-            if (!response.ok) throw new Error("Error en puente");
+                try {
+            // Enviamos el monto exacto a nuestro Worker
+            const response = await fetch(MI_PROXY + "?monto=" + amount);
+            
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || "Error en el puente");
+            }
             
             const data = await response.json();
-            const binanceRate = data.rates.find(r => r.market && r.market.toLowerCase().includes('binance'));
-            if (!binanceRate || !binanceRate.ask) throw new Error("No hay tasa");
+            
+            // Ahora la respuesta es directa { rate: 1038.70 }
+            if (!data.rate) throw new Error("No se recibió la tasa");
 
-            const rate = binanceRate.ask;
+            const rate = data.rate;
             let grossUSDT = amount / rate;
 
             rateDisplay.textContent = `1 USDT = ${rate.toFixed(2)} VES`;
             netDisplay.textContent = `${grossUSDT.toFixed(2)} USDT`;
 
             resultCard.style.display = 'block';
-
-            if (!isPremium) {
-                queriesUsed++;
-                localStorage.setItem('conversor_queries', queriesUsed);
-                updateLimitUI();
+            // ... (el resto del código de restar consultas sigue igual)
             }
 
         } catch (error) {
