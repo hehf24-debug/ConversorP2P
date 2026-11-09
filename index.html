@@ -10,6 +10,13 @@
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent;}
         body { font-family: 'Segoe UI', Roboto, sans-serif; background-color: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 15px; }
         .app-container { width: 100%; max-width: 400px; background-color: var(--card); border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); overflow: hidden; border: 1px solid var(--border); }
+        
+        /* ESTILOS DEL PANEL DE ADMIN */
+        .admin-panel { background-color: #1e1b4b; border: 2px solid #8b5cf6; border-radius: 15px; padding: 15px; margin-bottom: 20px; display: none; text-align: center; }
+        .admin-panel h3 { color: #a78bfa; margin-bottom: 5px; font-size: 1rem; }
+        .admin-panel p { color: white; font-size: 1.2rem; font-weight: bold; }
+        .admin-panel small { color: #9ca3af; font-size: 0.7rem; }
+
         .header { background: linear-gradient(135deg, #1f2937, #111827); padding: 25px 20px; text-align: center; }
         .header h1 { font-size: 1.4rem; margin-bottom: 5px; color: white; }
         .header p { font-size: 0.85rem; color: var(--muted); }
@@ -47,6 +54,13 @@
 <body>
 
 <div class="app-container">
+    <!-- PANEL DE ADMINISTRADOR (Oculto por defecto) -->
+    <div class="admin-panel" id="adminPanel">
+        <h3>👑 Panel de Control (Admin)</h3>
+        <p>Consultas a Cotizave: <span id="adminCalls">...</span> / 1,500</p>
+        <small>Límite mensual del plan gratuito</small>
+    </div>
+
     <div class="header">
         <h1>Conversor P2P</h1>
         <p>Calcula tus USDT al instante</p>
@@ -74,7 +88,6 @@
         <div id="errorMsg" class="error-msg"></div>
         <div class="result-card" id="resultCard">
             <h2>Resultado de la operación</h2>
-            <!-- CAMBIADO A TASA DE REFERENCIA -->
             <div class="data-row"><span>Tasa de Referencia P2P:</span><span id="rateDisplay">-</span></div>
             <div class="data-row total-row"><span>Recibes:</span><span id="netDisplay">-</span></div>
         </div>
@@ -83,8 +96,7 @@
 
 <div class="modal-overlay" id="paymentModal">
     <div class="modal-content">
-        <h3>Acceso VIP (30 Días)</h3>
-        
+        <h3>Acceso VIP (Ilimitado)</h3>
         <div class="payment-data">
             <span class="price-tag">Precio: 4$ (Tasa BCV) o 3 USDT</span>
             <p style="margin-top: 10px; margin-bottom: 5px;"><strong>Pago Móvil:</strong></p>
@@ -95,12 +107,10 @@
                 • Venezuela (0102)<br>
                 • Banesco (0134)
             </p>
-            
             <p style="margin-bottom: 5px;"><strong>Binance Pay:</strong></p>
             <p>UID: <b>72597924</b></p>
         </div>
-        
-        <a href="https://wa.me/584124166003?text=Hola,%20quiero%20comprar%20el%20acceso%20VIP%20de%2030%20d%C3%ADas%20para%20ConversorP2P.%20Aqu%C3%AD%20env%C3%ADo%20mi%20comprobante:" target="_blank" class="btn-whatsapp">
+        <a href="https://wa.me/584124166003?text=Hola,%20quiero%20comprar%20el%20acceso%20VIP%20ilimitado%20para%20ConversorP2P.%20Aqu%C3%AD%20env%C3%ADo%20mi%20comprobante:" target="_blank" class="btn-whatsapp">
             Enviar comprobante por WhatsApp
         </a>
         <button class="btn-close" id="closeModalBtn">Cerrar</button>
@@ -130,6 +140,23 @@
     }
 
     const MI_PROXY = "https://conversor-proxy.hehf24.workers.dev";
+
+    // --- LÓGICA DEL PANEL DE ADMINISTRADOR ---
+    // Si la URL termina en ?admin=true, mostramos el panel
+    if (window.location.search.includes('admin=true')) {
+        document.getElementById('adminPanel').style.display = 'block';
+        
+        // Consultamos las estadísticas al Worker
+        fetch(MI_PROXY + "/stats")
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('adminCalls').textContent = data.cotizave_calls;
+            })
+            .catch(err => {
+                document.getElementById('adminCalls').textContent = "Error";
+            });
+    }
+    // -----------------------------------------
 
     function updateLimitUI() {
         if (isPremium) {
@@ -173,7 +200,7 @@
             if (data.valido) {
                 isPremium = true;
                 localStorage.setItem('conversor_premium', 'true');
-                alert("¡Código correcto! Bienvenido al modo VIP. Tienes 30 días de consultas ilimitadas en este teléfono.\n\n⚠️ IMPORTANTE: No borres los datos de navegación o perderás tu acceso.");
+                alert("¡Código correcto! Bienvenido al modo VIP. Ahora tienes consultas ilimitadas de por vida en este teléfono.\n\n⚠️ IMPORTANTE: No borres los datos de navegación o perderás tu acceso.");
                 updateLimitUI();
                 paymentModal.style.display = 'none';
             } else {
@@ -203,9 +230,7 @@
         calculateBtn.innerHTML = '<span class="spinner"></span> Buscando...';
 
         try {
-            // Petición normal, sin enviar monto (Cotizave nos da la tasa de referencia)
             const response = await fetch(MI_PROXY);
-            
             if (!response.ok) throw new Error("Error de conexión");
             
             const data = await response.json();
