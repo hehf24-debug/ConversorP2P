@@ -23,7 +23,6 @@
         .row { display: flex; gap: 10px; margin-bottom: 15px; }
         .row .input-group { flex: 1; margin-bottom: 0; }
         
-        /* Estilo para los valores fijos (no editables) */
         .fixed-value { 
             width: 100%; 
             padding: 15px; 
@@ -56,7 +55,7 @@
         .modal-content { background: var(--card); border-radius: 15px; padding: 25px; width: 100%; max-width: 400px; border: 1px solid var(--border); text-align: center; }
         .modal-content h3 { color: var(--accent); margin-bottom: 15px; }
         .modal-content p { font-size: 0.9rem; color: var(--muted); margin-bottom: 15px; }
-        .payment-data { background: #2a2a2a; padding: 15px; border-radius: 10px; margin-bottom: 15px; text-align: left; font-size: 0.9rem; }
+        .payment-data { background: #2a2a2a; padding: 15px; border-radius: 10px; margin-bottom: 15px; text-align: left; font-size: 0.9rem; line-height: 1.6;}
         .payment-data strong { color: white; }
         .btn-whatsapp { display: block; width: 100%; padding: 15px; background-color: #25D366; color: white; text-decoration: none; border-radius: 10px; font-weight: bold; margin-bottom: 10px; }
         .btn-close { background: transparent; border: none; color: var(--muted); cursor: pointer; font-size: 0.9rem; text-decoration: underline; }
@@ -111,13 +110,20 @@
         
         <div class="payment-data">
             <p style="margin-bottom: 5px;"><strong>Pago Móvil:</strong></p>
-            <p style="margin-bottom: 10px;">Banco: (Tu banco aquí)<br>Teléfono: 0412-4166003<br>C.I: 22.927.162</p>
+            <p style="margin-bottom: 10px;">
+                Teléfono: <b>0412-4160003</b><br>
+                C.I: <b>22.927.162</b><br>
+                <b>Bancos:</b><br>
+                • Venezuela (0102)<br>
+                • Banesco (0134)
+            </p>
             
             <p style="margin-bottom: 5px;"><strong>Binance Pay:</strong></p>
-            <p>UID: 72597924</p>
+            <p>UID: <b>72597924</b></p>
         </div>
         
-        <a href="https://wa.me/584124166003?text=Hola,%20acabo%20de%20realizar%20el%20pago%20para%20desbloquear%20el%20modo%20VIP%20en%20ConversorP2P.%20Aqu%C3%AD%20est%C3%A1%20mi%20comprobante:" target="_blank" class="btn-whatsapp">
+        <!-- ENLACE ACTUALIZADO A TU WHATSAPP -->
+        <a href="https://wa.me/584124160003?text=Hola,%20acabo%20de%20realizar%20el%20pago%20para%20desbloquear%20el%20modo%20VIP%20en%20ConversorP2P.%20Aqu%C3%AD%20est%C3%A1%20mi%20comprobante:" target="_blank" class="btn-whatsapp">
             Enviar comprobante por WhatsApp
         </a>
         
@@ -170,7 +176,7 @@
         paymentModal.style.display = 'none';
     });
 
-    // Añadir botón para ingresar código VIP dentro del modal
+    // Botón para ingresar código VIP dentro del modal
     const modalContent = document.querySelector('.modal-content');
     const codeBtn = document.createElement('button');
     codeBtn.textContent = "Ya tengo mi código VIP";
@@ -235,7 +241,6 @@
             
             if (!binanceRate || !binanceRate.ask) throw new Error("No hay tasa");
 
-            // Cálculo fijo: Monto en Bolívares dividido entre la tasa de Binance
             const rate = binanceRate.ask;
             let grossUSDT = amount / rate;
 
