@@ -14,12 +14,28 @@
         .header h1 { font-size: 1.4rem; margin-bottom: 5px; color: white; }
         .header p { font-size: 0.85rem; color: var(--muted); }
         .content { padding: 20px; }
+        
         .input-group { margin-bottom: 15px; }
         .input-group label { display: block; font-size: 0.8rem; color: var(--muted); margin-bottom: 5px; font-weight: 600; }
-        .input-group input, .input-group select { width: 100%; padding: 15px; border-radius: 10px; border: 1px solid var(--border); background-color: #2a2a2a; color: white; font-size: 1.1rem; outline: none; }
-        .input-group input:focus, .input-group select:focus { border-color: var(--accent); }
-        .row { display: flex; gap: 10px; }
-        .row .input-group { flex: 1; }
+        .input-group input { width: 100%; padding: 15px; border-radius: 10px; border: 1px solid var(--border); background-color: #2a2a2a; color: white; font-size: 1.1rem; outline: none; transition: border-color 0.2s; }
+        .input-group input:focus { border-color: var(--accent); }
+        
+        .row { display: flex; gap: 10px; margin-bottom: 15px; }
+        .row .input-group { flex: 1; margin-bottom: 0; }
+        
+        /* Estilo para los valores fijos (no editables) */
+        .fixed-value { 
+            width: 100%; 
+            padding: 15px; 
+            border-radius: 10px; 
+            border: 1px solid var(--border); 
+            background-color: #1a1a1a; 
+            color: #888; 
+            font-size: 1.1rem; 
+            text-align: center;
+            font-weight: bold;
+        }
+
         .btn-main { width: 100%; padding: 16px; border: none; border-radius: 12px; background-color: var(--accent); color: #000; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 10px; transition: opacity 0.2s; }
         .btn-main:disabled { opacity: 0.5; cursor: not-allowed; background-color: #555; color: #aaa; }
         
@@ -61,23 +77,18 @@
         </div>
 
         <div class="input-group">
-            <label>¿Cuánto dinero quieres cambiar?</label>
+            <label>¿Cuántos Bolívares quieres cambiar?</label>
             <input type="number" id="amountInput" placeholder="Ej: 11000" inputmode="decimal">
         </div>
         
         <div class="row">
             <div class="input-group">
                 <label>Moneda que tienes</label>
-                <select id="fromCurrency">
-                    <option value="VES" selected>VES (Bolívares)</option>
-                    <option value="USD">USD (Dólares)</option>
-                </select>
+                <div class="fixed-value">VES (Bolívares)</div>
             </div>
             <div class="input-group">
                 <label>Quieres recibir</label>
-                <select id="toCurrency">
-                    <option value="USDT" selected>USDT</option>
-                </select>
+                <div class="fixed-value">USDT</div>
             </div>
         </div>
 
@@ -106,7 +117,6 @@
             <p>UID: 72597924</p>
         </div>
         
-        <!-- Cambia el número de teléfono en el enlace de WhatsApp -->
         <a href="https://wa.me/584124166003?text=Hola,%20acabo%20de%20realizar%20el%20pago%20para%20desbloquear%20el%20modo%20VIP%20en%20ConversorP2P.%20Aqu%C3%AD%20est%C3%A1%20mi%20comprobante:" target="_blank" class="btn-whatsapp">
             Enviar comprobante por WhatsApp
         </a>
@@ -117,7 +127,6 @@
 
 <script>
     const amountInput = document.getElementById('amountInput');
-    const fromCurrency = document.getElementById('fromCurrency');
     const calculateBtn = document.getElementById('calculateBtn');
     const errorMsg = document.getElementById('errorMsg');
     const resultCard = document.getElementById('resultCard');
@@ -127,7 +136,6 @@
     const limitText = document.getElementById('limitText');
     const unlockBtn = document.getElementById('unlockBtn');
     
-    // Elementos del modal
     const paymentModal = document.getElementById('paymentModal');
     const closeModalBtn = document.getElementById('closeModalBtn');
 
@@ -154,23 +162,15 @@
         }
     }
 
-    // Abrir modal de pago
     unlockBtn.addEventListener('click', () => {
         paymentModal.style.display = 'flex';
     });
 
-    // Cerrar modal
     closeModalBtn.addEventListener('click', () => {
         paymentModal.style.display = 'none';
     });
 
-    // Lógica para validar el código (Se puede llamar desde la consola o añadir un botón dentro del modal)
-    // Para que el usuario meta el código, agregamos un prompt rápido después de cerrar el modal o 
-    // simplemente dejamos que te escriban por WhatsApp y tú les des el código, 
-    // pero para que funcione en la app, el usuario debe tener un botón para meterlo.
-    // Añadiremos una opción oculta o un pequeño enlace para "Ya tengo mi código".
-    
-    // Vamos a añadir un botón extra en el modal para ingresar el código
+    // Añadir botón para ingresar código VIP dentro del modal
     const modalContent = document.querySelector('.modal-content');
     const codeBtn = document.createElement('button');
     codeBtn.textContent = "Ya tengo mi código VIP";
@@ -214,7 +214,6 @@
         if (queriesUsed >= MAX_FREE && !isPremium) return;
 
         const amount = parseFloat(amountInput.value);
-        const currency = fromCurrency.value;
 
         if (!amount || amount <= 0) {
             errorMsg.textContent = "Por favor, ingresa un monto válido.";
@@ -236,10 +235,11 @@
             
             if (!binanceRate || !binanceRate.ask) throw new Error("No hay tasa");
 
+            // Cálculo fijo: Monto en Bolívares dividido entre la tasa de Binance
             const rate = binanceRate.ask;
-            let grossUSDT = currency === 'VES' ? (amount / rate) : amount;
+            let grossUSDT = amount / rate;
 
-            rateDisplay.textContent = currency === 'VES' ? `1 USDT = ${rate.toFixed(2)} VES` : `1 USDT ≈ 1 USD`;
+            rateDisplay.textContent = `1 USDT = ${rate.toFixed(2)} VES`;
             netDisplay.textContent = `${grossUSDT.toFixed(2)} USDT`;
 
             resultCard.style.display = 'block';
