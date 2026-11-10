@@ -228,35 +228,42 @@
 
     const MI_PROXY = "https://conversor-proxy.hehf24.workers.dev";
 
-    // --- VERIFICACIÓN INVISIBLE DEL VIP (CON PROTECCIÓN ANTI-FALLOS) ---
+    // --- VERIFICACIÓN INVISIBLE DEL VIP (CORREGIDA) ---
     async function checkVipStatus() {
-        if (!isPremium || !userVipCode) return; // Si no es premium, no consultamos
+        // CASO 1: Dice ser premium pero no tiene código guardado (viene de versión vieja)
+        if (isPremium && !userVipCode) {
+            isPremium = false;
+            localStorage.removeItem('conversor_premium');
+            updateLimitUI();
+            return;
+        }
 
-        try {
-            const response = await fetch(MI_PROXY + "/check-vip", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ codigo: userVipCode, deviceId: deviceId })
-            });
-            const data = await response.json();
+        // CASO 2: Es premium y tiene código, verificamos en el servidor
+        if (isPremium && userVipCode) {
+            try {
+                const response = await fetch(MI_PROXY + "/check-vip", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ codigo: userVipCode, deviceId: deviceId })
+                });
+                const data = await response.json();
 
-            // SIEMPRE que la respuesta NO sea un 'true' explícito, le quitamos el VIP
-            if (data.valido !== true) {
+                if (data.valido !== true) {
+                    isPremium = false;
+                    userVipCode = null;
+                    localStorage.removeItem('conversor_premium');
+                    localStorage.removeItem('conversor_codigo');
+                    updateLimitUI(); 
+                    alert("Tu membresía VIP ha expirado o sido revocada. Vuelve a modo gratuito.");
+                }
+            } catch (e) {
+                console.error("Error verificando VIP, revocando por seguridad:", e);
                 isPremium = false;
                 userVipCode = null;
                 localStorage.removeItem('conversor_premium');
                 localStorage.removeItem('conversor_codigo');
                 updateLimitUI(); 
-                alert("Tu membresía VIP ha expirado o sido revocada. Vuelve a modo gratuito.");
             }
-        } catch (e) {
-            // Si hay un error de red o el servidor falla, POR SEGURIDAD le quitamos el VIP
-            console.error("Error verificando VIP, revocando por seguridad:", e);
-            isPremium = false;
-            userVipCode = null;
-            localStorage.removeItem('conversor_premium');
-            localStorage.removeItem('conversor_codigo');
-            updateLimitUI(); 
         }
     }
     checkVipStatus(); 
