@@ -31,7 +31,11 @@
         .admin-panel p { color: white; font-size: 1.1rem; font-weight: 800; }
         .admin-panel small { color: #9ca3af; font-size: 0.7rem; }
 
-        .header { background: linear-gradient(135deg, #1e293b, #0f172a); padding: 30px 20px 20px 20px; text-align: center; border-bottom: 1px solid var(--border); }
+        .header { background: linear-gradient(135deg, #1e293b, #0f172a); padding: 25px 20px 20px 20px; text-align: center; border-bottom: 1px solid var(--border); }
+        
+        /* ESTILO PARA EL LOGO EN EL HEADER */
+        .header-logo { width: 65px; height: 65px; margin-bottom: 12px; border-radius: 18px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2); }
+        
         .header h1 { font-size: 1.6rem; font-weight: 800; margin-bottom: 5px; color: white; letter-spacing: -0.5px;}
         .header p { font-size: 0.9rem; color: var(--muted); font-weight: 400;}
 
@@ -90,6 +94,12 @@
         .limit-reached-card h3 { color: #fca5a5; font-size: 1rem; margin-bottom: 5px;}
         .limit-reached-card p { font-size: 0.85rem; color: #f8fafc; margin-bottom: 10px;}
         .btn-vip-small { background: var(--warn); color: white; border: none; padding: 8px 15px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.8rem;}
+
+        /* ESTILOS DEL CARTEL DE BIENVENIDA (ONBOARDING) */
+        .welcome-list { text-align: left; margin-bottom: 20px; }
+        .welcome-list li { margin-bottom: 12px; font-size: 0.9rem; color: var(--text); line-height: 1.4; display: flex; align-items: flex-start; gap: 10px;}
+        .welcome-list li span { font-size: 1.2rem; }
+        .welcome-warning { background: rgba(245, 158, 11, 0.1); border-left: 3px solid #fbbf24; padding: 12px; border-radius: 6px; font-size: 0.8rem; color: #fcd34d; text-align: left; margin-bottom: 20px; line-height: 1.4;}
     </style>
 </head>
 <body>
@@ -102,6 +112,8 @@
     </div>
 
     <div class="header">
+        <!-- LOGO AÑADIDO AQUÍ -->
+        <img src="./icon.svg" alt="Logo Conversor P2P" class="header-logo">
         <h1>Conversor P2P</h1>
         <p>Compara tus bolívares al instante</p>
     </div>
@@ -152,6 +164,7 @@
     </div>
 </div>
 
+<!-- MODAL DE PAGO VIP -->
 <div class="modal-overlay" id="paymentModal">
     <div class="modal-content">
         <h3>Acceso VIP Ilimitado</h3>
@@ -176,6 +189,27 @@
     </div>
 </div>
 
+<!-- NUEVO CARTEL DE BIENVENIDA (ONBOARDING) -->
+<div class="modal-overlay" id="welcomeModal">
+    <div class="modal-content">
+        <h3 style="font-size: 1.5rem; margin-bottom: 5px;">¡Bienvenido! 👋</h3>
+        <p style="margin-bottom: 20px;">Tu asistente financiero personal.</p>
+        
+        <ul class="welcome-list">
+            <li><span>💸</span> <div>Convierte tus <b>Bolívares (VES)</b> a <b>USDT</b> (Dólares digitales) de forma rápida.</div></li>
+            <li><span>🏛️</span> <div>Consulta también el equivalente según la <b>Tasa Oficial del BCV</b> del día.</div></li>
+            <li><span>⚡</span> <div>Obtén respuestas al instante sin páginas lentas ni cálculos manuales.</div></li>
+        </ul>
+
+        <div class="welcome-warning">
+            <b>⚠️ Aviso Importante:</b><br>
+            Los montos mostrados son un <b>estimado de referencia</b> basado en la tasa actual del mercado P2P. La tasa exacta puede variar ligeramente al momento de realizar tu transacción real.
+        </div>
+
+        <button class="btn-main" id="closeWelcomeBtn" style="font-size: 1rem;">¡Entendido, empecemos!</button>
+    </div>
+</div>
+
 <script>
     const amountInput = document.getElementById('amountInput');
     const calculateBtn = document.getElementById('calculateBtn');
@@ -195,6 +229,21 @@
     const bcvDisplay = document.getElementById('bcvDisplay');
     const bcvRateDisplay = document.getElementById('bcvRateDisplay');
     const bcvTickerValue = document.getElementById('bcvTickerValue');
+    
+    // Elementos del Onboarding
+    const welcomeModal = document.getElementById('welcomeModal');
+    const closeWelcomeBtn = document.getElementById('closeWelcomeBtn');
+
+    // --- LÓGICA DEL CARTEL DE BIENVENIDA ---
+    if (!localStorage.getItem('conversor_onboarding_seen')) {
+        welcomeModal.style.display = 'flex';
+    }
+
+    closeWelcomeBtn.addEventListener('click', () => {
+        localStorage.setItem('conversor_onboarding_seen', 'true');
+        welcomeModal.style.display = 'none';
+    });
+    // ---------------------------------------
 
     let wasVip = localStorage.getItem('conversor_was_vip') === 'true';
     const MAX_FREE_NEW = 30; 
