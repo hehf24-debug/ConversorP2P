@@ -24,42 +24,25 @@
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: 'Outfit', sans-serif;}
         body { background-color: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 15px; padding-top: calc(15px + env(safe-area-inset-top)); background-image: radial-gradient(circle at top, #1e293b 0%, #0b0f19 60%); }
         
-        .app-container { 
-            width: 100%; max-width: 400px; background-color: var(--card); border-radius: 24px; 
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); overflow: hidden; border: 1px solid var(--border); 
-            position: relative; 
-        }
+        .app-container { width: 100%; max-width: 400px; background-color: var(--card); border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); overflow: hidden; border: 1px solid var(--border); position: relative; }
 
         .admin-panel { background-color: #1e1b4b; border-bottom: 2px solid #8b5cf6; padding: 12px; display: none; text-align: center; }
         .admin-panel h3 { color: #a78bfa; margin-bottom: 5px; font-size: 0.9rem; font-weight: 700;}
         .admin-panel p { color: white; font-size: 1.1rem; font-weight: 800; }
         .admin-panel small { color: #9ca3af; font-size: 0.7rem; }
 
-        .header { 
-            background: linear-gradient(135deg, #1e293b, #0f172a); 
-            padding: 30px 20px 20px 20px; 
-            text-align: center; 
-            border-bottom: 1px solid var(--border);
-        }
+        .header { background: linear-gradient(135deg, #1e293b, #0f172a); padding: 30px 20px 20px 20px; text-align: center; border-bottom: 1px solid var(--border); }
         .header h1 { font-size: 1.6rem; font-weight: 800; margin-bottom: 5px; color: white; letter-spacing: -0.5px;}
         .header p { font-size: 0.9rem; color: var(--muted); font-weight: 400;}
 
-        .bcv-ticker {
-            background-color: #0f172a; border-bottom: 1px solid var(--border);
-            padding: 10px 20px; display: flex; justify-content: space-between;
-            align-items: center; font-size: 0.8rem; color: var(--muted);
-            transition: background-color 0.3s;
-        }
+        .bcv-ticker { background-color: #0f172a; border-bottom: 1px solid var(--border); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--muted); transition: background-color 0.3s; }
         .bcv-ticker:hover { background-color: #1e293b; }
         .ticker-label { font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 5px;}
         .ticker-value { font-weight: 800; font-size: 1.1rem; color: #60a5fa; }
         
         .content { padding: 25px 20px; }
         
-        .limit-box { 
-            background-color: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3);
-            border-radius: 12px; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
-        }
+        .limit-box { background-color: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 12px; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .limit-box span { font-size: 0.85rem; color: #fbbf24; font-weight: 600;}
         .unlock-btn { background: transparent; border: 1px solid #fbbf24; color: #fbbf24; padding: 6px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: all 0.2s;}
         .unlock-btn:hover { background: #fbbf24; color: #000; }
@@ -103,7 +86,6 @@
         .btn-whatsapp:hover { background-color: #20b858; }
         .btn-close { background: transparent; border: none; color: var(--muted); cursor: pointer; font-size: 0.9rem; text-decoration: underline; font-weight: 600;}
         
-        /* Mensaje de límite alcanzado */
         .limit-reached-card { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 12px; padding: 15px; margin-top: 15px; display: none; text-align: center;}
         .limit-reached-card h3 { color: #fca5a5; font-size: 1rem; margin-bottom: 5px;}
         .limit-reached-card p { font-size: 0.85rem; color: #f8fafc; margin-bottom: 10px;}
@@ -147,7 +129,6 @@
         <button class="btn-main" id="calculateBtn">Calcular Tasas</button>
         <div id="errorMsg" class="error-msg"></div>
 
-        <!-- TARJETA DE LÍMITE ALCANZADO -->
         <div class="limit-reached-card" id="limitReachedCard">
             <h3>¡Oh! Te has quedado sin consultas gratis</h3>
             <p id="refillMessage">Pero no te preocupes, en unos días tendrás más.</p>
@@ -210,13 +191,11 @@
     const goVipBtn = document.getElementById('goVipBtn');
     const limitReachedCard = document.getElementById('limitReachedCard');
     const refillMessage = document.getElementById('refillMessage');
-
     const bcvSection = document.getElementById('bcvSection');
     const bcvDisplay = document.getElementById('bcvDisplay');
     const bcvRateDisplay = document.getElementById('bcvRateDisplay');
     const bcvTickerValue = document.getElementById('bcvTickerValue');
 
-    // CONFIGURACIÓN DE LÍMITES
     const MAX_FREE = 30;
     const REFILL_QUERIES = 10;
     const REFILL_DAYS = 7;
@@ -224,24 +203,22 @@
 
     let queriesUsed = parseInt(localStorage.getItem('conversor_queries') || '0');
     let isPremium = localStorage.getItem('conversor_premium') === 'true';
+    let userVipCode = localStorage.getItem('conversor_codigo') || null; // GUARDAMOS EL CÓDIGO
     let lastReset = parseInt(localStorage.getItem('conversor_last_reset') || '0');
 
-    // --- LÓGICA DE REINICIO SEMANAL ---
     if (!lastReset) {
         lastReset = Date.now();
         localStorage.setItem('conversor_last_reset', lastReset);
     } else {
         const daysPassed = (Date.now() - lastReset) / MS_IN_DAYS;
         if (daysPassed >= REFILL_DAYS) {
-            // Han pasado 7 días, reiniciamos
-            queriesUsed = MAX_FREE - REFILL_QUERIES; // Le damos 10 consultas
+            queriesUsed = MAX_FREE - REFILL_QUERIES;
             lastReset = Date.now();
             localStorage.setItem('conversor_queries', queriesUsed);
             localStorage.setItem('conversor_last_reset', lastReset);
             alert("¡Bienvenido de vuelta! Te hemos regalado 10 consultas nuevas por esta semana.");
         }
     }
-    // -----------------------------------
 
     let deviceId = localStorage.getItem('conversor_device_id');
     if (!deviceId) {
@@ -250,6 +227,34 @@
     }
 
     const MI_PROXY = "https://conversor-proxy.hehf24.workers.dev";
+
+    // --- VERIFICACIÓN INVISIBLE DEL VIP AL INICIAR ---
+    async function checkVipStatus() {
+        if (!isPremium || !userVipCode) return; // Si no es premium o no tiene código, no consultamos
+
+        try {
+            const response = await fetch(MI_PROXY + "/check-vip", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ codigo: userVipCode, deviceId: deviceId })
+            });
+            const data = await response.json();
+
+            if (!data.valido) {
+                // El código fue borrado por el admin o no existe
+                isPremium = false;
+                userVipCode = null;
+                localStorage.removeItem('conversor_premium');
+                localStorage.removeItem('conversor_codigo');
+                updateLimitUI(); // Actualiza la pantalla a modo gratis
+                alert("Tu membresía VIP ha expirado o sido revocada. Vuelve a modo gratuito.");
+            }
+        } catch (e) {
+            console.log("No se pudo verificar el VIP, manteniendo estado local.");
+        }
+    }
+    checkVipStatus(); // Se ejecuta al abrir la app
+    // ------------------------------------------------
 
     async function loadBCVTicker() {
         try {
@@ -292,16 +297,16 @@
                 calculateBtn.disabled = true;
                 calculateBtn.textContent = "Límite alcanzado";
                 
-                // Mostrar tarjeta de reinicio
                 limitReachedCard.style.display = 'block';
                 
-                // Calcular días restantes
                 const nextResetDate = lastReset + (REFILL_DAYS * MS_IN_DAYS);
                 const daysLeft = Math.ceil((nextResetDate - Date.now()) / MS_IN_DAYS);
                 
                 refillMessage.innerHTML = `Pero no te preocupes, en <b>${daysLeft} días</b> recibirás <b>${REFILL_QUERIES} consultas</b> de regalo. <br>¿No quieres esperar? Hazte VIP por solo $4.`;
             } else {
                 limitReachedCard.style.display = 'none';
+                calculateBtn.disabled = false;
+                calculateBtn.textContent = 'Calcular Tasas';
             }
         }
     }
@@ -325,8 +330,10 @@
             const data = await response.json();
             if (data.valido) {
                 isPremium = true;
+                userVipCode = code.trim().toUpperCase();
                 localStorage.setItem('conversor_premium', 'true');
-                alert("¡Código correcto! Bienvenido al modo VIP. Ahora tienes consultas ilimitadas de por vida en este teléfono.\n\n⚠️ IMPORTANTE: No borres los datos de navegación o perderás tu acceso.");
+                localStorage.setItem('conversor_codigo', userVipCode); // GUARDAMOS EL CÓDIGO
+                alert("¡Código correcto! Bienvenido al modo VIP. Ahora tienes consultas ilimitadas de por vida en este teléfono.");
                 updateLimitUI();
                 paymentModal.style.display = 'none';
             } else {
