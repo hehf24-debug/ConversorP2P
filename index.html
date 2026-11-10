@@ -67,6 +67,7 @@
         .total-row span:first-child { font-size: 0.9rem; color: var(--muted); margin-bottom: 5px;}
         .total-row span:last-child { font-size: 2.5rem; font-weight: 800; color: var(--accent); line-height: 1;}
 
+        /* TARJETA BCV RESTAURADA */
         .bcv-card { margin-top: 15px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 12px; padding: 15px; display: flex; flex-direction: column; align-items: center; }
         .bcv-title { font-size: 0.75rem; color: #93c5fd; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; font-weight: 600;}
         .bcv-value { font-size: 1.4rem; font-weight: 800; color: #60a5fa; }
@@ -104,9 +105,15 @@
         .welcome-list li span { font-size: 1.2rem; }
         .welcome-warning { background: rgba(245, 158, 11, 0.1); border-left: 3px solid #fbbf24; padding: 12px; border-radius: 6px; font-size: 0.8rem; color: #fcd34d; text-align: left; margin-bottom: 20px; line-height: 1.4;}
 
-        .binance-modal-text { font-size: 0.85rem; line-height: 1.5; text-align: left; margin-bottom: 15px; color: var(--muted);}
-        .binance-modal-text strong { color: white; }
-        .binance-modal-text a { color: var(--binance); text-decoration: underline; }
+        /* ESTILOS DEL MODAL DE BINANCE (2 BOTONES) */
+        .binance-modal-text { font-size: 0.9rem; line-height: 1.5; text-align: left; margin-bottom: 20px;}
+        .binance-modal-text strong { color: var(--binance); }
+        .btn-binance-outline { 
+            display: flex; justify-content: center; align-items: center; gap: 8px; width: 100%; padding: 14px; 
+            background-color: transparent; color: white; text-decoration: none; border-radius: 10px; font-weight: 600; 
+            font-size: 0.9rem; border: 1px solid var(--border); cursor: pointer; transition: all 0.2s; margin-bottom: 15px;
+        }
+        .btn-binance-outline:hover { background-color: rgba(255,255,255,0.05); }
     </style>
 </head>
 <body>
@@ -161,12 +168,14 @@
                 <span id="netDisplay">0.00 USDT</span>
             </div>
 
+            <!-- TARJETA BCV RESTAURADA -->
             <div class="bcv-card" id="bcvSection" style="display: none;">
                 <span class="bcv-title">Equivalente a Tasa Oficial BCV</span>
                 <span class="bcv-value" id="bcvDisplay">0.00 USD</span>
                 <span class="bcv-rate-info" id="bcvRateDisplay"></span>
             </div>
 
+            <!-- BOTÓN DE BINANCE CON MODAL -->
             <div class="binance-cta">
                 <p><b>Esta tasa es atractiva, ¿verdad?</b> Aprovecha y ejecuta tu operación en Binance P2P.</p>
                 <button id="goBinanceBtn" class="btn-binance">
@@ -204,23 +213,28 @@
     </div>
 </div>
 
-<!-- MODAL DE CONFIRMACIÓN BINANCE (TEXTO ACLARATORIO) -->
+<!-- MODAL DE CONFIRMACIÓN BINANCE (2 BOTONES) -->
 <div class="modal-overlay" id="binanceModal">
     <div class="modal-content">
-        <h3>Antes de ir a Binance... 🚀</h3>
+        <h3>¿Cómo deseas continuar? 🚀</h3>
         
         <div class="binance-modal-text">
-            <p>Si eres un usuario <strong>nuevo</strong> y te registras usando nuestro botón, estarás apoyando directamente al desarrollador de esta app.</p>
-            <p style="margin-top: 10px;">Si <strong>ya tienes cuenta</strong> en Binance, te recomendamos ir directamente a su aplicación o página web oficial para realizar tu operación P2P. Recuerda que también puedes apoyar el proyecto adquiriendo tu <strong>Membresía VIP</strong> aquí mismo.</p>
-            <p style="margin-top: 10px; font-size: 0.75rem; font-style: italic; opacity: 0.8;">* Cualquier promoción o bono que veas en la página de Binance es responsabilidad de Binance y está sujeto a sus términos y condiciones.</p>
+            <p>Si eres un usuario <strong>nuevo</strong>, usa el botón amarillo para registrarte. Ganarás un bono y estarás apoyando a este proyecto.</p>
+            <p style="margin-top: 10px;">Si <strong>ya tienes cuenta</strong>, usa el botón gris para ir directo al P2P de Binance.</p>
         </div>
 
-        <a href="https://www.binance.com/activity/referral-entry/CPA?ref=CPA_00LEBD1J2E" target="_blank" class="btn-binance" style="margin-bottom: 15px;">
+        <!-- BOTÓN 1: USUARIO NUEVO (REFERIDO) -->
+        <a href="https://www.binance.com/activity/referral-entry/CPA?ref=CPA_00LEBD1J2E" target="_blank" class="btn-binance" style="margin-bottom: 10px;">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 24C18.6274 24 24 18.6274 24 12C24 5.37258 18.6274 0 12 0C5.37258 0 0 5.37258 0 12C0 18.6274 5.37258 24 12 24Z" fill="#000"/><path d="M12 6.5L15.5 10L12 13.5L8.5 10L12 6.5Z" fill="#F0B90B"/><path d="M6.5 12L10 15.5L6.5 19L3 15.5L6.5 12Z" fill="#F0B90B"/><path d="M17.5 12L21 15.5L17.5 19L14 15.5L17.5 12Z" fill="#F0B90B"/><path d="M12 14.5L15.5 18L12 21.5L8.5 18L12 14.5Z" fill="#F0B90B"/></svg>
-            Soy nuevo, ir a registrarme
+            Soy Nuevo, Registrarme
+        </a>
+
+        <!-- BOTÓN 2: USUARIO EXISTENTE (IR DIRECTO A P2P) -->
+        <a href="https://p2p.binance.com/es" target="_blank" class="btn-binance-outline">
+            Ya tengo cuenta, ir a Binance
         </a>
         
-        <button class="btn-close" id="closeBinanceModalBtn">Cancelar y Volver</button>
+        <button class="btn-close" id="closeBinanceModalBtn" style="margin-top: 5px;">Cancelar y Volver</button>
     </div>
 </div>
 
@@ -273,6 +287,7 @@
     const welcomeModal = document.getElementById('welcomeModal');
     const closeWelcomeBtn = document.getElementById('closeWelcomeBtn');
 
+    // --- LÓGICA DEL CARTEL DE BIENVENIDA ---
     if (!localStorage.getItem('conversor_onboarding_seen')) {
         welcomeModal.style.display = 'flex';
     }
@@ -282,6 +297,7 @@
         welcomeModal.style.display = 'none';
     });
 
+    // --- LÓGICA DEL MODAL DE BINANCE ---
     goBinanceBtn.addEventListener('click', () => {
         binanceModal.style.display = 'flex';
     });
@@ -289,6 +305,7 @@
     closeBinanceModalBtn.addEventListener('click', () => {
         binanceModal.style.display = 'none';
     });
+    // ---------------------------------------
 
     let wasVip = localStorage.getItem('conversor_was_vip') === 'true';
     const MAX_FREE_NEW = 30; 
