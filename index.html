@@ -203,7 +203,7 @@
 
     let queriesUsed = parseInt(localStorage.getItem('conversor_queries') || '0');
     let isPremium = localStorage.getItem('conversor_premium') === 'true';
-    let userVipCode = localStorage.getItem('conversor_codigo') || null; // GUARDAMOS EL CÓDIGO
+    let userVipCode = localStorage.getItem('conversor_codigo') || null;
     let lastReset = parseInt(localStorage.getItem('conversor_last_reset') || '0');
 
     if (!lastReset) {
@@ -228,9 +228,9 @@
 
     const MI_PROXY = "https://conversor-proxy.hehf24.workers.dev";
 
-    // --- VERIFICACIÓN INVISIBLE DEL VIP AL INICIAR ---
+    // --- VERIFICACIÓN INVISIBLE DEL VIP (CON PROTECCIÓN ANTI-FALLOS) ---
     async function checkVipStatus() {
-        if (!isPremium || !userVipCode) return; // Si no es premium o no tiene código, no consultamos
+        if (!isPremium || !userVipCode) return; // Si no es premium, no consultamos
 
         try {
             const response = await fetch(MI_PROXY + "/check-vip", {
@@ -240,21 +240,27 @@
             });
             const data = await response.json();
 
-            if (!data.valido) {
-                // El código fue borrado por el admin o no existe
+            // SIEMPRE que la respuesta NO sea un 'true' explícito, le quitamos el VIP
+            if (data.valido !== true) {
                 isPremium = false;
                 userVipCode = null;
                 localStorage.removeItem('conversor_premium');
                 localStorage.removeItem('conversor_codigo');
-                updateLimitUI(); // Actualiza la pantalla a modo gratis
+                updateLimitUI(); 
                 alert("Tu membresía VIP ha expirado o sido revocada. Vuelve a modo gratuito.");
             }
         } catch (e) {
-            console.log("No se pudo verificar el VIP, manteniendo estado local.");
+            // Si hay un error de red o el servidor falla, POR SEGURIDAD le quitamos el VIP
+            console.error("Error verificando VIP, revocando por seguridad:", e);
+            isPremium = false;
+            userVipCode = null;
+            localStorage.removeItem('conversor_premium');
+            localStorage.removeItem('conversor_codigo');
+            updateLimitUI(); 
         }
     }
-    checkVipStatus(); // Se ejecuta al abrir la app
-    // ------------------------------------------------
+    checkVipStatus(); 
+    // ----------------------------------------------------------------
 
     async function loadBCVTicker() {
         try {
@@ -332,7 +338,7 @@
                 isPremium = true;
                 userVipCode = code.trim().toUpperCase();
                 localStorage.setItem('conversor_premium', 'true');
-                localStorage.setItem('conversor_codigo', userVipCode); // GUARDAMOS EL CÓDIGO
+                localStorage.setItem('conversor_codigo', userVipCode);
                 alert("¡Código correcto! Bienvenido al modo VIP. Ahora tienes consultas ilimitadas de por vida en este teléfono.");
                 updateLimitUI();
                 paymentModal.style.display = 'none';
