@@ -1,4 +1,4 @@
-const CACHE = "conversor-v1.3";
+const CACHE = "conversor-v1.4";
 const ASSETS = ["./", "./index.html", "./manifest.json", "./icon.svg"];
 
 self.addEventListener("install", e => {
