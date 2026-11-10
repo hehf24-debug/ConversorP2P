@@ -196,10 +196,15 @@
     const bcvRateDisplay = document.getElementById('bcvRateDisplay');
     const bcvTickerValue = document.getElementById('bcvTickerValue');
 
-    const MAX_FREE = 30;
-    const REFILL_QUERIES = 10;
+    // --- NUEVA LÓGICA DE LÍMITES ---
+    let wasVip = localStorage.getItem('conversor_was_vip') === 'true';
+    const MAX_FREE_NEW = 30; // Usuario nuevo
+    const MAX_FREE_EXPIRED = 10; // Usuario que ya fue VIP
     const REFILL_DAYS = 7;
     const MS_IN_DAYS = 1000 * 60 * 60 * 24;
+
+    // Establecemos el límite según si ya fue VIP o no
+    let maxFree = wasVip ? MAX_FREE_EXPIRED : MAX_FREE_NEW;
 
     let queriesUsed = parseInt(localStorage.getItem('conversor_queries') || '0');
     let isPremium = localStorage.getItem('conversor_premium') === 'true';
@@ -212,7 +217,10 @@
     } else {
         const daysPassed = (Date.now() - lastReset) / MS_IN_DAYS;
         if (daysPassed >= REFILL_DAYS) {
-            queriesUsed = MAX_FREE - REFILL_QUERIES;
+            // Reabastecimiento (le damos 10 consultas de recarga si está en 0)
+            queriesUsed = maxFree - 10; 
+            if (queriesUsed < 0) queriesUsed = 0;
+            
             lastReset = Date.now();
             localStorage.setItem('conversor_queries', queriesUsed);
             localStorage.setItem('conversor_last_reset', lastReset);
@@ -228,9 +236,8 @@
 
     const MI_PROXY = "https://conversor-proxy.hehf24.workers.dev";
 
-    // --- VERIFICACIÓN INVISIBLE DEL VIP (CORREGIDA) ---
+    // --- VERIFICACIÓN INVISIBLE DEL VIP ---
     async function checkVipStatus() {
-        // CASO 1: Dice ser premium pero no tiene código guardado (viene de versión vieja)
         if (isPremium && !userVipCode) {
             isPremium = false;
             localStorage.removeItem('conversor_premium');
@@ -238,7 +245,6 @@
             return;
         }
 
-        // CASO 2: Es premium y tiene código, verificamos en el servidor
         if (isPremium && userVipCode) {
             try {
                 const response = await fetch(MI_PROXY + "/check-vip", {
@@ -249,25 +255,30 @@
                 const data = await response.json();
 
                 if (data.valido !== true) {
+                    // EL VIP EXPIRÓ O FUE REVOCADO
                     isPremium = false;
                     userVipCode = null;
                     localStorage.removeItem('conversor_premium');
                     localStorage.removeItem('conversor_codigo');
+                    
+                    // ¡AQUÍ APLICAMOS LA REGLA DE NEGOCIO!
+                    // Como ya fue VIP, ahora solo tendrá 10 consultas
+                    localStorage.setItem('conversor_was_vip', 'true');
+                    wasVip = true;
+                    maxFree = MAX_FREE_EXPIRED;
+                    queriesUsed = 0; // Reinicia el contador para que tenga las 10
+                    localStorage.setItem('conversor_queries', queriesUsed);
+
                     updateLimitUI(); 
-                    alert("Tu membresía VIP ha expirado o sido revocada. Vuelve a modo gratuito.");
+                    alert("Tu membresía VIP ha expirado. Ahora tienes 10 consultas gratis. ¡Renueva para seguir ilimitado!");
                 }
             } catch (e) {
-                console.error("Error verificando VIP, revocando por seguridad:", e);
-                isPremium = false;
-                userVipCode = null;
-                localStorage.removeItem('conversor_premium');
-                localStorage.removeItem('conversor_codigo');
-                updateLimitUI(); 
+                console.error("Error verificando VIP, manteniendo estado local:", e);
             }
         }
     }
     checkVipStatus(); 
-    // ----------------------------------------------------------------
+    // ------------------------------------
 
     async function loadBCVTicker() {
         try {
@@ -302,8 +313,10 @@
             calculateBtn.disabled = false;
             limitReachedCard.style.display = 'none';
         } else {
-            let left = MAX_FREE - queriesUsed;
-            limitText.innerHTML = `Consultas gratis: <b>${left}/${MAX_FREE}</b>`;
+            let left = maxFree - queriesUsed;
+            if (left < 0) left = 0;
+            
+            limitText.innerHTML = `Consultas gratis: <b>${left}/${maxFree}</b>`;
             
             if (left <= 0) {
                 limitText.style.color = "#ef4444";
@@ -315,7 +328,7 @@
                 const nextResetDate = lastReset + (REFILL_DAYS * MS_IN_DAYS);
                 const daysLeft = Math.ceil((nextResetDate - Date.now()) / MS_IN_DAYS);
                 
-                refillMessage.innerHTML = `Pero no te preocupes, en <b>${daysLeft} días</b> recibirás <b>${REFILL_QUERIES} consultas</b> de regalo. <br>¿No quieres esperar? Hazte VIP por solo $4.`;
+                refillMessage.innerHTML = `Pero no te preocupes, en <b>${daysLeft} días</b> recibirás más consultas de regalo. <br>¿No quieres esperar? Hazte VIP por solo $4.`;
             } else {
                 limitReachedCard.style.display = 'none';
                 calculateBtn.disabled = false;
@@ -346,7 +359,10 @@
                 userVipCode = code.trim().toUpperCase();
                 localStorage.setItem('conversor_premium', 'true');
                 localStorage.setItem('conversor_codigo', userVipCode);
-                alert("¡Código correcto! Bienvenido al modo VIP. Ahora tienes consultas ilimitadas de por vida en este teléfono.");
+                // MARCAMOS QUE YA FUE VIP PARA LA PRÓXIMA VEZ
+                localStorage.setItem('conversor_was_vip', 'true'); 
+                
+                alert("¡Código correcto! Bienvenido al modo VIP. Tienes 30 días de consultas ilimitadas.");
                 updateLimitUI();
                 paymentModal.style.display = 'none';
             } else {
@@ -361,7 +377,7 @@
     });
 
     calculateBtn.addEventListener('click', async () => {
-        if (queriesUsed >= MAX_FREE && !isPremium) return;
+        if (queriesUsed >= maxFree && !isPremium) return;
         const amount = parseFloat(amountInput.value);
         if (!amount || amount <= 0) {
             errorMsg.textContent = "Por favor, ingresa un monto válido.";
@@ -408,7 +424,7 @@
             errorMsg.textContent = "Error de conexión. Intenta de nuevo.";
             errorMsg.style.display = 'block';
         } finally {
-            if (queriesUsed < MAX_FREE || isPremium) {
+            if (queriesUsed < maxFree || isPremium) {
                 calculateBtn.disabled = false;
                 calculateBtn.textContent = 'Calcular Tasas';
             }
