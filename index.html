@@ -19,7 +19,7 @@
         :root { 
             --bg: #0b0f19; --card: #151b2b; --accent: #10b981; --accent-hover: #059669;
             --text: #f8fafc; --muted: #94a3b8; --border: #2a3441; --warn: #ef4444; 
-            --bcv: #3b82f6;
+            --bcv: #3b82f6; --binance: #F0B90B;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: 'Outfit', sans-serif;}
         body { background-color: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 15px; padding-top: calc(15px + env(safe-area-inset-top)); background-image: radial-gradient(circle at top, #1e293b 0%, #0b0f19 60%); }
@@ -32,10 +32,7 @@
         .admin-panel small { color: #9ca3af; font-size: 0.7rem; }
 
         .header { background: linear-gradient(135deg, #1e293b, #0f172a); padding: 25px 20px 20px 20px; text-align: center; border-bottom: 1px solid var(--border); }
-        
-        /* ESTILO PARA EL LOGO EN EL HEADER */
         .header-logo { width: 65px; height: 65px; margin-bottom: 12px; border-radius: 18px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2); }
-        
         .header h1 { font-size: 1.6rem; font-weight: 800; margin-bottom: 5px; color: white; letter-spacing: -0.5px;}
         .header p { font-size: 0.9rem; color: var(--muted); font-weight: 400;}
 
@@ -75,6 +72,13 @@
         .bcv-value { font-size: 1.4rem; font-weight: 800; color: #60a5fa; }
         .bcv-rate-info { font-size: 0.7rem; color: var(--muted); margin-top: 5px; }
 
+        /* BOTÓN DE BINANCE */
+        .binance-cta { margin-top: 20px; background: linear-gradient(135deg, rgba(240, 185, 11, 0.1), rgba(240, 185, 11, 0.05)); border: 1px solid rgba(240, 185, 11, 0.3); border-radius: 12px; padding: 15px; text-align: center; }
+        .binance-cta p { font-size: 0.8rem; color: #f8fafc; margin-bottom: 12px; line-height: 1.4; }
+        .btn-binance { display: flex; justify-content: center; align-items: center; gap: 8px; width: 100%; padding: 14px; background-color: var(--binance); color: #000; text-decoration: none; border-radius: 10px; font-weight: 800; font-size: 0.9rem; border: none; cursor: pointer; transition: transform 0.1s, opacity 0.2s; }
+        .btn-binance:active { transform: scale(0.98); }
+        .btn-binance svg { width: 18px; height: 18px; }
+
         .error-msg { color: var(--warn); font-size: 0.85rem; text-align: center; margin-top: 15px; display: none; font-weight: 600;}
         .spinner { display: inline-block; width: 20px; height: 20px; border: 3px solid rgba(0,0,0,0.2); border-radius: 50%; border-top-color: #000; animation: spin 1s linear infinite; vertical-align: middle; }
         @keyframes spin { to { transform: rotate(360deg); } }
@@ -95,11 +99,13 @@
         .limit-reached-card p { font-size: 0.85rem; color: #f8fafc; margin-bottom: 10px;}
         .btn-vip-small { background: var(--warn); color: white; border: none; padding: 8px 15px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.8rem;}
 
-        /* ESTILOS DEL CARTEL DE BIENVENIDA (ONBOARDING) */
         .welcome-list { text-align: left; margin-bottom: 20px; }
         .welcome-list li { margin-bottom: 12px; font-size: 0.9rem; color: var(--text); line-height: 1.4; display: flex; align-items: flex-start; gap: 10px;}
         .welcome-list li span { font-size: 1.2rem; }
         .welcome-warning { background: rgba(245, 158, 11, 0.1); border-left: 3px solid #fbbf24; padding: 12px; border-radius: 6px; font-size: 0.8rem; color: #fcd34d; text-align: left; margin-bottom: 20px; line-height: 1.4;}
+
+        .binance-modal-text { font-size: 0.9rem; line-height: 1.5; text-align: left; margin-bottom: 20px;}
+        .binance-modal-text strong { color: var(--binance); }
     </style>
 </head>
 <body>
@@ -112,7 +118,6 @@
     </div>
 
     <div class="header">
-        <!-- LOGO AÑADIDO AQUÍ -->
         <img src="./icon.svg" alt="Logo Conversor P2P" class="header-logo">
         <h1>Conversor P2P</h1>
         <p>Compara tus bolívares al instante</p>
@@ -160,6 +165,16 @@
                 <span class="bcv-value" id="bcvDisplay">0.00 USD</span>
                 <span class="bcv-rate-info" id="bcvRateDisplay"></span>
             </div>
+
+            <!-- BOTÓN DE BINANCE CON MODAL -->
+            <div class="binance-cta">
+                <p><b>Esta tasa es atractiva, ¿verdad?</b> Aprovecha y ejecuta tu operación en Binance P2P.</p>
+                <button id="goBinanceBtn" class="btn-binance">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 24C18.6274 24 24 18.6274 24 12C24 5.37258 18.6274 0 12 0C5.37258 0 0 5.37258 0 12C0 18.6274 5.37258 24 12 24Z" fill="#000"/><path d="M12 6.5L15.5 10L12 13.5L8.5 10L12 6.5Z" fill="#F0B90B"/><path d="M6.5 12L10 15.5L6.5 19L3 15.5L6.5 12Z" fill="#F0B90B"/><path d="M17.5 12L21 15.5L17.5 19L14 15.5L17.5 12Z" fill="#F0B90B"/><path d="M12 14.5L15.5 18L12 21.5L8.5 18L12 14.5Z" fill="#F0B90B"/></svg>
+                    Ir a Binance y Comprar
+                </button>
+            </div>
+
         </div>
     </div>
 </div>
@@ -189,7 +204,27 @@
     </div>
 </div>
 
-<!-- NUEVO CARTEL DE BIENVENIDA (CORREGIDO) -->
+<!-- MODAL DE CONFIRMACIÓN BINANCE -->
+<div class="modal-overlay" id="binanceModal">
+    <div class="modal-content">
+        <h3>Antes de ir a Binance... 🚀</h3>
+        
+        <div class="binance-modal-text">
+            <p>Si eres un usuario <strong>nuevo</strong> y te registras usando nuestro botón, estarás apoyando directamente al desarrollador de esta app (¡nos ayudas a mantenerla gratis!).</p>
+            <p style="margin-top: 10px;">Si <strong>ya tienes cuenta</strong> en Binance, ¡éxitos en tus transacciones! Recuerda que puedes apoyar el proyecto adquiriendo tu <strong>Membresía VIP</strong> aquí mismo para consultas ilimitadas.</p>
+        </div>
+
+        <!-- ENLACE DE REFERIDO CPA INTEGRADO AQUÍ -->
+        <a href="https://www.binance.com/activity/referral-entry/CPA?ref=CPA_00LEBD1J2E" target="_blank" class="btn-binance" style="margin-bottom: 15px;">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 24C18.6274 24 24 18.6274 24 12C24 5.37258 18.6274 0 12 0C5.37258 0 0 5.37258 0 12C0 18.6274 5.37258 24 12 24Z" fill="#000"/><path d="M12 6.5L15.5 10L12 13.5L8.5 10L12 6.5Z" fill="#F0B90B"/><path d="M6.5 12L10 15.5L6.5 19L3 15.5L6.5 12Z" fill="#F0B90B"/><path d="M17.5 12L21 15.5L17.5 19L14 15.5L17.5 12Z" fill="#F0B90B"/><path d="M12 14.5L15.5 18L12 21.5L8.5 18L12 14.5Z" fill="#F0B90B"/></svg>
+            Entendido, ir a Binance
+        </a>
+        
+        <button class="btn-close" id="closeBinanceModalBtn">Cancelar y Volver</button>
+    </div>
+</div>
+
+<!-- CARTEL DE BIENVENIDA -->
 <div class="modal-overlay" id="welcomeModal">
     <div class="modal-content">
         <h3 style="font-size: 1.5rem; margin-bottom: 5px;">¡Bienvenido! 👋</h3>
@@ -231,7 +266,10 @@
     const bcvRateDisplay = document.getElementById('bcvRateDisplay');
     const bcvTickerValue = document.getElementById('bcvTickerValue');
     
-    // Elementos del Onboarding
+    const goBinanceBtn = document.getElementById('goBinanceBtn');
+    const binanceModal = document.getElementById('binanceModal');
+    const closeBinanceModalBtn = document.getElementById('closeBinanceModalBtn');
+
     const welcomeModal = document.getElementById('welcomeModal');
     const closeWelcomeBtn = document.getElementById('closeWelcomeBtn');
 
@@ -243,6 +281,15 @@
     closeWelcomeBtn.addEventListener('click', () => {
         localStorage.setItem('conversor_onboarding_seen', 'true');
         welcomeModal.style.display = 'none';
+    });
+
+    // --- LÓGICA DEL MODAL DE BINANCE ---
+    goBinanceBtn.addEventListener('click', () => {
+        binanceModal.style.display = 'flex';
+    });
+
+    closeBinanceModalBtn.addEventListener('click', () => {
+        binanceModal.style.display = 'none';
     });
     // ---------------------------------------
 
