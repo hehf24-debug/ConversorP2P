@@ -196,16 +196,13 @@
     const bcvRateDisplay = document.getElementById('bcvRateDisplay');
     const bcvTickerValue = document.getElementById('bcvTickerValue');
 
-    // --- NUEVA LÓGICA DE LÍMITES ---
     let wasVip = localStorage.getItem('conversor_was_vip') === 'true';
-    const MAX_FREE_NEW = 30; // Usuario nuevo
-    const MAX_FREE_EXPIRED = 10; // Usuario que ya fue VIP
+    const MAX_FREE_NEW = 30; 
+    const MAX_FREE_EXPIRED = 10; 
     const REFILL_DAYS = 7;
     const MS_IN_DAYS = 1000 * 60 * 60 * 24;
 
-    // Establecemos el límite según si ya fue VIP o no
     let maxFree = wasVip ? MAX_FREE_EXPIRED : MAX_FREE_NEW;
-
     let queriesUsed = parseInt(localStorage.getItem('conversor_queries') || '0');
     let isPremium = localStorage.getItem('conversor_premium') === 'true';
     let userVipCode = localStorage.getItem('conversor_codigo') || null;
@@ -217,10 +214,8 @@
     } else {
         const daysPassed = (Date.now() - lastReset) / MS_IN_DAYS;
         if (daysPassed >= REFILL_DAYS) {
-            // Reabastecimiento (le damos 10 consultas de recarga si está en 0)
             queriesUsed = maxFree - 10; 
             if (queriesUsed < 0) queriesUsed = 0;
-            
             lastReset = Date.now();
             localStorage.setItem('conversor_queries', queriesUsed);
             localStorage.setItem('conversor_last_reset', lastReset);
@@ -236,7 +231,6 @@
 
     const MI_PROXY = "https://conversor-proxy.hehf24.workers.dev";
 
-    // --- VERIFICACIÓN INVISIBLE DEL VIP ---
     async function checkVipStatus() {
         if (isPremium && !userVipCode) {
             isPremium = false;
@@ -255,30 +249,24 @@
                 const data = await response.json();
 
                 if (data.valido !== true) {
-                    // EL VIP EXPIRÓ O FUE REVOCADO
                     isPremium = false;
                     userVipCode = null;
                     localStorage.removeItem('conversor_premium');
                     localStorage.removeItem('conversor_codigo');
-                    
-                    // ¡AQUÍ APLICAMOS LA REGLA DE NEGOCIO!
-                    // Como ya fue VIP, ahora solo tendrá 10 consultas
                     localStorage.setItem('conversor_was_vip', 'true');
                     wasVip = true;
                     maxFree = MAX_FREE_EXPIRED;
-                    queriesUsed = 0; // Reinicia el contador para que tenga las 10
+                    queriesUsed = 0;
                     localStorage.setItem('conversor_queries', queriesUsed);
-
                     updateLimitUI(); 
-                    alert("Tu membresía VIP ha expirado. Ahora tienes 10 consultas gratis. ¡Renueva para seguir ilimitado!");
+                    alert("Tu membresía VIP ha expirado o sido revocada. Ahora tienes 10 consultas gratis. ¡Renueva para seguir ilimitado!");
                 }
             } catch (e) {
-                console.error("Error verificando VIP, manteniendo estado local:", e);
+                console.error("Error verificando VIP:", e);
             }
         }
     }
     checkVipStatus(); 
-    // ------------------------------------
 
     async function loadBCVTicker() {
         try {
@@ -354,15 +342,20 @@
                 body: JSON.stringify({ codigo: code, deviceId: deviceId })
             });
             const data = await response.json();
+            
             if (data.valido) {
                 isPremium = true;
                 userVipCode = code.trim().toUpperCase();
                 localStorage.setItem('conversor_premium', 'true');
                 localStorage.setItem('conversor_codigo', userVipCode);
-                // MARCAMOS QUE YA FUE VIP PARA LA PRÓXIMA VEZ
                 localStorage.setItem('conversor_was_vip', 'true'); 
                 
-                alert("¡Código correcto! Bienvenido al modo VIP. Tienes 30 días de consultas ilimitadas.");
+                if (data.migrado) {
+                    alert("¡Código migrado con éxito a este teléfono! Tu acceso VIP está activo aquí por los días restantes.");
+                } else {
+                    alert("¡Código correcto! Bienvenido al modo VIP. Tienes 30 días de consultas ilimitadas.");
+                }
+                
                 updateLimitUI();
                 paymentModal.style.display = 'none';
             } else {
