@@ -235,7 +235,6 @@
     const bcvDisplay = document.getElementById('bcvDisplay');
     const bcvRateDisplay = document.getElementById('bcvRateDisplay');
     
-    // Elementos Ticker BCV
     const bcvTickerValue = document.getElementById('bcvTickerValue');
 
     const MAX_FREE = 30;
@@ -250,7 +249,6 @@
 
     const MI_PROXY = "https://conversor-proxy.hehf24.workers.dev";
 
-    // --- CARGAR TICKER BCV AL INICIO ---
     async function loadBCVTicker() {
         try {
             const response = await fetch(MI_PROXY + "/tasas-bcv");
@@ -266,16 +264,26 @@
             bcvTickerValue.textContent = "Error";
         }
     }
-    loadBCVTicker(); // Se ejecuta al abrir la app
+    loadBCVTicker(); 
 
-    // Panel Admin
+    // --- AQUÍ ESTÁ LA CORRECCIÓN DEL PANEL ADMIN ---
     if (window.location.search.includes('admin=true')) {
         document.getElementById('adminPanel').style.display = 'block';
         fetch(MI_PROXY + "/stats")
-            .then(res => res.json())
-            .then(data => { document.getElementById('adminCalls').textContent = data.cotizave_calls; })
-            .catch(err => { document.getElementById('adminCalls').textContent = "Error"; });
+            .then(async res => {
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || "Error desconocido");
+                return data;
+            })
+            .then(data => { 
+                document.getElementById('adminCalls').textContent = data.cotizave_calls; 
+            })
+            .catch(err => { 
+                console.error(err);
+                document.getElementById('adminCalls').textContent = "Error: " + err.message; 
+            });
     }
+    // -----------------------------------------------
 
     function updateLimitUI() {
         if (isPremium) {
@@ -385,7 +393,6 @@
 
     updateLimitUI();
 
-    // Lógica PWA
     let deferredPrompt;
     window.addEventListener("beforeinstallprompt", e => {
         e.preventDefault();
