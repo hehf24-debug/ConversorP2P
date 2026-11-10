@@ -67,7 +67,7 @@
         .total-row span:first-child { font-size: 0.9rem; color: var(--muted); margin-bottom: 5px;}
         .total-row span:last-child { font-size: 2.5rem; font-weight: 800; color: var(--accent); line-height: 1;}
 
-        /* TARJETA BCV RESTAURADA */
+        /* TARJETA BCV */
         .bcv-card { margin-top: 15px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 12px; padding: 15px; display: flex; flex-direction: column; align-items: center; }
         .bcv-title { font-size: 0.75rem; color: #93c5fd; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; font-weight: 600;}
         .bcv-value { font-size: 1.4rem; font-weight: 800; color: #60a5fa; }
@@ -110,10 +110,10 @@
         .binance-modal-text strong { color: var(--binance); }
         .btn-binance-outline { 
             display: flex; justify-content: center; align-items: center; gap: 8px; width: 100%; padding: 14px; 
-            background-color: transparent; color: white; text-decoration: none; border-radius: 10px; font-weight: 600; 
-            font-size: 0.9rem; border: 1px solid var(--border); cursor: pointer; transition: all 0.2s; margin-bottom: 15px;
+            background-color: #2a3441; color: white; text-decoration: none; border-radius: 10px; font-weight: 600; 
+            font-size: 0.9rem; border: none; cursor: pointer; transition: all 0.2s; margin-bottom: 15px;
         }
-        .btn-binance-outline:hover { background-color: rgba(255,255,255,0.05); }
+        .btn-binance-outline:hover { background-color: #334155; }
     </style>
 </head>
 <body>
@@ -168,7 +168,7 @@
                 <span id="netDisplay">0.00 USDT</span>
             </div>
 
-            <!-- TARJETA BCV RESTAURADA -->
+            <!-- TARJETA BCV (Aquí se muestra el cálculo) -->
             <div class="bcv-card" id="bcvSection" style="display: none;">
                 <span class="bcv-title">Equivalente a Tasa Oficial BCV</span>
                 <span class="bcv-value" id="bcvDisplay">0.00 USD</span>
@@ -287,7 +287,6 @@
     const welcomeModal = document.getElementById('welcomeModal');
     const closeWelcomeBtn = document.getElementById('closeWelcomeBtn');
 
-    // --- LÓGICA DEL CARTEL DE BIENVENIDA ---
     if (!localStorage.getItem('conversor_onboarding_seen')) {
         welcomeModal.style.display = 'flex';
     }
@@ -297,15 +296,8 @@
         welcomeModal.style.display = 'none';
     });
 
-    // --- LÓGICA DEL MODAL DE BINANCE ---
-    goBinanceBtn.addEventListener('click', () => {
-        binanceModal.style.display = 'flex';
-    });
-
-    closeBinanceModalBtn.addEventListener('click', () => {
-        binanceModal.style.display = 'none';
-    });
-    // ---------------------------------------
+    goBinanceBtn.addEventListener('click', () => { binanceModal.style.display = 'flex'; });
+    closeBinanceModalBtn.addEventListener('click', () => { binanceModal.style.display = 'none'; });
 
     let wasVip = localStorage.getItem('conversor_was_vip') === 'true';
     const MAX_FREE_NEW = 30; 
@@ -507,6 +499,7 @@
             rateDisplay.textContent = `${rateBinance.toFixed(2)} VES`;
             netDisplay.textContent = `${usdtBinance.toFixed(2)} USDT`;
 
+            // LÓGICA DEL BCV EN EL CÁLCULO
             if (data.bcv_rate) {
                 const rateBCV = data.bcv_rate;
                 let usdBCV = amount / rateBCV;
