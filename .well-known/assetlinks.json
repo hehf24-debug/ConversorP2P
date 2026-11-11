@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "io.github.hehf24_debug.twa",
+        "sha256_cert_fingerprints": ["7C:33:6E:BC:8D:B8:C0:8C:A8:C4:97:9B:BC:34:11:3E:C7:DA:0B:69:D1:4A:70:6A:3C:3B:90:71:18:B5:35:BE"]
+      }
+    }]
