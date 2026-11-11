@@ -167,14 +167,12 @@
                 <span id="netDisplay">0.00 USDT</span>
             </div>
 
-            <!-- TARJETA BCV EN EL RESULTADO -->
             <div class="bcv-card" id="bcvSection" style="display: none;">
                 <span class="bcv-title">Equivalente a Tasa Oficial BCV</span>
                 <span class="bcv-value" id="bcvDisplay">0.00 USD</span>
                 <span class="bcv-rate-info" id="bcvRateDisplay"></span>
             </div>
 
-            <!-- BOTÓN DE BINANCE -->
             <div class="binance-cta">
                 <p><b>Esta tasa es atractiva, ¿verdad?</b> Aprovecha y ejecuta tu operación en Binance P2P.</p>
                 <button id="goBinanceBtn" class="btn-binance">
@@ -228,10 +226,10 @@
             Soy Nuevo, Registrarme
         </a>
 
-        <!-- BOTÓN 2: USUARIO EXISTENTE (IR DIRECTO A P2P) -->
-        <a href="https://p2p.binance.com/es" target="_blank" class="btn-binance-outline">
+        <!-- BOTÓN 2: USUARIO EXISTENTE (MODIFICADO PARA DEEP LINK) -->
+        <button id="btn-open-binance-app" class="btn-binance-outline">
             Ya tengo cuenta, ir a Binance
-        </a>
+        </button>
         
         <button class="btn-close" id="closeBinanceModalBtn" style="margin-top: 5px;">Cancelar y Volver</button>
     </div>
@@ -282,6 +280,8 @@
     const goBinanceBtn = document.getElementById('goBinanceBtn');
     const binanceModal = document.getElementById('binanceModal');
     const closeBinanceModalBtn = document.getElementById('closeBinanceModalBtn');
+    
+    const btnOpenBinanceApp = document.getElementById('btn-open-binance-app');
 
     const welcomeModal = document.getElementById('welcomeModal');
     const closeWelcomeBtn = document.getElementById('closeWelcomeBtn');
@@ -300,7 +300,30 @@
     goBinanceBtn.addEventListener('click', () => { binanceModal.style.display = 'flex'; });
     closeBinanceModalBtn.addEventListener('click', () => { binanceModal.style.display = 'none'; });
 
-    // 3. LÓGICA DE LÍMITES, VIP Y REINICIO
+    // 3. LÓGICA PARA ABRIR LA APP NATIVA DE BINANCE (DEEP LINK)
+    btnOpenBinanceApp.addEventListener('click', function(e) {
+        e.preventDefault();
+        const webUrl = "https://p2p.binance.com/es";
+        
+        // Intentamos abrir la app usando el esquema de URL de Binance
+        window.location.href = "binance://";
+
+        // Si después de 1 segundo la app no se abrió, redirigimos a la web
+        const timer = setTimeout(function() {
+            if (!document.hidden) {
+                window.open(webUrl, '_blank');
+            }
+        }, 1000);
+
+        // Si la página se oculta (la app se abrió), cancelamos el temporizador
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                clearTimeout(timer);
+            }
+        }, { once: true });
+    });
+
+    // 4. LÓGICA DE LÍMITES, VIP Y REINICIO
     let wasVip = localStorage.getItem('conversor_was_vip') === 'true';
     const MAX_FREE_NEW = 30; 
     const MAX_FREE_EXPIRED = 10; 
@@ -313,7 +336,6 @@
     let userVipCode = localStorage.getItem('conversor_codigo') || null;
     let lastReset = parseInt(localStorage.getItem('conversor_last_reset') || '0');
 
-    // Lógica de reinicio semanal
     if (!lastReset) {
         lastReset = Date.now();
         localStorage.setItem('conversor_last_reset', lastReset);
@@ -329,7 +351,6 @@
         }
     }
 
-    // Generación de ID de dispositivo
     let deviceId = localStorage.getItem('conversor_device_id');
     if (!deviceId) {
         deviceId = 'dev-' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
@@ -338,7 +359,7 @@
 
     const MI_PROXY = "https://conversor-proxy.hehf24.workers.dev";
 
-    // 4. VERIFICACIÓN INVISIBLE DE VIP (Se ejecuta al abrir)
+    // 5. VERIFICACIÓN INVISIBLE DE VIP
     async function checkVipStatus() {
         if (isPremium && !userVipCode) {
             isPremium = false;
@@ -376,7 +397,7 @@
     }
     checkVipStatus(); 
 
-    // 5. CARGAR TICKER BCV SUPERIOR
+    // 6. CARGAR TICKER BCV SUPERIOR
     async function loadBCVTicker() {
         try {
             const response = await fetch(MI_PROXY + "/tasas-bcv");
@@ -390,7 +411,7 @@
     }
     loadBCVTicker(); 
 
-    // 6. PANEL DE ADMIN
+    // 7. PANEL DE ADMIN
     if (window.location.search.includes('admin=true')) {
         document.getElementById('adminPanel').style.display = 'block';
         fetch(MI_PROXY + "/stats")
@@ -403,7 +424,7 @@
             .catch(err => { document.getElementById('adminCalls').textContent = "Error: " + err.message; });
     }
 
-    // 7. ACTUALIZAR INTERFAZ DE LÍMITES
+    // 8. ACTUALIZAR INTERFAZ DE LÍMITES
     function updateLimitUI() {
         if (isPremium) {
             limitText.innerHTML = "✨ <b>Modo VIP Activado</b>";
@@ -436,12 +457,12 @@
         }
     }
 
-    // 8. EVENTOS DE MODALES VIP
+    // 9. EVENTOS DE MODALES VIP
     unlockBtn.addEventListener('click', () => { paymentModal.style.display = 'flex'; });
     goVipBtn.addEventListener('click', () => { paymentModal.style.display = 'flex'; });
     closeModalBtn.addEventListener('click', () => { paymentModal.style.display = 'none'; });
 
-    // 9. VALIDAR CÓDIGO VIP
+    // 10. VALIDAR CÓDIGO VIP
     codeBtn.addEventListener('click', async () => {
         const code = prompt("Ingresa tu código VIP:");
         if (!code || code.trim() === "") return;
@@ -482,7 +503,7 @@
         }
     });
 
-    // 10. CALCULAR TASAS
+    // 11. CALCULAR TASAS
     calculateBtn.addEventListener('click', async () => {
         if (queriesUsed >= maxFree && !isPremium) return;
         const amount = parseFloat(amountInput.value);
@@ -500,7 +521,7 @@
 
         try {
             const response = await fetch(MI_PROXY);
-            const data = await response.json(); // Leemos el JSON siempre primero
+            const data = await response.json(); 
 
             if (!response.ok) {
                 throw new Error(data.error || "Error en el servidor");
@@ -514,7 +535,6 @@
             rateDisplay.textContent = `${rateBinance.toFixed(2)} VES`;
             netDisplay.textContent = `${usdtBinance.toFixed(2)} USDT`;
 
-            // Lógica para calcular BCV y mostrarlo
             if (data.bcv_rate) {
                 const rateBCV = data.bcv_rate;
                 let usdBCV = amount / rateBCV;
@@ -533,7 +553,6 @@
                 updateLimitUI();
             }
         } catch (error) {
-            // MOSTRAR ERROR REAL
             errorMsg.textContent = "Fallo: " + error.message;
             errorMsg.style.display = 'block';
         } finally {
@@ -546,7 +565,7 @@
 
     updateLimitUI();
 
-    // 11. INSTALACIÓN PWA
+    // 12. INSTALACIÓN PWA
     let deferredPrompt;
     window.addEventListener("beforeinstallprompt", e => {
         e.preventDefault();
