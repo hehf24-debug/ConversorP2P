@@ -67,13 +67,13 @@
         .total-row span:first-child { font-size: 0.9rem; color: var(--muted); margin-bottom: 5px;}
         .total-row span:last-child { font-size: 2.5rem; font-weight: 800; color: var(--accent); line-height: 1;}
 
-        /* TARJETA BCV */
+        /* TARJETA BCV EN EL RESULTADO */
         .bcv-card { margin-top: 15px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 12px; padding: 15px; display: flex; flex-direction: column; align-items: center; }
         .bcv-title { font-size: 0.75rem; color: #93c5fd; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; font-weight: 600;}
         .bcv-value { font-size: 1.4rem; font-weight: 800; color: #60a5fa; }
         .bcv-rate-info { font-size: 0.7rem; color: var(--muted); margin-top: 5px; }
 
-        /* BOTÓN DE BINANCE */
+        /* BOTÓN DE BINANCE EN EL RESULTADO */
         .binance-cta { margin-top: 20px; background: linear-gradient(135deg, rgba(240, 185, 11, 0.1), rgba(240, 185, 11, 0.05)); border: 1px solid rgba(240, 185, 11, 0.3); border-radius: 12px; padding: 15px; text-align: center; }
         .binance-cta p { font-size: 0.8rem; color: #f8fafc; margin-bottom: 12px; line-height: 1.4; }
         .btn-binance { display: flex; justify-content: center; align-items: center; gap: 8px; width: 100%; padding: 14px; background-color: var(--binance); color: #000; text-decoration: none; border-radius: 10px; font-weight: 800; font-size: 0.9rem; border: none; cursor: pointer; transition: transform 0.1s, opacity 0.2s; }
@@ -105,7 +105,6 @@
         .welcome-list li span { font-size: 1.2rem; }
         .welcome-warning { background: rgba(245, 158, 11, 0.1); border-left: 3px solid #fbbf24; padding: 12px; border-radius: 6px; font-size: 0.8rem; color: #fcd34d; text-align: left; margin-bottom: 20px; line-height: 1.4;}
 
-        /* ESTILOS DEL MODAL DE BINANCE (2 BOTONES) */
         .binance-modal-text { font-size: 0.9rem; line-height: 1.5; text-align: left; margin-bottom: 20px;}
         .binance-modal-text strong { color: var(--binance); }
         .btn-binance-outline { 
@@ -168,14 +167,14 @@
                 <span id="netDisplay">0.00 USDT</span>
             </div>
 
-            <!-- TARJETA BCV (Aquí se muestra el cálculo) -->
+            <!-- TARJETA BCV EN EL RESULTADO -->
             <div class="bcv-card" id="bcvSection" style="display: none;">
                 <span class="bcv-title">Equivalente a Tasa Oficial BCV</span>
                 <span class="bcv-value" id="bcvDisplay">0.00 USD</span>
                 <span class="bcv-rate-info" id="bcvRateDisplay"></span>
             </div>
 
-            <!-- BOTÓN DE BINANCE CON MODAL -->
+            <!-- BOTÓN DE BINANCE -->
             <div class="binance-cta">
                 <p><b>Esta tasa es atractiva, ¿verdad?</b> Aprovecha y ejecuta tu operación en Binance P2P.</p>
                 <button id="goBinanceBtn" class="btn-binance">
@@ -213,7 +212,7 @@
     </div>
 </div>
 
-<!-- MODAL DE CONFIRMACIÓN BINANCE (2 BOTONES) -->
+<!-- MODAL DE CONFIRMACIÓN BINANCE -->
 <div class="modal-overlay" id="binanceModal">
     <div class="modal-content">
         <h3>¿Cómo deseas continuar? 🚀</h3>
@@ -223,7 +222,7 @@
             <p style="margin-top: 10px;">Si <strong>ya tienes cuenta</strong>, usa el botón gris para ir directo al P2P de Binance.</p>
         </div>
 
-        <!-- BOTÓN 1: USUARIO NUEVO (REFERIDO) -->
+        <!-- BOTÓN 1: USUARIO NUEVO (REFERIDO CPA) -->
         <a href="https://www.binance.com/activity/referral-entry/CPA?ref=CPA_00LEBD1J2E" target="_blank" class="btn-binance" style="margin-bottom: 10px;">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 24C18.6274 24 24 18.6274 24 12C24 5.37258 18.6274 0 12 0C5.37258 0 0 5.37258 0 12C0 18.6274 5.37258 24 12 24Z" fill="#000"/><path d="M12 6.5L15.5 10L12 13.5L8.5 10L12 6.5Z" fill="#F0B90B"/><path d="M6.5 12L10 15.5L6.5 19L3 15.5L6.5 12Z" fill="#F0B90B"/><path d="M17.5 12L21 15.5L17.5 19L14 15.5L17.5 12Z" fill="#F0B90B"/><path d="M12 14.5L15.5 18L12 21.5L8.5 18L12 14.5Z" fill="#F0B90B"/></svg>
             Soy Nuevo, Registrarme
@@ -238,7 +237,7 @@
     </div>
 </div>
 
-<!-- CARTEL DE BIENVENIDA -->
+<!-- CARTEL DE BIENVENIDA (ONBOARDING) -->
 <div class="modal-overlay" id="welcomeModal">
     <div class="modal-content">
         <h3 style="font-size: 1.5rem; margin-bottom: 5px;">¡Bienvenido! 👋</h3>
@@ -287,6 +286,7 @@
     const welcomeModal = document.getElementById('welcomeModal');
     const closeWelcomeBtn = document.getElementById('closeWelcomeBtn');
 
+    // 1. LÓGICA DEL CARTEL DE BIENVENIDA
     if (!localStorage.getItem('conversor_onboarding_seen')) {
         welcomeModal.style.display = 'flex';
     }
@@ -296,9 +296,11 @@
         welcomeModal.style.display = 'none';
     });
 
+    // 2. LÓGICA DEL MODAL DE BINANCE
     goBinanceBtn.addEventListener('click', () => { binanceModal.style.display = 'flex'; });
     closeBinanceModalBtn.addEventListener('click', () => { binanceModal.style.display = 'none'; });
 
+    // 3. LÓGICA DE LÍMITES, VIP Y REINICIO
     let wasVip = localStorage.getItem('conversor_was_vip') === 'true';
     const MAX_FREE_NEW = 30; 
     const MAX_FREE_EXPIRED = 10; 
@@ -311,6 +313,7 @@
     let userVipCode = localStorage.getItem('conversor_codigo') || null;
     let lastReset = parseInt(localStorage.getItem('conversor_last_reset') || '0');
 
+    // Lógica de reinicio semanal
     if (!lastReset) {
         lastReset = Date.now();
         localStorage.setItem('conversor_last_reset', lastReset);
@@ -326,6 +329,7 @@
         }
     }
 
+    // Generación de ID de dispositivo
     let deviceId = localStorage.getItem('conversor_device_id');
     if (!deviceId) {
         deviceId = 'dev-' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
@@ -334,6 +338,7 @@
 
     const MI_PROXY = "https://conversor-proxy.hehf24.workers.dev";
 
+    // 4. VERIFICACIÓN INVISIBLE DE VIP (Se ejecuta al abrir)
     async function checkVipStatus() {
         if (isPremium && !userVipCode) {
             isPremium = false;
@@ -371,6 +376,7 @@
     }
     checkVipStatus(); 
 
+    // 5. CARGAR TICKER BCV SUPERIOR
     async function loadBCVTicker() {
         try {
             const response = await fetch(MI_PROXY + "/tasas-bcv");
@@ -384,6 +390,7 @@
     }
     loadBCVTicker(); 
 
+    // 6. PANEL DE ADMIN
     if (window.location.search.includes('admin=true')) {
         document.getElementById('adminPanel').style.display = 'block';
         fetch(MI_PROXY + "/stats")
@@ -396,6 +403,7 @@
             .catch(err => { document.getElementById('adminCalls').textContent = "Error: " + err.message; });
     }
 
+    // 7. ACTUALIZAR INTERFAZ DE LÍMITES
     function updateLimitUI() {
         if (isPremium) {
             limitText.innerHTML = "✨ <b>Modo VIP Activado</b>";
@@ -428,10 +436,12 @@
         }
     }
 
+    // 8. EVENTOS DE MODALES VIP
     unlockBtn.addEventListener('click', () => { paymentModal.style.display = 'flex'; });
     goVipBtn.addEventListener('click', () => { paymentModal.style.display = 'flex'; });
     closeModalBtn.addEventListener('click', () => { paymentModal.style.display = 'none'; });
 
+    // 9. VALIDAR CÓDIGO VIP
     codeBtn.addEventListener('click', async () => {
         const code = prompt("Ingresa tu código VIP:");
         if (!code || code.trim() === "") return;
@@ -472,6 +482,7 @@
         }
     });
 
+    // 10. CALCULAR TASAS
     calculateBtn.addEventListener('click', async () => {
         if (queriesUsed >= maxFree && !isPremium) return;
         const amount = parseFloat(amountInput.value);
@@ -489,9 +500,13 @@
 
         try {
             const response = await fetch(MI_PROXY);
-            if (!response.ok) throw new Error("Error de conexión");
-            const data = await response.json();
-            if (!data.binance_rate) throw new Error("No se recibió la tasa");
+            const data = await response.json(); // Leemos el JSON siempre primero
+
+            if (!response.ok) {
+                throw new Error(data.error || "Error en el servidor");
+            }
+            
+            if (!data.binance_rate) throw new Error("No se recibió la tasa de Binance");
 
             const rateBinance = data.binance_rate;
             let usdtBinance = amount / rateBinance;
@@ -499,7 +514,7 @@
             rateDisplay.textContent = `${rateBinance.toFixed(2)} VES`;
             netDisplay.textContent = `${usdtBinance.toFixed(2)} USDT`;
 
-            // LÓGICA DEL BCV EN EL CÁLCULO
+            // Lógica para calcular BCV y mostrarlo
             if (data.bcv_rate) {
                 const rateBCV = data.bcv_rate;
                 let usdBCV = amount / rateBCV;
@@ -518,7 +533,8 @@
                 updateLimitUI();
             }
         } catch (error) {
-            errorMsg.textContent = "Error de conexión. Intenta de nuevo.";
+            // MOSTRAR ERROR REAL
+            errorMsg.textContent = "Fallo: " + error.message;
             errorMsg.style.display = 'block';
         } finally {
             if (queriesUsed < maxFree || isPremium) {
@@ -530,6 +546,7 @@
 
     updateLimitUI();
 
+    // 11. INSTALACIÓN PWA
     let deferredPrompt;
     window.addEventListener("beforeinstallprompt", e => {
         e.preventDefault();
@@ -547,10 +564,12 @@
         });
         header.appendChild(installBtn);
     });
+    
     window.addEventListener("appinstalled", () => {
         const btn = document.querySelector('.header button');
         if(btn) btn.style.display = 'none';
     });
+    
     if("serviceWorker" in navigator){
         window.addEventListener("load", ()=> navigator.serviceWorker.register("./sw.js").catch(()=>{}));
     }
