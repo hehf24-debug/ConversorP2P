@@ -22,39 +22,48 @@
             --bcv: #3b82f6; --binance: #F0B90B;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: 'Outfit', sans-serif;}
-        body { background-color: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 15px; padding-top: calc(15px + env(safe-area-inset-top)); background-image: radial-gradient(circle at top, #1e293b 0%, #0b0f19 60%); }
+        body { background-color: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 15px; padding-top: calc(15px + env(safe-area-inset-top)); background-image: radial-gradient(circle at top, #1e293b 0%, #0b0f19 60%); overflow-x: hidden; }
         
-        .app-container { width: 100%; max-width: 400px; background-color: var(--card); border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); overflow: hidden; border: 1px solid var(--border); position: relative; }
+        .app-container { width: 100%; max-width: 400px; background-color: var(--card); border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); overflow: hidden; border: 1px solid var(--border); position: relative; z-index: 1;}
 
         .admin-panel { background-color: #1e1b4b; border-bottom: 2px solid #8b5cf6; padding: 12px; display: none; text-align: center; }
         .admin-panel h3 { color: #a78bfa; margin-bottom: 5px; font-size: 0.9rem; font-weight: 700;}
         .admin-panel p { color: white; font-size: 1.1rem; font-weight: 800; }
         .admin-panel small { color: #9ca3af; font-size: 0.7rem; }
 
-        .header { background: linear-gradient(135deg, #1e293b, #0f172a); padding: 25px 20px 20px 20px; text-align: center; border-bottom: 1px solid var(--border); }
-        .header-logo { width: 65px; height: 65px; margin-bottom: 12px; border-radius: 18px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2); }
+        /* ESTILOS DEL HEADER Y MENÚ HAMBURGUESA */
+        .header { background: linear-gradient(135deg, #1e293b, #0f172a); padding: 25px 20px 20px 20px; text-align: center; border-bottom: 1px solid var(--border); position: relative; }
+        
+        .menu-btn { position: absolute; top: 25px; left: 20px; background: transparent; border: none; color: white; cursor: pointer; padding: 5px; }
+        .menu-btn svg { width: 28px; height: 28px; }
+        
+        .header-logo { width: 65px; height: 65px; margin-bottom: 12px; border-radius: 18px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2); margin-top: 15px;}
         .header h1 { font-size: 1.6rem; font-weight: 800; margin-bottom: 5px; color: white; letter-spacing: -0.5px;}
         .header p { font-size: 0.9rem; color: var(--muted); font-weight: 400; margin-bottom: 15px;}
 
-        /* NUEVO BOTÓN DE DESCARGA DE APK */
-        .install-apk-btn {
-            display: inline-block;
-            background-color: var(--accent);
-            color: #000;
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-weight: 800;
-            font-size: 0.85rem;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-            transition: transform 0.1s;
-            border: none;
-            cursor: pointer;
-        }
+        .install-apk-btn { display: inline-block; background-color: var(--accent); color: #000; text-decoration: none; padding: 10px 20px; border-radius: 10px; font-weight: 800; font-size: 0.85rem; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); transition: transform 0.1s; border: none; cursor: pointer; }
         .install-apk-btn:active { transform: scale(0.98); }
 
+        /* ESTILOS DEL MENÚ LATERAL (SIDEBAR) */
+        .sidebar { position: fixed; top: 0; left: -280px; width: 280px; height: 100vh; background-color: #0f172a; border-right: 1px solid var(--border); z-index: 1000; transition: left 0.3s ease; display: flex; flex-direction: column; padding: 20px; }
+        .sidebar.active { left: 0; }
+        .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(2px); z-index: 999; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        .sidebar-overlay.active { opacity: 1; pointer-events: auto; }
+        
+        .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid var(--border); padding-bottom: 15px;}
+        .sidebar-header span { color: white; font-weight: 800; font-size: 1.2rem; }
+        .close-btn { background: none; border: none; color: var(--muted); font-size: 1.5rem; cursor: pointer;}
+        
+        .sidebar-menu { list-style: none; flex: 1; }
+        .sidebar-menu li { margin-bottom: 10px; }
+        .sidebar-menu a { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text); font-size: 1rem; font-weight: 600; padding: 12px; border-radius: 10px; transition: background 0.2s;}
+        .sidebar-menu a:hover { background-color: #1e293b; }
+        .sidebar-menu svg { width: 20px; height: 20px; color: var(--accent); }
+        .sidebar-menu .vip-link svg { color: var(--binance); }
+
+        .sidebar-footer { text-align: center; color: var(--muted); font-size: 0.75rem; padding-top: 20px; border-top: 1px solid var(--border); }
+
         .bcv-ticker { background-color: #0f172a; border-bottom: 1px solid var(--border); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--muted); transition: background-color 0.3s; }
-        .bcv-ticker:hover { background-color: #1e293b; }
         .ticker-label { font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 5px;}
         .ticker-value { font-weight: 800; font-size: 1.1rem; color: #60a5fa; }
         
@@ -84,22 +93,24 @@
         .total-row span:first-child { font-size: 0.9rem; color: var(--muted); margin-bottom: 5px;}
         .total-row span:last-child { font-size: 2.5rem; font-weight: 800; color: var(--accent); line-height: 1;}
 
+        /* TARJETA BCV CON BRECHA */
         .bcv-card { margin-top: 15px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 12px; padding: 15px; display: flex; flex-direction: column; align-items: center; }
         .bcv-title { font-size: 0.75rem; color: #93c5fd; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; font-weight: 600;}
         .bcv-value { font-size: 1.4rem; font-weight: 800; color: #60a5fa; }
         .bcv-rate-info { font-size: 0.7rem; color: var(--muted); margin-top: 5px; }
+        
+        .brecha-badge { margin-top: 8px; background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; gap: 4px;}
 
         .binance-cta { margin-top: 20px; background: linear-gradient(135deg, rgba(240, 185, 11, 0.1), rgba(240, 185, 11, 0.05)); border: 1px solid rgba(240, 185, 11, 0.3); border-radius: 12px; padding: 15px; text-align: center; }
         .binance-cta p { font-size: 0.8rem; color: #f8fafc; margin-bottom: 12px; line-height: 1.4; }
         .btn-binance { display: flex; justify-content: center; align-items: center; gap: 8px; width: 100%; padding: 14px; background-color: var(--binance); color: #000; text-decoration: none; border-radius: 10px; font-weight: 800; font-size: 0.9rem; border: none; cursor: pointer; transition: transform 0.1s, opacity 0.2s; }
         .btn-binance:active { transform: scale(0.98); }
-        .btn-binance svg { width: 18px; height: 18px; }
 
         .error-msg { color: var(--warn); font-size: 0.85rem; text-align: center; margin-top: 15px; display: none; font-weight: 600;}
         .spinner { display: inline-block; width: 20px; height: 20px; border: 3px solid rgba(0,0,0,0.2); border-radius: 50%; border-top-color: #000; animation: spin 1s linear infinite; vertical-align: middle; }
         @keyframes spin { to { transform: rotate(360deg); } }
         
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; padding: 20px; z-index: 1000; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; padding: 20px; z-index: 2000; }
         .modal-content { background: var(--card); border-radius: 24px; padding: 30px 25px; width: 100%; max-width: 400px; border: 1px solid var(--border); text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);}
         .modal-content h3 { color: white; font-size: 1.3rem; font-weight: 800; margin-bottom: 10px; }
         .modal-content p { font-size: 0.9rem; color: var(--muted); margin-bottom: 20px; }
@@ -107,7 +118,6 @@
         .payment-data strong { color: white; font-weight: 700;}
         .price-tag { color: var(--accent); font-size: 1.4rem; font-weight: 800; display: block; margin-bottom: 10px; text-align: center; background: rgba(16, 185, 129, 0.1); padding: 10px; border-radius: 10px;}
         .btn-whatsapp { display: flex; justify-content: center; align-items: center; gap: 10px; width: 100%; padding: 16px; background-color: #25D366; color: white; text-decoration: none; border-radius: 14px; font-weight: 700; font-size: 1rem; margin-bottom: 15px; border: none; cursor: pointer;}
-        .btn-whatsapp:hover { background-color: #20b858; }
         .btn-close { background: transparent; border: none; color: var(--muted); cursor: pointer; font-size: 0.9rem; text-decoration: underline; font-weight: 600;}
         
         .limit-reached-card { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 12px; padding: 15px; margin-top: 15px; display: none; text-align: center;}
@@ -117,20 +127,32 @@
 
         .welcome-list { text-align: left; margin-bottom: 20px; }
         .welcome-list li { margin-bottom: 12px; font-size: 0.9rem; color: var(--text); line-height: 1.4; display: flex; align-items: flex-start; gap: 10px;}
-        .welcome-list li span { font-size: 1.2rem; }
         .welcome-warning { background: rgba(245, 158, 11, 0.1); border-left: 3px solid #fbbf24; padding: 12px; border-radius: 6px; font-size: 0.8rem; color: #fcd34d; text-align: left; margin-bottom: 20px; line-height: 1.4;}
 
         .binance-modal-text { font-size: 0.9rem; line-height: 1.5; text-align: left; margin-bottom: 20px;}
         .binance-modal-text strong { color: var(--binance); }
-        .btn-binance-outline { 
-            display: flex; justify-content: center; align-items: center; gap: 8px; width: 100%; padding: 14px; 
-            background-color: #2a3441; color: white; text-decoration: none; border-radius: 10px; font-weight: 600; 
-            font-size: 0.9rem; border: none; cursor: pointer; transition: all 0.2s; margin-bottom: 15px;
-        }
-        .btn-binance-outline:hover { background-color: #334155; }
+        .btn-binance-outline { display: flex; justify-content: center; align-items: center; gap: 8px; width: 100%; padding: 14px; background-color: #2a3441; color: white; text-decoration: none; border-radius: 10px; font-weight: 600; font-size: 0.9rem; border: none; cursor: pointer; transition: all 0.2s; margin-bottom: 15px;}
     </style>
 </head>
 <body>
+
+<!-- MENÚ LATERAL (SIDEBAR) -->
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <span>Conversor P2P</span>
+        <button class="close-btn" id="closeMenuBtn">✕</button>
+    </div>
+    <ul class="sidebar-menu">
+        <li><a href="#" id="navCalc"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m-6 4h.01M9 16h.01M15 16h.01M9 11h.01M15 11h.01M15 7h.01M9 7h.01M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"></path></svg> Calculadora</a></li>
+        <li><a href="#" id="navRates"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path></svg> Tasas BCV</a></li>
+        <li><a href="#" class="vip-link" id="navVip"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg> Hazte VIP</a></li>
+        <li><a href="https://ko-fi.com/tu_usuario" target="_blank"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg> Apoyar Proyecto</a></li>
+    </ul>
+    <div class="sidebar-footer">
+        Versión 1.0.0<br>Hecho con ❤️ en Venezuela
+    </div>
+</div>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
 
 <div class="app-container">
     <div class="admin-panel" id="adminPanel">
@@ -140,10 +162,14 @@
     </div>
 
     <div class="header">
+        <!-- BOTÓN HAMBURGUESA -->
+        <button class="menu-btn" id="openMenuBtn">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+
         <img src="./icon.svg" alt="Logo Conversor P2P" class="header-logo">
         <h1>Conversor P2P</h1>
         <p>Compara tus bolívares al instante</p>
-        <!-- NUEVO BOTÓN DE DESCARGA (Se oculta solo si estás en la App instalada) -->
         <a href="./ConversorP2P.apk" download class="install-apk-btn" id="installApkBtn">📲 Descargar App Android</a>
     </div>
 
@@ -184,10 +210,15 @@
                 <span id="netDisplay">0.00 USDT</span>
             </div>
 
+            <!-- TARJETA BCV CON LA NUEVA BRECHA -->
             <div class="bcv-card" id="bcvSection" style="display: none;">
                 <span class="bcv-title">Equivalente a Tasa Oficial BCV</span>
                 <span class="bcv-value" id="bcvDisplay">0.00 USD</span>
                 <span class="bcv-rate-info" id="bcvRateDisplay"></span>
+                <div class="brecha-badge" id="brechaDisplay" style="display:none;">
+                    <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                    Brecha: <span id="brechaValue">+0%</span>
+                </div>
             </div>
 
             <div class="binance-cta">
@@ -197,7 +228,6 @@
                     Ir a Binance y Comprar
                 </button>
             </div>
-
         </div>
     </div>
 </div>
@@ -217,8 +247,7 @@
             UID: <b>72597924</b></p>
         </div>
         <a href="https://wa.me/584124166003?text=Hola,%20quiero%20comprar%20el%20acceso%20VIP%20ilimitado%20para%20ConversorP2P.%20Aqu%C3%AD%20env%C3%ADo%20mi%20comprobante:" target="_blank" class="btn-whatsapp">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.885-9.885 9.885m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
-            Enviar comprobante
+            Enviar comprobante por WhatsApp
         </a>
         <div style="margin-top: 15px;">
             <button id="codeBtn" style="background: transparent; border: 1px solid var(--border); color: var(--text); padding: 12px; width: 100%; border-radius: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Ya tengo mi código VIP</button>
@@ -231,23 +260,17 @@
 <div class="modal-overlay" id="binanceModal">
     <div class="modal-content">
         <h3>¿Cómo deseas continuar? 🚀</h3>
-        
         <div class="binance-modal-text">
             <p>Si eres un usuario <strong>nuevo</strong>, usa el botón amarillo para registrarte. Ganarás un bono y estarás apoyando a este proyecto.</p>
             <p style="margin-top: 10px;">Si <strong>ya tienes cuenta</strong>, usa el botón gris para ir directo al P2P de Binance.</p>
         </div>
-
-        <!-- BOTÓN 1: USUARIO NUEVO (REFERIDO CPA) -->
         <a href="https://www.binance.com/activity/referral-entry/CPA?ref=CPA_00LEBD1J2E" target="_blank" class="btn-binance" style="margin-bottom: 10px;">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 24C18.6274 24 24 18.6274 24 12C24 5.37258 18.6274 0 12 0C5.37258 0 0 5.37258 0 12C0 18.6274 5.37258 24 12 24Z" fill="#000"/><path d="M12 6.5L15.5 10L12 13.5L8.5 10L12 6.5Z" fill="#F0B90B"/><path d="M6.5 12L10 15.5L6.5 19L3 15.5L6.5 12Z" fill="#F0B90B"/><path d="M17.5 12L21 15.5L17.5 19L14 15.5L17.5 12Z" fill="#F0B90B"/><path d="M12 14.5L15.5 18L12 21.5L8.5 18L12 14.5Z" fill="#F0B90B"/></svg>
             Soy Nuevo, Registrarme
         </a>
-
-        <!-- BOTÓN 2: USUARIO EXISTENTE (ENLACE WEB DIRECTO) -->
         <a href="https://p2p.binance.com/es" target="_blank" class="btn-binance-outline">
             Ya tengo cuenta, ir a Binance
         </a>
-        
         <button class="btn-close" id="closeBinanceModalBtn" style="margin-top: 5px;">Cancelar y Volver</button>
     </div>
 </div>
@@ -257,19 +280,16 @@
     <div class="modal-content">
         <h3 style="font-size: 1.5rem; margin-bottom: 5px;">¡Bienvenido! 👋</h3>
         <p style="margin-bottom: 20px;">Tu asistente financiero personal.</p>
-        
         <ul class="welcome-list">
             <li><span>💸</span> <div><b>Calcula</b> cuántos <b>USDT</b> (Dólares digitales) puedes obtener por tus <b>Bolívares (VES)</b>.</div></li>
             <li><span>🏛️</span> <div>Consulta también el equivalente según la <b>Tasa Oficial del BCV</b> del día.</div></li>
             <li><span>⚡</span> <div>Obtén respuestas al instante sin páginas lentas ni cálculos manuales.</div></li>
             <li><span>🚫</span> <div><b>Importante:</b> Esta es una herramienta de <b>consulta e información</b>. No realizamos transacciones ni compras por ti.</div></li>
         </ul>
-
         <div class="welcome-warning">
             <b>⚠️ Aviso sobre la Tasa:</b><br>
             Los montos mostrados son un <b>estimado de referencia</b> basado en la tasa actual del mercado P2P. La tasa exacta puede variar al momento de realizar tu transacción en tu plataforma de confianza (como Binance).
         </div>
-
         <button class="btn-main" id="closeWelcomeBtn" style="font-size: 1rem;">¡Entendido, empecemos!</button>
     </div>
 </div>
@@ -289,10 +309,13 @@
     const goVipBtn = document.getElementById('goVipBtn');
     const limitReachedCard = document.getElementById('limitReachedCard');
     const refillMessage = document.getElementById('refillMessage');
+    
     const bcvSection = document.getElementById('bcvSection');
     const bcvDisplay = document.getElementById('bcvDisplay');
     const bcvRateDisplay = document.getElementById('bcvRateDisplay');
     const bcvTickerValue = document.getElementById('bcvTickerValue');
+    const brechaDisplay = document.getElementById('brechaDisplay');
+    const brechaValue = document.getElementById('brechaValue');
     
     const goBinanceBtn = document.getElementById('goBinanceBtn');
     const binanceModal = document.getElementById('binanceModal');
@@ -301,18 +324,35 @@
     const welcomeModal = document.getElementById('welcomeModal');
     const closeWelcomeBtn = document.getElementById('closeWelcomeBtn');
 
-    // 1. LÓGICA DEL CARTEL DE BIENVENIDA (SIEMPRE VISIBLE)
+    // LÓGICA DEL MENÚ HAMBURGUESA
+    const sidebar = document.getElementById('sidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+    const openMenuBtn = document.getElementById('openMenuBtn');
+    const closeMenuBtn = document.getElementById('closeMenuBtn');
+    const navCalc = document.getElementById('navCalc');
+    const navRates = document.getElementById('navRates');
+    const navVip = document.getElementById('navVip');
+
+    function openMenu() { sidebar.classList.add('active'); sidebarOverlay.classList.add('active'); }
+    function closeMenu() { sidebar.classList.remove('active'); sidebarOverlay.classList.remove('active'); }
+
+    openMenuBtn.addEventListener('click', openMenu);
+    closeMenuBtn.addEventListener('click', closeMenu);
+    sidebarOverlay.addEventListener('click', closeMenu);
+
+    navCalc.addEventListener('click', (e) => { e.preventDefault(); closeMenu(); window.scrollTo({top: 0, behavior: 'smooth'}); });
+    navRates.addEventListener('click', (e) => { e.preventDefault(); closeMenu(); window.scrollTo({top: 0, behavior: 'smooth'}); setTimeout(() => alert("Aquí puedes mostrar el historial de tasas en el futuro."), 500); });
+    navVip.addEventListener('click', (e) => { e.preventDefault(); closeMenu(); paymentModal.style.display = 'flex'; });
+
+    // CARTEL DE BIENVENIDA
     welcomeModal.style.display = 'flex';
+    closeWelcomeBtn.addEventListener('click', () => { welcomeModal.style.display = 'none'; });
 
-    closeWelcomeBtn.addEventListener('click', () => {
-        welcomeModal.style.display = 'none';
-    });
-
-    // 2. LÓGICA DEL MODAL DE BINANCE
+    // MODAL BINANCE
     goBinanceBtn.addEventListener('click', () => { binanceModal.style.display = 'flex'; });
     closeBinanceModalBtn.addEventListener('click', () => { binanceModal.style.display = 'none'; });
 
-    // 3. LÓGICA DE LÍMITES, VIP Y REINICIO
+    // LÓGICA DE LÍMITES Y VIP
     let wasVip = localStorage.getItem('conversor_was_vip') === 'true';
     const MAX_FREE_NEW = 30; 
     const MAX_FREE_EXPIRED = 10; 
@@ -348,7 +388,6 @@
 
     const MI_PROXY = "https://conversor-proxy.hehf24.workers.dev";
 
-    // 4. VERIFICACIÓN INVISIBLE DE VIP
     async function checkVipStatus() {
         if (isPremium && !userVipCode) {
             isPremium = false;
@@ -356,7 +395,6 @@
             updateLimitUI();
             return;
         }
-
         if (isPremium && userVipCode) {
             try {
                 const response = await fetch(MI_PROXY + "/check-vip", {
@@ -365,7 +403,6 @@
                     body: JSON.stringify({ codigo: userVipCode, deviceId: deviceId })
                 });
                 const data = await response.json();
-
                 if (data.valido !== true) {
                     isPremium = false;
                     userVipCode = null;
@@ -379,14 +416,11 @@
                     updateLimitUI(); 
                     alert("Tu membresía VIP ha expirado o sido revocada. Ahora tienes 10 consultas gratis. ¡Renueva para seguir ilimitado!");
                 }
-            } catch (e) {
-                console.error("Error verificando VIP:", e);
-            }
+            } catch (e) { console.error("Error verificando VIP:", e); }
         }
     }
     checkVipStatus(); 
 
-    // 5. CARGAR TICKER BCV SUPERIOR
     async function loadBCVTicker() {
         try {
             const response = await fetch(MI_PROXY + "/tasas-bcv");
@@ -400,7 +434,6 @@
     }
     loadBCVTicker(); 
 
-    // 6. PANEL DE ADMIN
     if (window.location.search.includes('admin=true')) {
         document.getElementById('adminPanel').style.display = 'block';
         fetch(MI_PROXY + "/stats")
@@ -413,7 +446,6 @@
             .catch(err => { document.getElementById('adminCalls').textContent = "Error: " + err.message; });
     }
 
-    // 7. ACTUALIZAR INTERFAZ DE LÍMITES
     function updateLimitUI() {
         if (isPremium) {
             limitText.innerHTML = "✨ <b>Modo VIP Activado</b>";
@@ -424,19 +456,14 @@
         } else {
             let left = maxFree - queriesUsed;
             if (left < 0) left = 0;
-            
             limitText.innerHTML = `Consultas gratis: <b>${left}/${maxFree}</b>`;
-            
             if (left <= 0) {
                 limitText.style.color = "#ef4444";
                 calculateBtn.disabled = true;
                 calculateBtn.textContent = "Límite alcanzado";
-                
                 limitReachedCard.style.display = 'block';
-                
                 const nextResetDate = lastReset + (REFILL_DAYS * MS_IN_DAYS);
                 const daysLeft = Math.ceil((nextResetDate - Date.now()) / MS_IN_DAYS);
-                
                 refillMessage.innerHTML = `Pero no te preocupes, en <b>${daysLeft} días</b> recibirás más consultas de regalo. <br>¿No quieres esperar? Hazte VIP por solo $4.`;
             } else {
                 limitReachedCard.style.display = 'none';
@@ -446,18 +473,15 @@
         }
     }
 
-    // 8. EVENTOS DE MODALES VIP
     unlockBtn.addEventListener('click', () => { paymentModal.style.display = 'flex'; });
     goVipBtn.addEventListener('click', () => { paymentModal.style.display = 'flex'; });
     closeModalBtn.addEventListener('click', () => { paymentModal.style.display = 'none'; });
 
-    // 9. VALIDAR CÓDIGO VIP
     codeBtn.addEventListener('click', async () => {
         const code = prompt("Ingresa tu código VIP:");
         if (!code || code.trim() === "") return;
         codeBtn.textContent = "Validando...";
         codeBtn.disabled = true;
-
         try {
             const response = await fetch(MI_PROXY + "/validar-codigo", {
                 method: "POST",
@@ -465,20 +489,14 @@
                 body: JSON.stringify({ codigo: code, deviceId: deviceId })
             });
             const data = await response.json();
-            
             if (data.valido) {
                 isPremium = true;
                 userVipCode = code.trim().toUpperCase();
                 localStorage.setItem('conversor_premium', 'true');
                 localStorage.setItem('conversor_codigo', userVipCode);
                 localStorage.setItem('conversor_was_vip', 'true'); 
-                
-                if (data.migrado) {
-                    alert("¡Código migrado con éxito a este teléfono! Tu acceso VIP está activo aquí por los días restantes.");
-                } else {
-                    alert("¡Código correcto! Bienvenido al modo VIP. Tienes 30 días de consultas ilimitadas.");
-                }
-                
+                if (data.migrado) { alert("¡Código migrado con éxito a este teléfono! Tu acceso VIP está activo aquí por los días restantes."); } 
+                else { alert("¡Código correcto! Bienvenido al modo VIP. Tienes 30 días de consultas ilimitadas."); }
                 updateLimitUI();
                 paymentModal.style.display = 'none';
             } else {
@@ -492,7 +510,6 @@
         }
     });
 
-    // 10. CALCULAR TASAS
     calculateBtn.addEventListener('click', async () => {
         if (queriesUsed >= maxFree && !isPremium) return;
         const amount = parseFloat(amountInput.value);
@@ -505,6 +522,7 @@
         errorMsg.style.display = 'none';
         resultCard.style.display = 'none';
         bcvSection.style.display = 'none';
+        brechaDisplay.style.display = 'none';
         calculateBtn.disabled = true;
         calculateBtn.innerHTML = '<span class="spinner"></span> Buscando...';
 
@@ -512,10 +530,7 @@
             const response = await fetch(MI_PROXY);
             const data = await response.json(); 
 
-            if (!response.ok) {
-                throw new Error(data.error || "Error en el servidor");
-            }
-            
+            if (!response.ok) { throw new Error(data.error || "Error en el servidor"); }
             if (!data.binance_rate) throw new Error("No se recibió la tasa de Binance");
 
             const rateBinance = data.binance_rate;
@@ -529,7 +544,24 @@
                 let usdBCV = amount / rateBCV;
                 bcvDisplay.textContent = `${usdBCV.toFixed(2)} USD`;
                 bcvRateDisplay.textContent = `Tasa BCV: ${rateBCV.toFixed(2)} Bs/USD`;
+                
+                // CÁLCULO DE LA BRECHA
+                const brecha = ((rateBinance / rateBCV) - 1) * 100;
+                brechaValue.textContent = `${brecha > 0 ? '+' : ''}${brecha.toFixed(2)}%`;
+                
+                // Color de la brecha (Verde si Binance es mayor, rojo si es menor)
+                if (brecha > 0) {
+                    brechaDisplay.style.color = "#34d399";
+                    brechaDisplay.style.background = "rgba(16, 185, 129, 0.15)";
+                    brechaDisplay.style.borderColor = "rgba(16, 185, 129, 0.3)";
+                } else {
+                    brechaDisplay.style.color = "#f87171";
+                    brechaDisplay.style.background = "rgba(239, 68, 68, 0.15)";
+                    brechaDisplay.style.borderColor = "rgba(239, 68, 68, 0.3)";
+                }
+                
                 bcvSection.style.display = 'flex';
+                brechaDisplay.style.display = 'flex';
             } else {
                 bcvSection.style.display = 'none';
             }
@@ -554,8 +586,7 @@
 
     updateLimitUI();
 
-    // 11. LÓGICA DE DESCARGA DE APK (Y OCULTAR SI ESTÁ EN LA APP NATIVA)
-    // Si estamos dentro de la app de Android (Capacitor), ocultamos el botón de descarga
+    // LÓGICA DE DESCARGA DE APK
     if (window.Capacitor) {
         const installBtn = document.getElementById('installApkBtn');
         if (installBtn) installBtn.style.display = 'none';
