@@ -188,7 +188,10 @@
         .hub-info h4 { margin: 0; font-size: 0.95rem; }
         .hub-info p { margin: 0; font-size: 0.75rem; color: var(--muted); }
         .badge-active { background: rgba(16,185,129,0.2); color: #34d399; padding: 2px 8px; border-radius: 10px; font-size: 0.65rem; font-weight: 700; margin-left: auto;}
+        .badge-dev { background: rgba(139,92,246,0.2); color: #a78bfa; padding: 2px 8px; border-radius: 10px; font-size: 0.65rem; font-weight: 700; margin-left: auto;}
         .badge-soon { background: rgba(245,158,11,0.2); color: #fbbf24; padding: 2px 8px; border-radius: 10px; font-size: 0.65rem; font-weight: 700; margin-left: auto;}
+        
+        .hub-disclaimer { background: rgba(139, 92, 246, 0.1); border-left: 3px solid #a78bfa; padding: 10px; border-radius: 6px; font-size: 0.75rem; color: #c4b5fd; text-align: left; margin-top: 15px; line-height: 1.4;}
     </style>
 </head>
 <body>
@@ -381,7 +384,7 @@
 <div class="modal-overlay" id="hubModal">
     <div class="modal-content">
         <h3>Ecosistema H-Nexo</h3>
-        <p>Descubre las herramientas que he construido para ti.</p>
+        <p>Descubre las herramientas que estoy construyendo para ti.</p>
         
         <div class="hub-grid">
             <!-- App 1: Conversor P2P (Activa) -->
@@ -394,14 +397,14 @@
                 <span class="badge-active">Activa</span>
             </div>
             
-            <!-- App 2: CicloP2P (Activa) -->
+            <!-- App 2: CicloP2P (En Desarrollo) -->
             <a href="https://hehf24-debug.github.io/Ciclop2p/" target="_blank" class="hub-item">
                 <div class="hub-icon">🔄</div>
                 <div class="hub-info">
                     <h4>CicloP2P</h4>
-                    <p>Calculadora de Arbitraje Avanzado</p>
+                    <p>Calculadora de Arbitraje (Beta)</p>
                 </div>
-                <span class="badge-active">Activa</span>
+                <span class="badge-dev">En Desarrollo</span>
             </a>
 
             <!-- Futuro Proyecto (Próximamente) -->
@@ -413,6 +416,11 @@
                 </div>
                 <span class="badge-soon">Pronto</span>
             </div>
+        </div>
+
+        <div class="hub-disclaimer">
+            <b>⚠️ Ecosistema en Construcción:</b><br>
+            Cada herramienta está siendo pulida y mejorada constantemente. Algunas funciones están en fase Beta y pueden recibir actualizaciones frecuentes. ¡Tu feedback es bienvenido!
         </div>
         
         <button class="btn-close" id="closeHubModalBtn" style="margin-top: 20px;">Cerrar</button>
