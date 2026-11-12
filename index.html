@@ -22,7 +22,7 @@
         :root { 
             --bg: #0b0f19; --card: #151b2b; --accent: #10b981; --accent-hover: #059669;
             --text: #f8fafc; --muted: #94a3b8; --border: #2a3441; --warn: #ef4444; 
-            --bcv: #3b82f6; --binance: #F0B90B;
+            --bcv: #3b82f6; --binance: #F0B90B; --cyan: #06b6d4;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: 'Outfit', sans-serif;}
         body { background-color: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 15px; padding-top: calc(15px + env(safe-area-inset-top)); background-image: radial-gradient(circle at top, #1e293b 0%, #0b0f19 60%); overflow-x: hidden; }
@@ -45,7 +45,6 @@
         .header h1 { font-size: 1.6rem; font-weight: 800; margin-bottom: 5px; color: white; letter-spacing: -0.5px;}
         .header p { font-size: 0.9rem; color: var(--muted); font-weight: 400; margin-bottom: 15px;}
 
-        /* BOTONES CTA MÁS TÁCTILES */
         .install-apk-btn { display: inline-block; background-color: var(--accent); color: #000; text-decoration: none; padding: 14px 24px; border-radius: 12px; font-weight: 800; font-size: 0.9rem; box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3); transition: transform 0.1s, box-shadow 0.2s; border: none; cursor: pointer; }
         .install-apk-btn:active { transform: scale(0.96); box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3); }
 
@@ -68,6 +67,7 @@
         .sidebar-menu .vip-link svg { color: var(--binance); }
         .sidebar-menu .ko-fi-link svg { color: #ff5e5b; }
         .sidebar-menu .history-link svg { color: #3b82f6; }
+        .sidebar-menu .hub-link svg { color: var(--cyan); }
 
         .sidebar-footer { text-align: center; color: var(--muted); font-size: 0.75rem; padding-top: 20px; border-top: 1px solid var(--border); }
 
@@ -89,14 +89,28 @@
         .input-group input:focus { border-color: var(--accent); }
         .currency-badge { position: absolute; right: 20px; bottom: 20px; font-size: 1rem; color: var(--muted); font-weight: 600; }
 
+        /* TOGGLE MARGEN DE SEGURIDAD */
+        .margin-toggle-container { display: flex; align-items: center; justify-content: space-between; background: #0f172a; padding: 12px 15px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 15px; }
+        .margin-toggle-container span { font-size: 0.8rem; color: var(--muted); font-weight: 600; }
+        .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #2a3441; transition: .4s; border-radius: 24px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--accent); }
+        input:checked + .slider:before { transform: translateX(20px); }
+
         .btn-main { width: 100%; padding: 18px; border: none; border-radius: 16px; background: linear-gradient(90deg, var(--accent), #34d399); color: #000; font-size: 1.1rem; font-weight: 800; cursor: pointer; transition: transform 0.1s, opacity 0.2s, box-shadow 0.2s; box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.4); }
         .btn-main:active { transform: scale(0.97); box-shadow: 0 5px 10px -5px rgba(16, 185, 129, 0.4); }
         .btn-main:disabled { opacity: 0.5; cursor: not-allowed; background: #555; color: #aaa; box-shadow: none;}
 
-        /* TARJETA DE RESULTADOS CON GLOW NEÓN */
+        /* TARJETA DE RESULTADOS CON GLOW NEÓN REACTIVO */
         .result-card { margin-top: 25px; background: #0f172a; border-radius: 16px; padding: 25px; border: 1px solid var(--border); display: none; animation: fadeIn 0.4s ease-out; }
-        .result-card.success { border-color: var(--accent); box-shadow: 0 0 20px rgba(16, 185, 129, 0.15); }
+        .result-card.success { animation: neonGlow 2s infinite alternate; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes neonGlow { 
+            0% { box-shadow: 0 0 5px rgba(16, 185, 129, 0.1), inset 0 0 5px rgba(16, 185, 129, 0.05); border-color: #2a3441; }
+            100% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.4), inset 0 0 10px rgba(16, 185, 129, 0.1); border-color: var(--accent); }
+        }
         
         .result-card h2 { font-size: 0.75rem; color: var(--muted); margin-bottom: 15px; font-weight: 600; letter-spacing: 1px;}
         .data-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 0.95rem; color: var(--muted);}
@@ -130,7 +144,7 @@
         .modal-content h3 { color: white; font-size: 1.3rem; font-weight: 800; margin-bottom: 10px; }
         .modal-content p { font-size: 0.9rem; color: var(--muted); margin-bottom: 20px; }
         
-        /* NUEVO DISEÑO VIP (TARJETAS SEPARADAS) */
+        /* DISEÑO VIP */
         .vip-card { background: #0f172a; padding: 18px; border-radius: 16px; margin-bottom: 15px; text-align: left; border: 1px solid var(--border); position: relative;}
         .vip-card h4 { color: white; font-size: 1rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
         .vip-card p { font-size: 0.85rem; line-height: 1.6; color: #cbd5e1; margin-bottom: 15px;}
@@ -160,16 +174,28 @@
         /* GRÁFICA */
         .chart-container { position: relative; height: 220px; width: 100%; margin-top: 15px; background: #0f172a; border-radius: 12px; padding: 10px; border: 1px solid var(--border); }
         
-        /* NOTIFICACIÓN TOAST */
+        /* NOTIFICACIÓN TOAST CON RAYO */
         .toast { position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #000; padding: 12px 24px; border-radius: 30px; font-weight: 800; font-size: 0.85rem; box-shadow: 0 10px 25px rgba(16,185,129,0.4); transition: bottom 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 3000; display: flex; align-items: center; gap: 8px; pointer-events: none; }
         .toast.show { bottom: 30px; }
+        .toast svg { animation: flash 1s infinite alternate; }
+        @keyframes flash { 0% { opacity: 0.5; } 100% { opacity: 1; } }
+
+        /* H-NEXO HUB */
+        .hub-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 15px; text-align: left;}
+        .hub-item { background: #0f172a; border: 1px solid var(--border); border-radius: 12px; padding: 15px; display: flex; align-items: center; gap: 12px; text-decoration: none; color: white; transition: border-color 0.2s;}
+        .hub-item:hover { border-color: var(--accent); }
+        .hub-icon { width: 40px; height: 40px; background: #1e293b; border-radius: 10px; display: flex; justify-content: center; align-items: center; font-size: 1.2rem;}
+        .hub-info h4 { margin: 0; font-size: 0.95rem; }
+        .hub-info p { margin: 0; font-size: 0.75rem; color: var(--muted); }
+        .badge-active { background: rgba(16,185,129,0.2); color: #34d399; padding: 2px 8px; border-radius: 10px; font-size: 0.65rem; font-weight: 700; margin-left: auto;}
+        .badge-soon { background: rgba(245,158,11,0.2); color: #fbbf24; padding: 2px 8px; border-radius: 10px; font-size: 0.65rem; font-weight: 700; margin-left: auto;}
     </style>
 </head>
 <body>
 
-<!-- COMPONENTE TOAST (Notificación flotante) -->
+<!-- COMPONENTE TOAST -->
 <div id="toast" class="toast">
-    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
     <span id="toastMsg">Copiado</span>
 </div>
 
@@ -183,6 +209,8 @@
         <li><a href="#" id="navCalc"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m-6 4h.01M9 16h.01M15 16h.01M9 11h.01M15 11h.01M15 7h.01M9 7h.01M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"></path></svg> Calculadora</a></li>
         <li><a href="#" id="navHistory" class="history-link"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path></svg> Historial de Tasas</a></li>
         <li><a href="#" class="vip-link" id="navVip"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg> Hazte VIP</a></li>
+        <!-- H-NEXO HUB LINK -->
+        <li><a href="#" id="navHub" class="hub-link"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg> Ecosistema H-Nexo</a></li>
         <li><a href="https://ko-fi.com/hnexo" target="_blank" class="ko-fi-link"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg> Apoyar Proyecto</a></li>
     </ul>
     <div class="sidebar-footer">
@@ -228,6 +256,15 @@
             <input type="text" id="amountInput" placeholder="0,00" inputmode="decimal">
             <span class="currency-badge">VES</span>
         </div>
+
+        <!-- TOGGLE MARGEN DE SEGURIDAD -->
+        <div class="margin-toggle-container">
+            <span>Margen de seguridad (Tasa -1%)</span>
+            <label class="switch">
+                <input type="checkbox" id="marginToggle">
+                <span class="slider"></span>
+            </label>
+        </div>
         
         <button class="btn-main" id="calculateBtn">Calcular Tasas</button>
         <div id="errorMsg" class="error-msg"></div>
@@ -269,7 +306,7 @@
     </div>
 </div>
 
-<!-- MODAL DE PAGO VIP REDISEÑADO -->
+<!-- MODAL DE PAGO VIP -->
 <div class="modal-overlay" id="paymentModal">
     <div class="modal-content">
         <h3>Acceso VIP Ilimitado</h3>
@@ -277,7 +314,6 @@
         
         <span class="price-tag">Precio: 4$ (BCV) o 3 USDT</span>
 
-        <!-- TARJETA 1: PAGO MÓVIL -->
         <div class="vip-card">
             <h4><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg> Pago Móvil</h4>
             <p>
@@ -290,7 +326,6 @@
             </button>
         </div>
 
-        <!-- TARJETA 2: BINANCE PAY -->
         <div class="vip-card">
             <h4><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Binance Pay</h4>
             <p>
@@ -339,6 +374,48 @@
             <canvas id="historyChart"></canvas>
         </div>
         <button class="btn-close" id="closeHistoryModalBtn" style="margin-top: 20px;">Cerrar</button>
+    </div>
+</div>
+
+<!-- MODAL DE ECOSISTEMA H-NEXO (HUB) -->
+<div class="modal-overlay" id="hubModal">
+    <div class="modal-content">
+        <h3>Ecosistema H-Nexo</h3>
+        <p>Descubre las herramientas que he construido para ti.</p>
+        
+        <div class="hub-grid">
+            <!-- App 1: Conversor P2P (Activa) -->
+            <div class="hub-item">
+                <div class="hub-icon">💸</div>
+                <div class="hub-info">
+                    <h4>Conversor P2P</h4>
+                    <p>Calculadora de USDT y BCV</p>
+                </div>
+                <span class="badge-active">Activa</span>
+            </div>
+            
+            <!-- App 2: CicloP2P (Activa) -->
+            <a href="https://hehf24-debug.github.io/Ciclop2p/" target="_blank" class="hub-item">
+                <div class="hub-icon">🔄</div>
+                <div class="hub-info">
+                    <h4>CicloP2P</h4>
+                    <p>Calculadora de Arbitraje Avanzado</p>
+                </div>
+                <span class="badge-active">Activa</span>
+            </a>
+
+            <!-- Futuro Proyecto (Próximamente) -->
+            <div class="hub-item" style="opacity: 0.7;">
+                <div class="hub-icon">📊</div>
+                <div class="hub-info">
+                    <h4>P2P Tracker</h4>
+                    <p>Historial y alertas de tasas</p>
+                </div>
+                <span class="badge-soon">Pronto</span>
+            </div>
+        </div>
+        
+        <button class="btn-close" id="closeHubModalBtn" style="margin-top: 20px;">Cerrar</button>
     </div>
 </div>
 
@@ -399,6 +476,14 @@
 
     const copyResultBtn = document.getElementById('copyResultBtn');
 
+    // ELEMENTOS DEL HUB
+    const hubModal = document.getElementById('hubModal');
+    const navHub = document.getElementById('navHub');
+    const closeHubModalBtn = document.getElementById('closeHubModalBtn');
+
+    // TOGGLE DE MARGEN
+    const marginToggle = document.getElementById('marginToggle');
+
     // LÓGICA DEL MENÚ HAMBURGUESA
     const sidebar = document.getElementById('sidebar');
     const sidebarOverlay = document.getElementById('sidebarOverlay');
@@ -417,7 +502,7 @@
     navCalc.addEventListener('click', (e) => { e.preventDefault(); closeMenu(); window.scrollTo({top: 0, behavior: 'smooth'}); });
     navVip.addEventListener('click', (e) => { e.preventDefault(); closeMenu(); paymentModal.style.display = 'flex'; });
 
-    // SISTEMA TOAST (MICROINTERACCIÓN)
+    // SISTEMA TOAST
     function showToast(message) {
         const toast = document.getElementById('toast');
         document.getElementById('toastMsg').textContent = message;
@@ -515,6 +600,14 @@
     });
 
     closeHistoryModalBtn.addEventListener('click', () => { historyModal.style.display = 'none'; });
+
+    // LÓGICA DEL HUB
+    navHub.addEventListener('click', (e) => {
+        e.preventDefault();
+        closeMenu();
+        hubModal.style.display = 'flex';
+    });
+    closeHubModalBtn.addEventListener('click', () => { hubModal.style.display = 'none'; });
 
     // CARTEL DE BIENVENIDA
     welcomeModal.style.display = 'flex';
@@ -692,6 +785,20 @@
         }
     });
 
+    // ANIMACIÓN TACHÓMETRO
+    function animateValue(obj, start, end, duration) {
+        let startTimestamp = null;
+        const step = (timestamp) => {
+            if (!startTimestamp) startTimestamp = timestamp;
+            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+            obj.innerHTML = (start + (end - start) * progress).toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            if (progress < 1) {
+                window.requestAnimationFrame(step);
+            }
+        };
+        window.requestAnimationFrame(step);
+    }
+
     calculateBtn.addEventListener('click', async () => {
         if (queriesUsed >= maxFree && !isPremium) return;
         
@@ -706,7 +813,7 @@
 
         errorMsg.style.display = 'none';
         resultCard.style.display = 'none';
-        resultCard.classList.remove('success'); // Quitar glow previo
+        resultCard.classList.remove('success');
         bcvSection.style.display = 'none';
         brechaDisplay.style.display = 'none';
         calculateBtn.disabled = true;
@@ -719,18 +826,32 @@
             if (!response.ok) { throw new Error(data.error || "Error en el servidor"); }
             if (!data.binance_rate) throw new Error("No se recibió la tasa de Binance");
 
-            const rateBinance = data.binance_rate;
+            let rateBinance = data.binance_rate;
+            
+            // LÓGICA DEL MARGEN DE SEGURIDAD
+            if (marginToggle.checked) {
+                rateBinance = rateBinance * 0.99; // Resta 1%
+            }
+
             let usdtBinance = amount / rateBinance;
 
             saveDailyRate(rateBinance);
 
             rateDisplay.textContent = `${rateBinance.toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2})} VES`;
-            netDisplay.textContent = `${usdtBinance.toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2})} USDT`;
+            
+            // TACHÓMETRO
+            netDisplay.innerHTML = `0,00 USDT`;
+            animateValue(netDisplay, 0, usdtBinance, 800);
+            netDisplay.innerHTML += ' USDT';
 
             if (data.bcv_rate) {
                 const rateBCV = data.bcv_rate;
                 let usdBCV = amount / rateBCV;
-                bcvDisplay.textContent = `${usdBCV.toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2})} USD`;
+                
+                bcvDisplay.innerHTML = `0,00 USD`;
+                animateValue(bcvDisplay, 0, usdBCV, 800);
+                bcvDisplay.innerHTML += ' USD';
+
                 bcvRateDisplay.textContent = `Tasa BCV: ${rateBCV.toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2})} Bs/USD`;
                 
                 const brecha = ((rateBinance / rateBCV) - 1) * 100;
@@ -752,7 +873,6 @@
                 bcvSection.style.display = 'none';
             }
 
-            // MOSTRAR TARJETA CON GLOW
             resultCard.style.display = 'block';
             resultCard.classList.add('success');
 
