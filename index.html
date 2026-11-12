@@ -15,7 +15,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <!-- LIBRERÍA PARA LOS GRÁFICOS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
@@ -34,31 +33,26 @@
         .admin-panel p { color: white; font-size: 1.1rem; font-weight: 800; }
         .admin-panel small { color: #9ca3af; font-size: 0.7rem; }
 
-        /* ESTILOS DEL HEADER Y MENÚ HAMBURGUESA */
+        /* HEADER */
         .header { background: linear-gradient(135deg, #1e293b, #0f172a); padding: 25px 20px 20px 20px; text-align: center; border-bottom: 1px solid var(--border); position: relative; }
-        
         .menu-btn { position: absolute; top: 25px; left: 20px; background: transparent; border: none; color: white; cursor: pointer; padding: 5px; transition: transform 0.2s;}
         .menu-btn:active { transform: scale(0.9); }
         .menu-btn svg { width: 28px; height: 28px; }
-        
         .header-logo { width: 65px; height: 65px; margin-bottom: 12px; border-radius: 18px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2); margin-top: 15px;}
         .header h1 { font-size: 1.6rem; font-weight: 800; margin-bottom: 5px; color: white; letter-spacing: -0.5px;}
         .header p { font-size: 0.9rem; color: var(--muted); font-weight: 400; margin-bottom: 15px;}
-
         .install-apk-btn { display: inline-block; background-color: var(--accent); color: #000; text-decoration: none; padding: 14px 24px; border-radius: 12px; font-weight: 800; font-size: 0.9rem; box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3); transition: transform 0.1s, box-shadow 0.2s; border: none; cursor: pointer; }
         .install-apk-btn:active { transform: scale(0.96); box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3); }
 
-        /* ESTILOS DEL MENÚ LATERAL (SIDEBAR) */
+        /* MENÚ LATERAL */
         .sidebar { position: fixed; top: 0; left: -280px; width: 280px; height: 100vh; background-color: #0f172a; border-right: 1px solid var(--border); z-index: 1000; transition: left 0.3s ease; display: flex; flex-direction: column; padding: 20px; }
         .sidebar.active { left: 0; }
         .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(2px); z-index: 999; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
         .sidebar-overlay.active { opacity: 1; pointer-events: auto; }
-        
         .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid var(--border); padding-bottom: 15px;}
         .sidebar-header span { color: white; font-weight: 800; font-size: 1.2rem; }
         .close-btn { background: none; border: none; color: var(--muted); font-size: 1.5rem; cursor: pointer; transition: color 0.2s;}
         .close-btn:hover { color: white; }
-        
         .sidebar-menu { list-style: none; flex: 1; }
         .sidebar-menu li { margin-bottom: 10px; }
         .sidebar-menu a { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text); font-size: 1rem; font-weight: 600; padding: 14px; border-radius: 10px; transition: background 0.2s;}
@@ -68,9 +62,9 @@
         .sidebar-menu .ko-fi-link svg { color: #ff5e5b; }
         .sidebar-menu .history-link svg { color: #3b82f6; }
         .sidebar-menu .hub-link svg { color: var(--cyan); }
-
         .sidebar-footer { text-align: center; color: var(--muted); font-size: 0.75rem; padding-top: 20px; border-top: 1px solid var(--border); }
 
+        /* TICKER BCV */
         .bcv-ticker { background-color: #0f172a; border-bottom: 1px solid var(--border); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--muted); transition: background-color 0.3s; }
         .ticker-label { font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 5px;}
         .ticker-value { font-weight: 800; font-size: 1.1rem; color: #60a5fa; }
@@ -89,9 +83,12 @@
         .input-group input:focus { border-color: var(--accent); }
         .currency-badge { position: absolute; right: 20px; bottom: 20px; font-size: 1rem; color: var(--muted); font-weight: 600; }
 
-        /* TOGGLE MARGEN DE SEGURIDAD */
-        .margin-toggle-container { display: flex; align-items: center; justify-content: space-between; background: #0f172a; padding: 12px 15px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 15px; }
-        .margin-toggle-container span { font-size: 0.8rem; color: var(--muted); font-weight: 600; }
+        /* TOGGLE MARGEN DE SEGURIDAD CON EXPLICACIÓN */
+        .margin-toggle-container { display: flex; flex-direction: column; background: #0f172a; padding: 15px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 15px; gap: 10px;}
+        .margin-header { display: flex; justify-content: space-between; align-items: center; }
+        .margin-header span { font-size: 0.9rem; color: var(--text); font-weight: 700; }
+        .margin-desc { font-size: 0.75rem; color: var(--muted); line-height: 1.4; }
+        
         .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #2a3441; transition: .4s; border-radius: 24px; }
@@ -103,34 +100,35 @@
         .btn-main:active { transform: scale(0.97); box-shadow: 0 5px 10px -5px rgba(16, 185, 129, 0.4); }
         .btn-main:disabled { opacity: 0.5; cursor: not-allowed; background: #555; color: #aaa; box-shadow: none;}
 
-        /* TARJETA DE RESULTADOS CON GLOW NEÓN REACTIVO */
-        .result-card { margin-top: 25px; background: #0f172a; border-radius: 16px; padding: 25px; border: 1px solid var(--border); display: none; animation: fadeIn 0.4s ease-out; }
-        .result-card.success { animation: neonGlow 2s infinite alternate; }
+        /* TARJETA DE RESULTADOS SOFISTICADA */
+        .result-card { margin-top: 25px; background: #0f172a; border-radius: 16px; padding: 25px; border: 1px solid var(--accent); display: none; animation: fadeIn 0.4s ease-out; box-shadow: 0 10px 30px -10px rgba(16, 185, 129, 0.15); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes neonGlow { 
-            0% { box-shadow: 0 0 5px rgba(16, 185, 129, 0.1), inset 0 0 5px rgba(16, 185, 129, 0.05); border-color: #2a3441; }
-            100% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.4), inset 0 0 10px rgba(16, 185, 129, 0.1); border-color: var(--accent); }
-        }
         
-        .result-card h2 { font-size: 0.75rem; color: var(--muted); margin-bottom: 15px; font-weight: 600; letter-spacing: 1px;}
+        .result-card h2 { font-size: 0.75rem; color: var(--muted); margin-bottom: 15px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;}
         .data-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 0.95rem; color: var(--muted);}
         .data-row span:last-child { font-weight: 600; color: white;}
-        .total-row { border-top: 1px solid var(--border); padding-top: 15px; margin-top: 15px; display: flex; flex-direction: column; align-items: center; cursor: pointer; position: relative;}
-        .total-row span:first-child { font-size: 0.9rem; color: var(--muted); margin-bottom: 5px;}
-        .total-row span:last-child { font-size: 2.5rem; font-weight: 800; color: var(--accent); line-height: 1; transition: transform 0.2s;}
-        .total-row:hover span:last-child { transform: scale(1.02); }
         
-        .copy-hint { font-size: 0.65rem; color: var(--muted); margin-top: 5px; display: flex; align-items: center; gap: 4px;}
+        /* EL NÚMERO GIGANTE */
+        .total-row { border-top: 1px solid var(--border); padding-top: 20px; margin-top: 15px; display: flex; flex-direction: column; align-items: center; cursor: pointer; position: relative;}
+        .total-row .label-receive { font-size: 0.85rem; color: var(--muted); margin-bottom: 8px; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px;}
+        
+        .amount-display { display: flex; align-items: baseline; justify-content: center; gap: 8px; }
+        .amount-display #netDisplay { font-size: 3.2rem; font-weight: 800; color: var(--text); line-height: 1; letter-spacing: -1px; transition: color 0.2s;}
+        .amount-display .currency-label { font-size: 1.2rem; color: var(--accent); font-weight: 700;}
+        
+        .copy-icon { width: 20px; height: 20px; color: var(--muted); transition: color 0.2s;}
+        .total-row:hover .copy-icon { color: var(--accent); }
+        .total-row:active .amount-display #netDisplay { color: var(--accent); }
 
-        /* TARJETA BCV CON BRECHA */
-        .bcv-card { margin-top: 15px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 12px; padding: 15px; display: flex; flex-direction: column; align-items: center; }
-        .bcv-title { font-size: 0.75rem; color: #93c5fd; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; font-weight: 600;}
-        .bcv-value { font-size: 1.4rem; font-weight: 800; color: #60a5fa; }
+        /* TARJETA BCV */
+        .bcv-card { margin-top: 20px; background: rgba(59, 130, 246, 0.05); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 12px; padding: 15px; display: flex; flex-direction: column; align-items: center; }
+        .bcv-title { font-size: 0.7rem; color: #93c5fd; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; font-weight: 600;}
+        .bcv-value { font-size: 1.3rem; font-weight: 700; color: #60a5fa; }
         .bcv-rate-info { font-size: 0.7rem; color: var(--muted); margin-top: 5px; }
         
-        .brecha-badge { margin-top: 8px; background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; gap: 4px;}
+        .brecha-badge { margin-top: 10px; background: rgba(16, 185, 129, 0.1); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.2); padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; gap: 4px;}
 
-        .binance-cta { margin-top: 20px; background: linear-gradient(135deg, rgba(240, 185, 11, 0.1), rgba(240, 185, 11, 0.05)); border: 1px solid rgba(240, 185, 11, 0.3); border-radius: 12px; padding: 15px; text-align: center; }
+        .binance-cta { margin-top: 25px; background: linear-gradient(135deg, rgba(240, 185, 11, 0.1), rgba(240, 185, 11, 0.05)); border: 1px solid rgba(240, 185, 11, 0.3); border-radius: 12px; padding: 15px; text-align: center; }
         .binance-cta p { font-size: 0.8rem; color: #f8fafc; margin-bottom: 12px; line-height: 1.4; }
         .btn-binance { display: flex; justify-content: center; align-items: center; gap: 8px; width: 100%; padding: 16px; background-color: var(--binance); color: #000; text-decoration: none; border-radius: 10px; font-weight: 800; font-size: 0.95rem; border: none; cursor: pointer; transition: transform 0.1s, opacity 0.2s; }
         .btn-binance:active { transform: scale(0.97); }
@@ -139,12 +137,12 @@
         .spinner { display: inline-block; width: 20px; height: 20px; border: 3px solid rgba(0,0,0,0.2); border-radius: 50%; border-top-color: #000; animation: spin 1s linear infinite; vertical-align: middle; }
         @keyframes spin { to { transform: rotate(360deg); } }
         
+        /* MODALES */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; padding: 20px; z-index: 2000; }
         .modal-content { background: var(--card); border-radius: 24px; padding: 30px 25px; width: 100%; max-width: 400px; border: 1px solid var(--border); text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); max-height: 90vh; overflow-y: auto;}
         .modal-content h3 { color: white; font-size: 1.3rem; font-weight: 800; margin-bottom: 10px; }
         .modal-content p { font-size: 0.9rem; color: var(--muted); margin-bottom: 20px; }
         
-        /* DISEÑO VIP */
         .vip-card { background: #0f172a; padding: 18px; border-radius: 16px; margin-bottom: 15px; text-align: left; border: 1px solid var(--border); position: relative;}
         .vip-card h4 { color: white; font-size: 1rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
         .vip-card p { font-size: 0.85rem; line-height: 1.6; color: #cbd5e1; margin-bottom: 15px;}
@@ -152,7 +150,6 @@
         .btn-copy-vip { background: rgba(255,255,255,0.05); border: 1px solid #334155; color: white; width: 100%; padding: 10px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 6px; transition: all 0.2s;}
         .btn-copy-vip:active { transform: scale(0.97); background: #1e293b; }
         .btn-copy-vip:hover { border-color: var(--accent); color: var(--accent); }
-
         .price-tag { color: var(--accent); font-size: 1.4rem; font-weight: 800; display: block; margin-bottom: 15px; text-align: center; background: rgba(16, 185, 129, 0.1); padding: 10px; border-radius: 10px;}
         .btn-whatsapp { display: flex; justify-content: center; align-items: center; gap: 10px; width: 100%; padding: 16px; background-color: #25D366; color: white; text-decoration: none; border-radius: 14px; font-weight: 700; font-size: 1rem; margin-bottom: 15px; border: none; cursor: pointer;}
         .btn-close { background: transparent; border: none; color: var(--muted); cursor: pointer; font-size: 0.9rem; text-decoration: underline; font-weight: 600; padding: 10px;}
@@ -171,14 +168,12 @@
         .binance-modal-text strong { color: var(--binance); }
         .btn-binance-outline { display: flex; justify-content: center; align-items: center; gap: 8px; width: 100%; padding: 16px; background-color: #2a3441; color: white; text-decoration: none; border-radius: 10px; font-weight: 600; font-size: 0.95rem; border: none; cursor: pointer; transition: all 0.2s; margin-bottom: 15px;}
 
-        /* GRÁFICA */
         .chart-container { position: relative; height: 220px; width: 100%; margin-top: 15px; background: #0f172a; border-radius: 12px; padding: 10px; border: 1px solid var(--border); }
         
-        /* NOTIFICACIÓN TOAST CON RAYO */
-        .toast { position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #000; padding: 12px 24px; border-radius: 30px; font-weight: 800; font-size: 0.85rem; box-shadow: 0 10px 25px rgba(16,185,129,0.4); transition: bottom 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 3000; display: flex; align-items: center; gap: 8px; pointer-events: none; }
+        /* TOAST SOFISTICADO */
+        .toast { position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); background: #1e293b; color: white; border: 1px solid var(--accent); padding: 12px 24px; border-radius: 30px; font-weight: 600; font-size: 0.85rem; box-shadow: 0 10px 25px rgba(0,0,0,0.5); transition: bottom 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 3000; display: flex; align-items: center; gap: 8px; pointer-events: none; }
         .toast.show { bottom: 30px; }
-        .toast svg { animation: flash 1s infinite alternate; }
-        @keyframes flash { 0% { opacity: 0.5; } 100% { opacity: 1; } }
+        .toast svg { color: var(--accent); }
 
         /* H-NEXO HUB */
         .hub-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 15px; text-align: left;}
@@ -190,7 +185,6 @@
         .badge-active { background: rgba(16,185,129,0.2); color: #34d399; padding: 2px 8px; border-radius: 10px; font-size: 0.65rem; font-weight: 700; margin-left: auto;}
         .badge-dev { background: rgba(139,92,246,0.2); color: #a78bfa; padding: 2px 8px; border-radius: 10px; font-size: 0.65rem; font-weight: 700; margin-left: auto;}
         .badge-soon { background: rgba(245,158,11,0.2); color: #fbbf24; padding: 2px 8px; border-radius: 10px; font-size: 0.65rem; font-weight: 700; margin-left: auto;}
-        
         .hub-disclaimer { background: rgba(139, 92, 246, 0.1); border-left: 3px solid #a78bfa; padding: 10px; border-radius: 6px; font-size: 0.75rem; color: #c4b5fd; text-align: left; margin-top: 15px; line-height: 1.4;}
     </style>
 </head>
@@ -198,7 +192,7 @@
 
 <!-- COMPONENTE TOAST -->
 <div id="toast" class="toast">
-    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
     <span id="toastMsg">Copiado</span>
 </div>
 
@@ -212,7 +206,6 @@
         <li><a href="#" id="navCalc"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m-6 4h.01M9 16h.01M15 16h.01M9 11h.01M15 11h.01M15 7h.01M9 7h.01M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"></path></svg> Calculadora</a></li>
         <li><a href="#" id="navHistory" class="history-link"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path></svg> Historial de Tasas</a></li>
         <li><a href="#" class="vip-link" id="navVip"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg> Hazte VIP</a></li>
-        <!-- H-NEXO HUB LINK -->
         <li><a href="#" id="navHub" class="hub-link"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg> Ecosistema H-Nexo</a></li>
         <li><a href="https://ko-fi.com/hnexo" target="_blank" class="ko-fi-link"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg> Apoyar Proyecto</a></li>
     </ul>
@@ -260,13 +253,18 @@
             <span class="currency-badge">VES</span>
         </div>
 
-        <!-- TOGGLE MARGEN DE SEGURIDAD -->
+        <!-- TOGGLE MARGEN DE SEGURIDAD CON EXPLICACIÓN -->
         <div class="margin-toggle-container">
-            <span>Margen de seguridad (Tasa -1%)</span>
-            <label class="switch">
-                <input type="checkbox" id="marginToggle">
-                <span class="slider"></span>
-            </label>
+            <div class="margin-header">
+                <span>Margen de Seguridad</span>
+                <label class="switch">
+                    <input type="checkbox" id="marginToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="margin-desc">
+                💡 Actívalo para calcular con la tasa un 1% más baja. Úsalo si el mercado está muy volátil y no quieres llevarte sorpresas al momento de hacer la operación.
+            </div>
         </div>
         
         <button class="btn-main" id="calculateBtn">Calcular Tasas</button>
@@ -278,14 +276,19 @@
             <button class="btn-vip-small" id="goVipBtn">Hazte VIP y no esperes</button>
         </div>
 
+        <!-- TARJETA DE RESULTADOS SOFISTICADA -->
         <div class="result-card" id="resultCard">
-            <h2>RESULTADO CON BINANCE P2P</h2>
-            <div class="data-row"><span>Tasa Binance P2P</span><span id="rateDisplay">-</span></div>
+            <h2>Resultado con Binance P2P</h2>
+            <div class="data-row"><span>Tasa actual de referencia</span><span id="rateDisplay">-</span></div>
             
-            <div class="total-row" id="copyResultBtn" title="Toca para copiar">
-                <span>Recibes en USDT</span>
-                <span id="netDisplay">0,00 USDT</span>
-                <span class="copy-hint">Toca aquí para copiar el resultado</span>
+            <!-- EL NÚMERO GIGANTE CON ICONO -->
+            <div class="total-row" id="copyResultBtn" title="Toca para copiar el resultado">
+                <span class="label-receive">Recibes en USDT</span>
+                <div class="amount-display">
+                    <span id="netDisplay">0,00</span>
+                    <span class="currency-label">USDT</span>
+                    <svg class="copy-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                </div>
             </div>
 
             <div class="bcv-card" id="bcvSection" style="display: none;">
@@ -299,10 +302,10 @@
             </div>
 
             <div class="binance-cta">
-                <p><b>Esta tasa es atractiva, ¿verdad?</b> Aprovecha y ejecuta tu operación en Binance P2P.</p>
+                <p><b>¿Listo para operar?</b> Ve a Binance P2P y ejecuta tu compra o venta.</p>
                 <button id="goBinanceBtn" class="btn-binance">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 24C18.6274 24 24 18.6274 24 12C24 5.37258 18.6274 0 12 0C5.37258 0 0 5.37258 0 12C0 18.6274 5.37258 24 12 24Z" fill="#000"/><path d="M12 6.5L15.5 10L12 13.5L8.5 10L12 6.5Z" fill="#F0B90B"/><path d="M6.5 12L10 15.5L6.5 19L3 15.5L6.5 12Z" fill="#F0B90B"/><path d="M17.5 12L21 15.5L17.5 19L14 15.5L17.5 12Z" fill="#F0B90B"/><path d="M12 14.5L15.5 18L12 21.5L8.5 18L12 14.5Z" fill="#F0B90B"/></svg>
-                    Ir a Binance y Comprar
+                    Ir a Binance
                 </button>
             </div>
         </div>
@@ -387,7 +390,6 @@
         <p>Descubre las herramientas que estoy construyendo para ti.</p>
         
         <div class="hub-grid">
-            <!-- App 1: Conversor P2P (Activa) -->
             <div class="hub-item">
                 <div class="hub-icon">💸</div>
                 <div class="hub-info">
@@ -397,7 +399,6 @@
                 <span class="badge-active">Activa</span>
             </div>
             
-            <!-- App 2: CicloP2P (En Desarrollo) -->
             <a href="https://hehf24-debug.github.io/Ciclop2p/" target="_blank" class="hub-item">
                 <div class="hub-icon">🔄</div>
                 <div class="hub-info">
@@ -407,7 +408,6 @@
                 <span class="badge-dev">En Desarrollo</span>
             </a>
 
-            <!-- Futuro Proyecto (Próximamente) -->
             <div class="hub-item" style="opacity: 0.7;">
                 <div class="hub-icon">📊</div>
                 <div class="hub-info">
@@ -528,7 +528,7 @@
         }
         
         navigator.clipboard.writeText(textToCopy).then(() => {
-            showToast("¡Datos copiados!");
+            showToast("✔️ Datos copiados");
         }).catch(err => {
             alert("Error al copiar. Datos: " + textToCopy);
         });
@@ -536,9 +536,9 @@
 
     // LÓGICA PARA COPIAR EL RESULTADO
     copyResultBtn.addEventListener('click', () => {
-        const amount = netDisplay.textContent;
+        const amount = netDisplay.textContent + " USDT";
         navigator.clipboard.writeText(amount).then(() => {
-            showToast("¡Resultado copiado!");
+            showToast("✔️ Resultado copiado");
         }).catch(err => {
             console.error(err);
         });
@@ -768,15 +768,15 @@
                 localStorage.setItem('conversor_premium', 'true');
                 localStorage.setItem('conversor_codigo', userVipCode);
                 localStorage.setItem('conversor_was_vip', 'true'); 
-                if (data.migrado) { showToast("¡Código migrado con éxito!"); } 
-                else { showToast("¡Código correcto! Bienvenido al VIP."); }
+                if (data.migrado) { showToast("✔️ Código migrado con éxito"); } 
+                else { showToast("✔️ Código correcto. Bienvenido al VIP"); }
                 updateLimitUI();
                 paymentModal.style.display = 'none';
             } else {
-                showToast("Error: " + (data.error || "Código inválido."));
+                showToast("❌ Error: " + (data.error || "Código inválido."));
             }
         } catch (error) {
-            showToast("Error de conexión al validar.");
+            showToast("❌ Error de conexión al validar.");
         } finally {
             codeBtn.textContent = "Ya tengo mi código VIP";
             codeBtn.disabled = false;
@@ -793,7 +793,7 @@
         }
     });
 
-    // ANIMACIÓN TACHÓMETRO
+    // ANIMACIÓN TACHÓMETRO MADURA
     function animateValue(obj, start, end, duration) {
         let startTimestamp = null;
         const step = (timestamp) => {
@@ -821,7 +821,6 @@
 
         errorMsg.style.display = 'none';
         resultCard.style.display = 'none';
-        resultCard.classList.remove('success');
         bcvSection.style.display = 'none';
         brechaDisplay.style.display = 'none';
         calculateBtn.disabled = true;
@@ -838,7 +837,7 @@
             
             // LÓGICA DEL MARGEN DE SEGURIDAD
             if (marginToggle.checked) {
-                rateBinance = rateBinance * 0.99; // Resta 1%
+                rateBinance = rateBinance * 0.99;
             }
 
             let usdtBinance = amount / rateBinance;
@@ -847,17 +846,16 @@
 
             rateDisplay.textContent = `${rateBinance.toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2})} VES`;
             
-            // TACHÓMETRO
-            netDisplay.innerHTML = `0,00 USDT`;
-            animateValue(netDisplay, 0, usdtBinance, 800);
-            netDisplay.innerHTML += ' USDT';
+            // TACHÓMETRO 400ms
+            netDisplay.innerHTML = `0,00`;
+            animateValue(netDisplay, 0, usdtBinance, 400);
 
             if (data.bcv_rate) {
                 const rateBCV = data.bcv_rate;
                 let usdBCV = amount / rateBCV;
                 
                 bcvDisplay.innerHTML = `0,00 USD`;
-                animateValue(bcvDisplay, 0, usdBCV, 800);
+                animateValue(bcvDisplay, 0, usdBCV, 400);
                 bcvDisplay.innerHTML += ' USD';
 
                 bcvRateDisplay.textContent = `Tasa BCV: ${rateBCV.toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2})} Bs/USD`;
@@ -882,7 +880,6 @@
             }
 
             resultCard.style.display = 'block';
-            resultCard.classList.add('success');
 
             if (!isPremium) {
                 queriesUsed++;
