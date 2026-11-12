@@ -34,7 +34,24 @@
         .header { background: linear-gradient(135deg, #1e293b, #0f172a); padding: 25px 20px 20px 20px; text-align: center; border-bottom: 1px solid var(--border); }
         .header-logo { width: 65px; height: 65px; margin-bottom: 12px; border-radius: 18px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2); }
         .header h1 { font-size: 1.6rem; font-weight: 800; margin-bottom: 5px; color: white; letter-spacing: -0.5px;}
-        .header p { font-size: 0.9rem; color: var(--muted); font-weight: 400;}
+        .header p { font-size: 0.9rem; color: var(--muted); font-weight: 400; margin-bottom: 15px;}
+
+        /* NUEVO BOTÓN DE DESCARGA DE APK */
+        .install-apk-btn {
+            display: inline-block;
+            background-color: var(--accent);
+            color: #000;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 0.85rem;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            transition: transform 0.1s;
+            border: none;
+            cursor: pointer;
+        }
+        .install-apk-btn:active { transform: scale(0.98); }
 
         .bcv-ticker { background-color: #0f172a; border-bottom: 1px solid var(--border); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--muted); transition: background-color 0.3s; }
         .bcv-ticker:hover { background-color: #1e293b; }
@@ -67,13 +84,11 @@
         .total-row span:first-child { font-size: 0.9rem; color: var(--muted); margin-bottom: 5px;}
         .total-row span:last-child { font-size: 2.5rem; font-weight: 800; color: var(--accent); line-height: 1;}
 
-        /* TARJETA BCV EN EL RESULTADO */
         .bcv-card { margin-top: 15px; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 12px; padding: 15px; display: flex; flex-direction: column; align-items: center; }
         .bcv-title { font-size: 0.75rem; color: #93c5fd; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; font-weight: 600;}
         .bcv-value { font-size: 1.4rem; font-weight: 800; color: #60a5fa; }
         .bcv-rate-info { font-size: 0.7rem; color: var(--muted); margin-top: 5px; }
 
-        /* BOTÓN DE BINANCE EN EL RESULTADO */
         .binance-cta { margin-top: 20px; background: linear-gradient(135deg, rgba(240, 185, 11, 0.1), rgba(240, 185, 11, 0.05)); border: 1px solid rgba(240, 185, 11, 0.3); border-radius: 12px; padding: 15px; text-align: center; }
         .binance-cta p { font-size: 0.8rem; color: #f8fafc; margin-bottom: 12px; line-height: 1.4; }
         .btn-binance { display: flex; justify-content: center; align-items: center; gap: 8px; width: 100%; padding: 14px; background-color: var(--binance); color: #000; text-decoration: none; border-radius: 10px; font-weight: 800; font-size: 0.9rem; border: none; cursor: pointer; transition: transform 0.1s, opacity 0.2s; }
@@ -128,6 +143,8 @@
         <img src="./icon.svg" alt="Logo Conversor P2P" class="header-logo">
         <h1>Conversor P2P</h1>
         <p>Compara tus bolívares al instante</p>
+        <!-- NUEVO BOTÓN DE DESCARGA (Se oculta solo si estás en la App instalada) -->
+        <a href="./ConversorP2P.apk" download class="install-apk-btn" id="installApkBtn">📲 Descargar App Android</a>
     </div>
 
     <div class="bcv-ticker" id="bcvTicker">
@@ -537,29 +554,12 @@
 
     updateLimitUI();
 
-    // 11. INSTALACIÓN PWA
-    let deferredPrompt;
-    window.addEventListener("beforeinstallprompt", e => {
-        e.preventDefault();
-        deferredPrompt = e;
-        const header = document.querySelector('.header');
-        const installBtn = document.createElement('button');
-        installBtn.textContent = "📲 Instalar App";
-        installBtn.style = "background:var(--accent); color:#000; border:none; padding:8px 15px; border-radius:10px; font-weight:700; font-size:0.8rem; margin-top:15px; cursor:pointer; display:block; margin-left:auto; margin-right:auto;";
-        installBtn.addEventListener('click', async () => {
-            if (!deferredPrompt) return;
-            deferredPrompt.prompt();
-            await deferredPrompt.userChoice;
-            deferredPrompt = null;
-            installBtn.style.display = 'none';
-        });
-        header.appendChild(installBtn);
-    });
-    
-    window.addEventListener("appinstalled", () => {
-        const btn = document.querySelector('.header button');
-        if(btn) btn.style.display = 'none';
-    });
+    // 11. LÓGICA DE DESCARGA DE APK (Y OCULTAR SI ESTÁ EN LA APP NATIVA)
+    // Si estamos dentro de la app de Android (Capacitor), ocultamos el botón de descarga
+    if (window.Capacitor) {
+        const installBtn = document.getElementById('installApkBtn');
+        if (installBtn) installBtn.style.display = 'none';
+    }
     
     if("serviceWorker" in navigator){
         window.addEventListener("load", ()=> navigator.serviceWorker.register("./sw.js").catch(()=>{}));
