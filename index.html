@@ -60,6 +60,7 @@
         .sidebar-menu a:hover { background-color: #1e293b; }
         .sidebar-menu svg { width: 20px; height: 20px; color: var(--accent); }
         .sidebar-menu .vip-link svg { color: var(--binance); }
+        .sidebar-menu .ko-fi-link svg { color: #ff5e5b; }
 
         .sidebar-footer { text-align: center; color: var(--muted); font-size: 0.75rem; padding-top: 20px; border-top: 1px solid var(--border); }
 
@@ -139,14 +140,15 @@
 <!-- MENÚ LATERAL (SIDEBAR) -->
 <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
-        <span>Conversor P2P</span>
+        <span>H-Nexo</span>
         <button class="close-btn" id="closeMenuBtn">✕</button>
     </div>
     <ul class="sidebar-menu">
         <li><a href="#" id="navCalc"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m-6 4h.01M9 16h.01M15 16h.01M9 11h.01M15 11h.01M15 7h.01M9 7h.01M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"></path></svg> Calculadora</a></li>
         <li><a href="#" id="navRates"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path></svg> Tasas BCV</a></li>
         <li><a href="#" class="vip-link" id="navVip"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg> Hazte VIP</a></li>
-        <li><a href="https://ko-fi.com/tu_usuario" target="_blank"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg> Apoyar Proyecto</a></li>
+        <!-- ENLACE DE KO-FI ACTUALIZADO A H-NEXO -->
+        <li><a href="https://ko-fi.com/hnexo" target="_blank" class="ko-fi-link"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg> Apoyar Proyecto</a></li>
     </ul>
     <div class="sidebar-footer">
         Versión 1.0.0<br>Hecho con ❤️ en Venezuela
@@ -162,7 +164,6 @@
     </div>
 
     <div class="header">
-        <!-- BOTÓN HAMBURGUESA -->
         <button class="menu-btn" id="openMenuBtn">
             <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path></svg>
         </button>
@@ -549,7 +550,6 @@
                 const brecha = ((rateBinance / rateBCV) - 1) * 100;
                 brechaValue.textContent = `${brecha > 0 ? '+' : ''}${brecha.toFixed(2)}%`;
                 
-                // Color de la brecha (Verde si Binance es mayor, rojo si es menor)
                 if (brecha > 0) {
                     brechaDisplay.style.color = "#34d399";
                     brechaDisplay.style.background = "rgba(16, 185, 129, 0.15)";
