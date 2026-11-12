@@ -1,4 +1,4 @@
-const CACHE = "conversor-v4.1";
+const CACHE = "conversor-v4.2";
 const ASSETS = ["./", "./index.html", "./manifest.json", "./icon.svg"];
 
 // 1. Forzar al nuevo Service Worker a instalarse de inmediato
