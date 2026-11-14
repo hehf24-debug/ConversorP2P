@@ -62,7 +62,6 @@
         .sidebar-menu .ko-fi-link svg { color: #ff5e5b; }
         .sidebar-menu .history-link svg { color: #3b82f6; }
         .sidebar-menu .hub-link svg { color: var(--cyan); }
-        .sidebar-menu .help-link svg { color: #a78bfa; }
         .sidebar-footer { text-align: center; color: var(--muted); font-size: 0.75rem; padding-top: 20px; border-top: 1px solid var(--border); }
 
         /* TICKER BCV */
@@ -71,12 +70,6 @@
         .ticker-value { font-weight: 800; font-size: 1.1rem; color: #60a5fa; }
         
         .content { padding: 25px 20px; }
-        
-        .limit-box { background-color: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 12px; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .limit-box span { font-size: 0.85rem; color: #fbbf24; font-weight: 600;}
-        .unlock-btn { background: transparent; border: 1px solid #fbbf24; color: #fbbf24; padding: 8px 14px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: all 0.2s;}
-        .unlock-btn:hover { background: #fbbf24; color: #000; }
-        .unlock-btn:active { transform: scale(0.95); }
 
         .input-group { margin-bottom: 20px; position: relative;}
         .input-group label { display: block; font-size: 0.8rem; color: var(--muted); margin-bottom: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;}
@@ -104,20 +97,16 @@
         /* TARJETA DE RESULTADOS SOFISTICADA */
         .result-card { margin-top: 25px; background: #0f172a; border-radius: 16px; padding: 25px; border: 1px solid var(--accent); display: none; animation: fadeIn 0.4s ease-out; box-shadow: 0 10px 30px -10px rgba(16, 185, 129, 0.15); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
         .result-card h2 { font-size: 0.75rem; color: var(--muted); margin-bottom: 15px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;}
         .data-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 0.95rem; color: var(--muted);}
         .data-row span:last-child { font-weight: 600; color: white;}
         
-        /* EL NÚMERO GIGANTE */
         .total-row { border-top: 1px solid var(--border); padding-top: 20px; margin-top: 15px; display: flex; flex-direction: column; align-items: center; cursor: pointer; position: relative;}
         .total-row .label-receive { font-size: 0.85rem; color: var(--muted); margin-bottom: 8px; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px;}
-        
         .amount-display { display: flex; align-items: baseline; justify-content: center; gap: 8px; }
         .amount-display #netDisplay { font-size: 3.2rem; font-weight: 800; color: var(--text); line-height: 1; letter-spacing: -1px; transition: color 0.2s;}
         .amount-display .currency-label { font-size: 1.2rem; color: var(--accent); font-weight: 700;}
-        
-        .copy-icon { width: 20px; height: 20px; color: var(--muted); transition: color 0.2s; margin-left: 5px;}
+        .copy-icon { width: 20px; height: 20px; color: var(--muted); transition: color 0.2s;}
         .total-row:hover .copy-icon { color: var(--accent); }
         .total-row:active .amount-display #netDisplay { color: var(--accent); }
 
@@ -126,9 +115,7 @@
         .bcv-title { font-size: 0.7rem; color: #93c5fd; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; font-weight: 600;}
         .bcv-value { font-size: 1.3rem; font-weight: 700; color: #60a5fa; }
         .bcv-rate-info { font-size: 0.7rem; color: var(--muted); margin-top: 5px; }
-        
-        .brecha-badge { margin-top: 10px; background: rgba(16, 185, 129, 0.1); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.2); padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; gap: 6px; cursor: pointer; transition: background 0.2s;}
-        .brecha-badge:active { background: rgba(16, 185, 129, 0.2); }
+        .brecha-badge { margin-top: 10px; background: rgba(16, 185, 129, 0.1); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.2); padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; gap: 4px;}
 
         .binance-cta { margin-top: 25px; background: linear-gradient(135deg, rgba(240, 185, 11, 0.1), rgba(240, 185, 11, 0.05)); border: 1px solid rgba(240, 185, 11, 0.3); border-radius: 12px; padding: 15px; text-align: center; }
         .binance-cta p { font-size: 0.8rem; color: #f8fafc; margin-bottom: 12px; line-height: 1.4; }
@@ -155,16 +142,12 @@
         .price-tag { color: var(--accent); font-size: 1.4rem; font-weight: 800; display: block; margin-bottom: 15px; text-align: center; background: rgba(16, 185, 129, 0.1); padding: 10px; border-radius: 10px;}
         .btn-whatsapp { display: flex; justify-content: center; align-items: center; gap: 10px; width: 100%; padding: 16px; background-color: #25D366; color: white; text-decoration: none; border-radius: 14px; font-weight: 700; font-size: 1rem; margin-bottom: 15px; border: none; cursor: pointer;}
         .btn-close { background: transparent; border: none; color: var(--muted); cursor: pointer; font-size: 0.9rem; text-decoration: underline; font-weight: 600; padding: 10px;}
-        
-        .limit-reached-card { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 12px; padding: 15px; margin-top: 15px; display: none; text-align: center;}
-        .limit-reached-card h3 { color: #fca5a5; font-size: 1rem; margin-bottom: 5px;}
-        .limit-reached-card p { font-size: 0.85rem; color: #f8fafc; margin-bottom: 10px;}
-        .btn-vip-small { background: var(--warn); color: white; border: none; padding: 10px 15px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem;}
 
         .welcome-list { text-align: left; margin-bottom: 20px; }
         .welcome-list li { margin-bottom: 15px; font-size: 0.9rem; color: var(--text); line-height: 1.4; display: flex; align-items: flex-start; gap: 12px;}
         .welcome-list li span { font-size: 1.2rem; line-height: 1; }
         .welcome-warning { background: rgba(245, 158, 11, 0.1); border-left: 3px solid #fbbf24; padding: 12px; border-radius: 6px; font-size: 0.8rem; color: #fcd34d; text-align: left; margin-bottom: 20px; line-height: 1.4;}
+        .welcome-checkbox { display: flex; align-items: center; gap: 8px; margin-bottom: 15px; font-size: 0.8rem; color: var(--muted); cursor: pointer; justify-content: center;}
 
         .binance-modal-text { font-size: 0.9rem; line-height: 1.5; text-align: left; margin-bottom: 20px;}
         .binance-modal-text strong { color: var(--binance); }
@@ -188,9 +171,6 @@
         .badge-dev { background: rgba(139,92,246,0.2); color: #a78bfa; padding: 2px 8px; border-radius: 10px; font-size: 0.65rem; font-weight: 700; margin-left: auto;}
         .badge-soon { background: rgba(245,158,11,0.2); color: #fbbf24; padding: 2px 8px; border-radius: 10px; font-size: 0.65rem; font-weight: 700; margin-left: auto;}
         .hub-disclaimer { background: rgba(139, 92, 246, 0.1); border-left: 3px solid #a78bfa; padding: 10px; border-radius: 6px; font-size: 0.75rem; color: #c4b5fd; text-align: left; margin-top: 15px; line-height: 1.4;}
-        
-        .welcome-checkbox-label { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 20px; font-size: 0.85rem; color: var(--muted); cursor: pointer; user-select: none;}
-        .welcome-checkbox-label input { width: 18px; height: 18px; accent-color: var(--accent); cursor: pointer;}
     </style>
 </head>
 <body>
@@ -209,11 +189,10 @@
     </div>
     <ul class="sidebar-menu">
         <li><a href="#" id="navCalc"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m-6 4h.01M9 16h.01M15 16h.01M9 11h.01M15 11h.01M15 7h.01M9 7h.01M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"></path></svg> Calculadora</a></li>
-        <li><a href="#" id="navHelp" class="help-link"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> ¿Cómo funciona?</a></li>
         <li><a href="#" id="navHistory" class="history-link"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path></svg> Historial de Tasas</a></li>
-        <li><a href="#" class="vip-link" id="navVip"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg> Hazte VIP</a></li>
+        <li><a href="#" class="vip-link" id="navVip"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg> Apoyar Proyecto</a></li>
         <li><a href="#" id="navHub" class="hub-link"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg> Ecosistema H-Nexo</a></li>
-        <li><a href="https://ko-fi.com/hnexo" target="_blank" class="ko-fi-link"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg> Apoyar Proyecto</a></li>
+        <li><a href="https://ko-fi.com/hnexo" target="_blank" class="ko-fi-link"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg> Ko-fi</a></li>
     </ul>
     <div class="sidebar-footer">
         Versión 1.0.0<br>Hecho con ❤️ en Venezuela
@@ -235,7 +214,7 @@
 
         <img src="./icon.svg" alt="Logo Conversor P2P" class="header-logo">
         <h1>Conversor P2P</h1>
-        <p>Compara tus bolívares al instante</p>
+        <p>La calculadora definitiva para tus cambios</p>
         <a href="./ConversorP2P.apk" download class="install-apk-btn" id="installApkBtn">📲 Descargar App Android</a>
     </div>
 
@@ -248,11 +227,6 @@
     </div>
     
     <div class="content">
-        <div class="limit-box">
-            <span id="limitText">Consultas gratis: 30/30</span>
-            <button class="unlock-btn" id="unlockBtn">Desbloquear VIP</button>
-        </div>
-        
         <div class="input-group">
             <label>¿Cuántos Bolívares quieres cambiar?</label>
             <input type="text" id="amountInput" placeholder="0,00" inputmode="decimal">
@@ -276,18 +250,11 @@
         <button class="btn-main" id="calculateBtn">Calcular Tasas</button>
         <div id="errorMsg" class="error-msg"></div>
 
-        <div class="limit-reached-card" id="limitReachedCard">
-            <h3>¡Oh! Te has quedado sin consultas gratis</h3>
-            <p id="refillMessage">Pero no te preocupes, en unos días tendrás más.</p>
-            <button class="btn-vip-small" id="goVipBtn">Hazte VIP y no esperes</button>
-        </div>
-
         <!-- TARJETA DE RESULTADOS SOFISTICADA -->
         <div class="result-card" id="resultCard">
             <h2>Resultado con Binance P2P</h2>
             <div class="data-row"><span>Tasa actual de referencia</span><span id="rateDisplay">-</span></div>
             
-            <!-- EL NÚMERO GIGANTE CON ICONO -->
             <div class="total-row" id="copyResultBtn" title="Toca para copiar el resultado">
                 <span class="label-receive">Recibes en USDT</span>
                 <div class="amount-display">
@@ -301,10 +268,9 @@
                 <span class="bcv-title">Equivalente a Tasa Oficial BCV</span>
                 <span class="bcv-value" id="bcvDisplay">0,00 USD</span>
                 <span class="bcv-rate-info" id="bcvRateDisplay"></span>
-                <div class="brecha-badge" id="brechaDisplay" style="display:none;" onclick="showToast('La brecha es la diferencia entre la tasa P2P de Binance y la tasa oficial del BCV.')">
+                <div class="brecha-badge" id="brechaDisplay" style="display:none;">
                     <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
                     Brecha: <span id="brechaValue">+0%</span>
-                    <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 </div>
             </div>
 
@@ -319,14 +285,12 @@
     </div>
 </div>
 
-<!-- MODAL DE PAGO VIP -->
+<!-- MODAL DE APOYO / DONACIONES -->
 <div class="modal-overlay" id="paymentModal">
     <div class="modal-content">
-        <h3>Acceso VIP Ilimitado</h3>
-        <p>Desbloquea consultas ilimitadas y apoya el proyecto.</p>
+        <h3>Apoya el Proyecto</h3>
+        <p>Esta app es y siempre será gratuita. Si te es útil, puedes apoyar el desarrollo con una donación para mantener los servidores activos.</p>
         
-        <span class="price-tag">Precio: 4$ (BCV) o 3 USDT</span>
-
         <div class="vip-card">
             <h4><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg> Pago Móvil</h4>
             <p>
@@ -335,7 +299,7 @@
                 Bancos: <strong>Venezuela (0102)</strong> y <strong>Banesco (0134)</strong>
             </p>
             <button class="btn-copy-vip" onclick="copyVipData('pago_movil')">
-                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg> Copiar datos de Pago Móvil
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg> Copiar datos
             </button>
         </div>
 
@@ -345,16 +309,16 @@
                 UID: <strong>72597924</strong>
             </p>
             <button class="btn-copy-vip" onclick="copyVipData('binance')">
-                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg> Copiar UID de Binance
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg> Copiar UID
             </button>
         </div>
-
-        <a href="https://wa.me/584124166003?text=Hola,%20quiero%20comprar%20el%20acceso%20VIP%20ilimitado%20para%20ConversorP2P.%20Aqu%C3%AD%20env%C3%ADo%20mi%20comprobante:" target="_blank" class="btn-whatsapp" style="margin-top: 10px;">
-            Enviar comprobante por WhatsApp
+        
+        <a href="https://ko-fi.com/hnexo" target="_blank" class="btn-whatsapp" style="margin-top: 10px; background-color: #ff5e5b;">
+            Apoyar en Ko-fi
         </a>
-        <div style="margin-top: 5px;">
-            <button id="codeBtn" style="background: transparent; border: 1px solid var(--border); color: var(--text); padding: 14px; width: 100%; border-radius: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Ya tengo mi código VIP</button>
-        </div>
+        
+        <p style="font-size: 0.75rem; color: var(--accent); margin-top: 15px; font-weight: 600;">✨ Próximamente: Sincronización en la Nube y Alertas (requiere registro)</p>
+        
         <button class="btn-close" id="closeModalBtn" style="margin-top: 10px;">Cerrar</button>
     </div>
 </div>
@@ -382,7 +346,7 @@
 <div class="modal-overlay" id="historyModal">
     <div class="modal-content">
         <h3>Historial de Tasas</h3>
-        <p>Evolución de la tasa Binance P2P en los últimos días (guardado localmente en tu teléfono).</p>
+        <p>Evolución de la tasa Binance P2P en los últimos días.</p>
         <div class="chart-container">
             <canvas id="historyChart"></canvas>
         </div>
@@ -434,7 +398,7 @@
     </div>
 </div>
 
-<!-- CARTEL DE BIENVENIDA (ONBOARDING) -->
+<!-- CARTEL DE BIENVENIDA CON CHECKBOX -->
 <div class="modal-overlay" id="welcomeModal">
     <div class="modal-content">
         <h3 style="font-size: 1.5rem; margin-bottom: 5px;">¡Bienvenido! 👋</h3>
@@ -447,12 +411,11 @@
         </ul>
         <div class="welcome-warning">
             <b>⚠️ Aviso sobre la Tasa:</b><br>
-            Los montos mostrados son un <b>estimado de referencia</b> basado en la tasa actual del mercado P2P. La tasa exacta puede variar al momento de realizar tu transacción en tu plataforma de confianza (como Binance).
+            Los montos mostrados son un <b>estimado de referencia</b> basado en la tasa actual del mercado P2P. La tasa exacta puede variar al momento de realizar tu transacción.
         </div>
         
-        <label class="welcome-checkbox-label">
-            <input type="checkbox" id="dontShowWelcome">
-            No volver a mostrar este mensaje
+        <label class="welcome-checkbox">
+            <input type="checkbox" id="dontShowAgain"> No volver a mostrar este mensaje
         </label>
 
         <button class="btn-main" id="closeWelcomeBtn" style="font-size: 1rem;">¡Entendido, empecemos!</button>
@@ -467,14 +430,9 @@
     const resultCard = document.getElementById('resultCard');
     const rateDisplay = document.getElementById('rateDisplay');
     const netDisplay = document.getElementById('netDisplay');
-    const limitText = document.getElementById('limitText');
-    const unlockBtn = document.getElementById('unlockBtn');
+    
     const paymentModal = document.getElementById('paymentModal');
     const closeModalBtn = document.getElementById('closeModalBtn');
-    const codeBtn = document.getElementById('codeBtn');
-    const goVipBtn = document.getElementById('goVipBtn');
-    const limitReachedCard = document.getElementById('limitReachedCard');
-    const refillMessage = document.getElementById('refillMessage');
     
     const bcvSection = document.getElementById('bcvSection');
     const bcvDisplay = document.getElementById('bcvDisplay');
@@ -489,8 +447,7 @@
 
     const welcomeModal = document.getElementById('welcomeModal');
     const closeWelcomeBtn = document.getElementById('closeWelcomeBtn');
-    const dontShowWelcome = document.getElementById('dontShowWelcome');
-    const navHelp = document.getElementById('navHelp');
+    const dontShowAgain = document.getElementById('dontShowAgain');
 
     const historyModal = document.getElementById('historyModal');
     const navHistory = document.getElementById('navHistory');
@@ -524,14 +481,6 @@
 
     navCalc.addEventListener('click', (e) => { e.preventDefault(); closeMenu(); window.scrollTo({top: 0, behavior: 'smooth'}); });
     navVip.addEventListener('click', (e) => { e.preventDefault(); closeMenu(); paymentModal.style.display = 'flex'; });
-    
-    // LÓGICA DEL BOTÓN DE AYUDA
-    navHelp.addEventListener('click', (e) => {
-        e.preventDefault();
-        closeMenu();
-        dontShowWelcome.checked = false; // Desmarcar al abrir manualmente
-        welcomeModal.style.display = 'flex';
-    });
 
     // SISTEMA TOAST
     function showToast(message) {
@@ -545,9 +494,9 @@
     function copyVipData(type) {
         let textToCopy = "";
         if (type === 'pago_movil') {
-            textToCopy = "Banco: Venezuela (0102) / Banesco (0134)\nTeléfono: 04124166003\nC.I: 22.927.162\nMonto: 4$ o 3 USDT";
+            textToCopy = "Banco: Venezuela (0102) / Banesco (0134)\nTeléfono: 04124166003\nC.I: 22.927.162";
         } else if (type === 'binance') {
-            textToCopy = "UID: 72597924\nMonto: 3 USDT";
+            textToCopy = "UID: 72597924";
         }
         
         navigator.clipboard.writeText(textToCopy).then(() => {
@@ -640,92 +589,24 @@
     });
     closeHubModalBtn.addEventListener('click', () => { hubModal.style.display = 'none'; });
 
-    // CARTEL DE BIENVENIDA
-    if (localStorage.getItem('conversor_hide_welcome') === 'true') {
-        welcomeModal.style.display = 'none';
-    } else {
+    // CARTEL DE BIENVENIDA CON MEMORIA
+    if (!localStorage.getItem('conversor_onboarding_seen')) {
         welcomeModal.style.display = 'flex';
     }
-
-    closeWelcomeBtn.addEventListener('click', () => {
-        if (dontShowWelcome.checked) {
-            localStorage.setItem('conversor_hide_welcome', 'true');
+    
+    closeWelcomeBtn.addEventListener('click', () => { 
+        if (dontShowAgain.checked) {
+            localStorage.setItem('conversor_onboarding_seen', 'true');
         }
-        welcomeModal.style.display = 'none';
+        welcomeModal.style.display = 'none'; 
     });
 
     // MODAL BINANCE
     goBinanceBtn.addEventListener('click', () => { binanceModal.style.display = 'flex'; });
     closeBinanceModalBtn.addEventListener('click', () => { binanceModal.style.display = 'none'; });
 
-    // LÓGICA DE LÍMITES Y VIP
-    let wasVip = localStorage.getItem('conversor_was_vip') === 'true';
-    const MAX_FREE_NEW = 30; 
-    const MAX_FREE_EXPIRED = 10; 
-    const REFILL_DAYS = 7;
-    const MS_IN_DAYS = 1000 * 60 * 60 * 24;
-
-    let maxFree = wasVip ? MAX_FREE_EXPIRED : MAX_FREE_NEW;
-    let queriesUsed = parseInt(localStorage.getItem('conversor_queries') || '0');
-    let isPremium = localStorage.getItem('conversor_premium') === 'true';
-    let userVipCode = localStorage.getItem('conversor_codigo') || null;
-    let lastReset = parseInt(localStorage.getItem('conversor_last_reset') || '0');
-
-    if (!lastReset) {
-        lastReset = Date.now();
-        localStorage.setItem('conversor_last_reset', lastReset);
-    } else {
-        const daysPassed = (Date.now() - lastReset) / MS_IN_DAYS;
-        if (daysPassed >= REFILL_DAYS) {
-            queriesUsed = maxFree - 10; 
-            if (queriesUsed < 0) queriesUsed = 0;
-            lastReset = Date.now();
-            localStorage.setItem('conversor_queries', queriesUsed);
-            localStorage.setItem('conversor_last_reset', lastReset);
-            showToast("¡Bienvenido de vuelta! Tienes 10 consultas nuevas.");
-        }
-    }
-
-    let deviceId = localStorage.getItem('conversor_device_id');
-    if (!deviceId) {
-        deviceId = 'dev-' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-        localStorage.setItem('conversor_device_id', deviceId);
-    }
-
+    // ELEMENTOS BÁSICOS DEL SISTEMA (Sin límites)
     const MI_PROXY = "https://conversor-proxy.hehf24.workers.dev";
-
-    async function checkVipStatus() {
-        if (isPremium && !userVipCode) {
-            isPremium = false;
-            localStorage.removeItem('conversor_premium');
-            updateLimitUI();
-            return;
-        }
-        if (isPremium && userVipCode) {
-            try {
-                const response = await fetch(MI_PROXY + "/check-vip", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ codigo: userVipCode, deviceId: deviceId })
-                });
-                const data = await response.json();
-                if (data.valido !== true) {
-                    isPremium = false;
-                    userVipCode = null;
-                    localStorage.removeItem('conversor_premium');
-                    localStorage.removeItem('conversor_codigo');
-                    localStorage.setItem('conversor_was_vip', 'true');
-                    wasVip = true;
-                    maxFree = MAX_FREE_EXPIRED;
-                    queriesUsed = 0;
-                    localStorage.setItem('conversor_queries', queriesUsed);
-                    updateLimitUI(); 
-                    showToast("Membresía VIP expirada. Ahora tienes 10 consultas gratis.");
-                }
-            } catch (e) { console.error("Error verificando VIP:", e); }
-        }
-    }
-    checkVipStatus(); 
 
     async function loadBCVTicker() {
         try {
@@ -740,6 +621,7 @@
     }
     loadBCVTicker(); 
 
+    // PANEL DE ADMIN
     if (window.location.search.includes('admin=true')) {
         document.getElementById('adminPanel').style.display = 'block';
         fetch(MI_PROXY + "/stats")
@@ -752,69 +634,8 @@
             .catch(err => { document.getElementById('adminCalls').textContent = "Error: " + err.message; });
     }
 
-    function updateLimitUI() {
-        if (isPremium) {
-            limitText.innerHTML = "✨ <b>Modo VIP Activado</b>";
-            limitText.style.color = "#22c55e";
-            unlockBtn.style.display = 'none';
-            calculateBtn.disabled = false;
-            limitReachedCard.style.display = 'none';
-        } else {
-            let left = maxFree - queriesUsed;
-            if (left < 0) left = 0;
-            limitText.innerHTML = `Consultas gratis: <b>${left}/${maxFree}</b>`;
-            if (left <= 0) {
-                limitText.style.color = "#ef4444";
-                calculateBtn.disabled = true;
-                calculateBtn.textContent = "Límite alcanzado";
-                limitReachedCard.style.display = 'block';
-                const nextResetDate = lastReset + (REFILL_DAYS * MS_IN_DAYS);
-                const daysLeft = Math.ceil((nextResetDate - Date.now()) / MS_IN_DAYS);
-                refillMessage.innerHTML = `Pero no te preocupes, en <b>${daysLeft} días</b> recibirás más consultas de regalo. <br>¿No quieres esperar? Hazte VIP por solo $4.`;
-            } else {
-                limitReachedCard.style.display = 'none';
-                calculateBtn.disabled = false;
-                calculateBtn.textContent = 'Calcular Tasas';
-            }
-        }
-    }
-
-    unlockBtn.addEventListener('click', () => { paymentModal.style.display = 'flex'; });
-    goVipBtn.addEventListener('click', () => { paymentModal.style.display = 'flex'; });
+    // CERRAR MODAL DE DONACIONES
     closeModalBtn.addEventListener('click', () => { paymentModal.style.display = 'none'; });
-
-    codeBtn.addEventListener('click', async () => {
-        const code = prompt("Ingresa tu código VIP:");
-        if (!code || code.trim() === "") return;
-        codeBtn.textContent = "Validando...";
-        codeBtn.disabled = true;
-        try {
-            const response = await fetch(MI_PROXY + "/validar-codigo", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ codigo: code, deviceId: deviceId })
-            });
-            const data = await response.json();
-            if (data.valido) {
-                isPremium = true;
-                userVipCode = code.trim().toUpperCase();
-                localStorage.setItem('conversor_premium', 'true');
-                localStorage.setItem('conversor_codigo', userVipCode);
-                localStorage.setItem('conversor_was_vip', 'true'); 
-                if (data.migrado) { showToast("✔️ Código migrado con éxito"); } 
-                else { showToast("✔️ Código correcto. Bienvenido al VIP"); }
-                updateLimitUI();
-                paymentModal.style.display = 'none';
-            } else {
-                showToast("❌ Error: " + (data.error || "Código inválido."));
-            }
-        } catch (error) {
-            showToast("❌ Error de conexión al validar.");
-        } finally {
-            codeBtn.textContent = "Ya tengo mi código VIP";
-            codeBtn.disabled = false;
-        }
-    });
 
     // FORMATEO DEL INPUT
     amountInput.addEventListener('input', function (e) {
@@ -826,7 +647,7 @@
         }
     });
 
-    // ANIMACIÓN TACHÓMETRO MADURA
+    // ANIMACIÓN TACHÓMETRO
     function animateValue(obj, start, end, duration) {
         let startTimestamp = null;
         const step = (timestamp) => {
@@ -840,9 +661,8 @@
         window.requestAnimationFrame(step);
     }
 
+    // CALCULAR (Sin restricciones de límite)
     calculateBtn.addEventListener('click', async () => {
-        if (queriesUsed >= maxFree && !isPremium) return;
-        
         const rawValue = amountInput.value.replace(/\./g, '').replace(',', '.');
         const amount = parseFloat(rawValue);
         
@@ -868,7 +688,7 @@
 
             let rateBinance = data.binance_rate;
             
-            // LÓGICA DEL MARGEN DE SEGURIDAD
+            // MARGEN DE SEGURIDAD
             if (marginToggle.checked) {
                 rateBinance = rateBinance * 0.99;
             }
@@ -879,7 +699,7 @@
 
             rateDisplay.textContent = `${rateBinance.toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2})} VES`;
             
-            // TACHÓMETRO 400ms
+            // TACHÓMETRO
             netDisplay.innerHTML = `0,00`;
             animateValue(netDisplay, 0, usdtBinance, 400);
 
@@ -914,23 +734,14 @@
 
             resultCard.style.display = 'block';
 
-            if (!isPremium) {
-                queriesUsed++;
-                localStorage.setItem('conversor_queries', queriesUsed);
-                updateLimitUI();
-            }
         } catch (error) {
             errorMsg.textContent = "Fallo: " + error.message;
             errorMsg.style.display = 'block';
         } finally {
-            if (queriesUsed < maxFree || isPremium) {
-                calculateBtn.disabled = false;
-                calculateBtn.textContent = 'Calcular Tasas';
-            }
+            calculateBtn.disabled = false;
+            calculateBtn.textContent = 'Calcular Tasas';
         }
     });
-
-    updateLimitUI();
 
     if (window.Capacitor) {
         const installBtn = document.getElementById('installApkBtn');
