@@ -71,6 +71,11 @@
         
         .content { padding: 25px 20px; }
 
+        /* NUEVO TOGGLE DE DIRECCIÓN */
+        .direction-toggle { display: flex; background: #0f172a; border-radius: 12px; padding: 4px; margin-bottom: 20px; border: 1px solid var(--border); }
+        .direction-btn { flex: 1; padding: 10px; border: none; background: transparent; color: var(--muted); font-weight: 700; font-size: 0.85rem; border-radius: 8px; cursor: pointer; transition: all 0.2s; display: flex; justify-content: center; align-items: center; gap: 6px;}
+        .direction-btn.active { background: var(--accent); color: #000; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2); }
+
         .input-group { margin-bottom: 20px; position: relative;}
         .input-group label { display: block; font-size: 0.8rem; color: var(--muted); margin-bottom: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;}
         .input-group input { width: 100%; padding: 20px; border-radius: 16px; border: 2px solid var(--border); background-color: #0f172a; color: white; font-size: 1.5rem; font-weight: 700; outline: none; transition: border-color 0.2s; }
@@ -227,13 +232,20 @@
     </div>
     
     <div class="content">
-        <div class="input-group">
-            <label>¿Cuántos Bolívares quieres cambiar?</label>
-            <input type="text" id="amountInput" placeholder="0,00" inputmode="decimal">
-            <span class="currency-badge">VES</span>
+        
+        <!-- NUEVO TOGGLE DE DIRECCIÓN -->
+        <div class="direction-toggle">
+            <button class="direction-btn active" id="modeVesToUsdt">VES ➔ USDT</button>
+            <button class="direction-btn" id="modeUsdtToVes">USDT ➔ VES</button>
         </div>
 
-        <!-- TOGGLE MARGEN DE SEGURIDAD CON EXPLICACIÓN -->
+        <div class="input-group">
+            <label id="inputLabel">¿Cuántos Bolívares quieres cambiar?</label>
+            <input type="text" id="amountInput" placeholder="0,00" inputmode="decimal">
+            <span class="currency-badge" id="inputBadge">VES</span>
+        </div>
+
+        <!-- TOGGLE MARGEN DE SEGURIDAD -->
         <div class="margin-toggle-container">
             <div class="margin-header">
                 <span>Margen de Seguridad</span>
@@ -243,11 +255,11 @@
                 </label>
             </div>
             <div class="margin-desc">
-                💡 Actívalo para calcular con la tasa un 1% más baja. Úsalo si el mercado está muy volátil y no quieres llevarte sorpresas al momento de hacer la operación.
+                💡 Actívalo para calcular con la tasa un 1% menos favorable. Úsalo si el mercado está muy volátil.
             </div>
         </div>
         
-        <button class="btn-main" id="calculateBtn">Calcular Tasas</button>
+        <button class="btn-main" id="calculateBtn">Calcular</button>
         <div id="errorMsg" class="error-msg"></div>
 
         <!-- TARJETA DE RESULTADOS SOFISTICADA -->
@@ -256,16 +268,16 @@
             <div class="data-row"><span>Tasa actual de referencia</span><span id="rateDisplay">-</span></div>
             
             <div class="total-row" id="copyResultBtn" title="Toca para copiar el resultado">
-                <span class="label-receive">Recibes en USDT</span>
+                <span class="label-receive" id="resultLabel">Recibes en USDT</span>
                 <div class="amount-display">
                     <span id="netDisplay">0,00</span>
-                    <span class="currency-label">USDT</span>
+                    <span class="currency-label" id="resultCurrency">USDT</span>
                     <svg class="copy-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
                 </div>
             </div>
 
             <div class="bcv-card" id="bcvSection" style="display: none;">
-                <span class="bcv-title">Equivalente a Tasa Oficial BCV</span>
+                <span class="bcv-title" id="bcvLabel">Equivalente a Tasa Oficial BCV</span>
                 <span class="bcv-value" id="bcvDisplay">0,00 USD</span>
                 <span class="bcv-rate-info" id="bcvRateDisplay"></span>
                 <div class="brecha-badge" id="brechaDisplay" style="display:none;">
@@ -404,7 +416,7 @@
         <h3 style="font-size: 1.5rem; margin-bottom: 5px;">¡Bienvenido! 👋</h3>
         <p style="margin-bottom: 20px;">Tu asistente financiero personal.</p>
         <ul class="welcome-list">
-            <li><span>💸</span> <div><b>Calcula</b> cuántos <b>USDT</b> (Dólares digitales) puedes obtener por tus <b>Bolívares (VES)</b>.</div></li>
+            <li><span>💸</span> <div><b>Calcula</b> cuántos <b>USDT</b> puedes obtener por tus <b>Bolívares</b>, o viceversa.</div></li>
             <li><span>🏛️</span> <div>Consulta también el equivalente según la <b>Tasa Oficial del BCV</b> del día.</div></li>
             <li><span>⚡</span> <div>Obtén respuestas al instante sin páginas lentas ni cálculos manuales.</div></li>
             <li><span>🚫</span> <div><b>Importante:</b> Esta es una herramienta de <b>consulta e información</b>. No realizamos transacciones ni compras por ti.</div></li>
@@ -425,16 +437,21 @@
 <script>
     // ELEMENTOS DEL DOM
     const amountInput = document.getElementById('amountInput');
+    const inputLabel = document.getElementById('inputLabel');
+    const inputBadge = document.getElementById('inputBadge');
     const calculateBtn = document.getElementById('calculateBtn');
     const errorMsg = document.getElementById('errorMsg');
     const resultCard = document.getElementById('resultCard');
     const rateDisplay = document.getElementById('rateDisplay');
     const netDisplay = document.getElementById('netDisplay');
+    const resultLabel = document.getElementById('resultLabel');
+    const resultCurrency = document.getElementById('resultCurrency');
     
     const paymentModal = document.getElementById('paymentModal');
     const closeModalBtn = document.getElementById('closeModalBtn');
     
     const bcvSection = document.getElementById('bcvSection');
+    const bcvLabel = document.getElementById('bcvLabel');
     const bcvDisplay = document.getElementById('bcvDisplay');
     const bcvRateDisplay = document.getElementById('bcvRateDisplay');
     const bcvTickerValue = document.getElementById('bcvTickerValue');
@@ -461,8 +478,11 @@
     const navHub = document.getElementById('navHub');
     const closeHubModalBtn = document.getElementById('closeHubModalBtn');
 
-    // TOGGLE DE MARGEN
+    // TOGGLE DE MARGEN Y DIRECCIÓN
     const marginToggle = document.getElementById('marginToggle');
+    const modeVesToUsdt = document.getElementById('modeVesToUsdt');
+    const modeUsdtToVes = document.getElementById('modeUsdtToVes');
+    let currentMode = 'ves_to_usdt'; // Por defecto
 
     // LÓGICA DEL MENÚ HAMBURGUESA
     const sidebar = document.getElementById('sidebar');
@@ -481,6 +501,35 @@
 
     navCalc.addEventListener('click', (e) => { e.preventDefault(); closeMenu(); window.scrollTo({top: 0, behavior: 'smooth'}); });
     navVip.addEventListener('click', (e) => { e.preventDefault(); closeMenu(); paymentModal.style.display = 'flex'; });
+
+    // LÓGICA DE CAMBIO DE MODO (INVERSO)
+    modeVesToUsdt.addEventListener('click', () => {
+        currentMode = 'ves_to_usdt';
+        modeVesToUsdt.classList.add('active');
+        modeUsdtToVes.classList.remove('active');
+        
+        inputLabel.textContent = "¿Cuántos Bolívares quieres cambiar?";
+        inputBadge.textContent = "VES";
+        resultLabel.textContent = "Recibes en USDT";
+        resultCurrency.textContent = "USDT";
+        bcvLabel.textContent = "Equivalente a Tasa Oficial BCV";
+        
+        resultCard.style.display = 'none'; // Ocultar resultado anterior
+    });
+
+    modeUsdtToVes.addEventListener('click', () => {
+        currentMode = 'usdt_to_ves';
+        modeUsdtToVes.classList.add('active');
+        modeVesToUsdt.classList.remove('active');
+        
+        inputLabel.textContent = "¿Cuántos Dólares (USDT) tienes?";
+        inputBadge.textContent = "USDT";
+        resultLabel.textContent = "Recibes en Bolívares";
+        resultCurrency.textContent = "VES";
+        bcvLabel.textContent = "Equivalente a Tasa Oficial BCV (Bolívares)";
+        
+        resultCard.style.display = 'none';
+    });
 
     // SISTEMA TOAST
     function showToast(message) {
@@ -508,7 +557,7 @@
 
     // LÓGICA PARA COPIAR EL RESULTADO
     copyResultBtn.addEventListener('click', () => {
-        const amount = netDisplay.textContent + " USDT";
+        const amount = netDisplay.textContent + " " + resultCurrency.textContent;
         navigator.clipboard.writeText(amount).then(() => {
             showToast("✔️ Resultado copiado");
         }).catch(err => {
@@ -605,7 +654,6 @@
     goBinanceBtn.addEventListener('click', () => { binanceModal.style.display = 'flex'; });
     closeBinanceModalBtn.addEventListener('click', () => { binanceModal.style.display = 'none'; });
 
-    // ELEMENTOS BÁSICOS DEL SISTEMA (Sin límites)
     const MI_PROXY = "https://conversor-proxy.hehf24.workers.dev";
 
     async function loadBCVTicker() {
@@ -661,7 +709,7 @@
         window.requestAnimationFrame(step);
     }
 
-    // CALCULAR (Sin restricciones de límite)
+    // CALCULAR (Lógica Inversa y Directa)
     calculateBtn.addEventListener('click', async () => {
         const rawValue = amountInput.value.replace(/\./g, '').replace(',', '.');
         const amount = parseFloat(rawValue);
@@ -693,23 +741,37 @@
                 rateBinance = rateBinance * 0.99;
             }
 
-            let usdtBinance = amount / rateBinance;
+            let finalResult = 0;
 
-            saveDailyRate(rateBinance);
+            if (currentMode === 'ves_to_usdt') {
+                finalResult = amount / rateBinance;
+            } else {
+                finalResult = amount * rateBinance;
+            }
+
+            saveDailyRate(data.binance_rate);
 
             rateDisplay.textContent = `${rateBinance.toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2})} VES`;
             
             // TACHÓMETRO
             netDisplay.innerHTML = `0,00`;
-            animateValue(netDisplay, 0, usdtBinance, 400);
+            animateValue(netDisplay, 0, finalResult, 400);
 
             if (data.bcv_rate) {
                 const rateBCV = data.bcv_rate;
-                let usdBCV = amount / rateBCV;
+                let bcvResult = 0;
                 
-                bcvDisplay.innerHTML = `0,00 USD`;
-                animateValue(bcvDisplay, 0, usdBCV, 400);
-                bcvDisplay.innerHTML += ' USD';
+                if (currentMode === 'ves_to_usdt') {
+                    bcvResult = amount / rateBCV;
+                    bcvDisplay.innerHTML = `0,00 USD`;
+                } else {
+                    bcvResult = amount * rateBCV;
+                    bcvDisplay.innerHTML = `0,00 VES`;
+                }
+                
+                animateValue(bcvDisplay, 0, bcvResult, 400);
+                if(currentMode === 'ves_to_usdt') bcvDisplay.innerHTML += ' USD';
+                else bcvDisplay.innerHTML += ' VES';
 
                 bcvRateDisplay.textContent = `Tasa BCV: ${rateBCV.toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2})} Bs/USD`;
                 
@@ -739,7 +801,7 @@
             errorMsg.style.display = 'block';
         } finally {
             calculateBtn.disabled = false;
-            calculateBtn.textContent = 'Calcular Tasas';
+            calculateBtn.textContent = 'Calcular';
         }
     });
 
