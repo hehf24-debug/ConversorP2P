@@ -95,9 +95,10 @@
         input:checked + .slider { background-color: var(--accent); }
         input:checked + .slider:before { transform: translateX(18px); }
 
-        .btn-main { width: 100%; padding: 16px; border: none; border-radius: 12px; background: linear-gradient(90deg, var(--accent), #34d399); color: #000; font-size: 1rem; font-weight: 800; cursor: pointer; transition: transform 0.1s, opacity 0.2s, box-shadow 0.2s; box-shadow: 0 6px 15px -5px rgba(16, 185, 129, 0.4); }
-        .btn-main:active { transform: scale(0.97); }
-        .btn-main:disabled { opacity: 0.5; cursor: not-allowed; background: #555; color: #aaa; box-shadow: none;}
+        /* BOTÓN PARA FORZAR ACTUALIZACIÓN (Ya no calcula, solo actualiza tasas) */
+        .btn-refresh { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 12px; background: transparent; color: var(--muted); font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all 0.2s; margin-bottom: 15px; display: flex; justify-content: center; align-items: center; gap: 8px;}
+        .btn-refresh:active { background: #1e293b; }
+        .btn-refresh:disabled { opacity: 0.5; cursor: not-allowed; }
 
         /* TARJETA DE RESULTADOS MAS COMPACTA Y PROLIJA */
         .result-card { margin-top: 15px; background: #0f172a; border-radius: 16px; padding: 15px; border: 1px solid var(--accent); display: none; animation: fadeIn 0.4s ease-out; box-shadow: 0 10px 30px -10px rgba(16, 185, 129, 0.15); }
@@ -270,8 +271,8 @@
             </div>
         </div>
         
-        <!-- BOTÓN PARA FORZAR ACTUALIZACIÓN (Ya no calcula, solo actualiza tasas) -->
-        <button class="btn-main" id="refreshBtn">Actualizar Tasas</button>
+        <!-- BOTÓN PARA FORZAR ACTUALIZACIÓN -->
+        <button class="btn-refresh" id="refreshBtn">🔄 Actualizar Tasas</button>
         <div id="errorMsg" class="error-msg"></div>
 
         <!-- TARJETA DE RESULTADOS -->
@@ -686,30 +687,27 @@
         } catch (e) { bcvTickerValue.textContent = "Error"; }
     }
     
-    // NUEVA FUNCIÓN: OBTENER TASAS Y HABILITAR EL CÁLCULO EN VIVO
+    // OBTENER TASAS Y HABILITAR EL CÁLCULO EN VIVO
     async function fetchRatesAndEnableLiveCalc() {
         refreshBtn.disabled = true;
         refreshBtn.innerHTML = '<span class="spinner"></span> Actualizando...';
         errorMsg.style.display = 'none';
 
         try {
-            // Consultamos al Worker (que tiene caché de 10 min)
             const response = await fetch(MI_PROXY);
             const data = await response.json(); 
 
             if (!response.ok) { throw new Error(data.error || "Error en el servidor"); }
             if (!data.binance_rate) throw new Error("No se recibió la tasa");
 
-            // GUARDAMOS LAS TASAS EN MEMORIA GLOBAL (Redondeadas a 2 decimales)
             currentBinanceRate = Math.round(data.binance_rate * 100) / 100;
             currentBcvRate = Math.round(data.bcv_rate * 100) / 100;
 
             saveDailyRate(currentBinanceRate);
             
             refreshBtn.textContent = 'Tasas Actualizadas';
-            setTimeout(() => { refreshBtn.textContent = 'Actualizar Tasas'; refreshBtn.disabled = false; }, 2000);
+            setTimeout(() => { refreshBtn.textContent = '🔄 Actualizar Tasas'; refreshBtn.disabled = false; }, 2000);
             
-            // Ejecutamos el cálculo inmediatamente por si ya hay un número escrito
             liveCalculate();
 
         } catch (error) {
@@ -720,13 +718,14 @@
         }
     }
 
-    // NUEVA LÓGICA: CÁLCULO EN VIVO (Se dispara al escribir o cambiar margen)
+    // LÓGICA: CÁLCULO EN VIVO (Se dispara al escribir o cambiar margen)
     function liveCalculate() {
-        // Si no tenemos tasas cargadas aún, no hacemos nada
         if (currentBinanceRate === 0 || currentBcvRate === 0) return;
 
-        // Convertir la coma decimal a punto para que JS pueda hacer la matemática
-        const rawValue = amountInput.value.replace(/\./g, '').replace(',', '.');
+        // Convertir el valor visual (12.000,50) al valor matemático (12000.50)
+        let rawValue = amountInput.value;
+        rawValue = rawValue.replace(/\./g, ''); // Quitar puntos de miles
+        rawValue = rawValue.replace(/,/g, '.');  // Cambiar coma decimal por punto
         const amount = parseFloat(rawValue);
         
         if (!amount || amount <= 0) {
@@ -740,7 +739,6 @@
         try {
             let rateBinance = currentBinanceRate;
             
-            // MARGEN DE SEGURIDAD
             if (marginToggle.checked) {
                 rateBinance = rateBinance * 0.99;
                 rateBinance = Math.round(rateBinance * 100) / 100;
@@ -756,7 +754,6 @@
 
             rateDisplay.textContent = `${rateBinance.toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2})} VES`;
             
-            // Mostramos el resultado SIN la animación de tachómetro para que se sienta instantáneo
             netDisplay.textContent = finalResult.toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2});
 
             if (currentBcvRate > 0) {
@@ -811,36 +808,34 @@
             .catch(err => { document.getElementById('adminCalls').textContent = "Error: " + err.message; });
     }
 
-    // CERRAR MODAL DE DONACIONES
     closeModalBtn.addEventListener('click', () => { paymentModal.style.display = 'none'; });
 
-    // NUEVA LÓGICA DE FORMATEO DEL INPUT (Permite decimales con coma)
+    // NUEVA LÓGICA DE FORMATEO DEL INPUT (Puntos de miles, coma decimal)
     amountInput.addEventListener('input', function (e) {
-        let val = this.value.replace(/\./g, ','); 
-        val = val.replace(/[^0-9,]/g, ''); 
+        // 1. Obtener solo números y comas
+        let val = this.value.replace(/[^0-9,]/g, '');
         
+        // 2. Separar parte entera y decimal
         let parts = val.split(',');
         let intPart = parts[0];
-        let decPart = parts.length > 1 ? parts[1] : null;
+        let decPart = parts.length > 1 ? parts.slice(1).join('') : null; // Si hay múltiples comas, las unimos
 
+        // 3. Formatear la parte entera con puntos de miles
         if (intPart !== '') {
             intPart = parseInt(intPart, 10).toLocaleString('es-VE');
         }
 
+        // 4. Reconstruir el valor
         if (decPart !== null) {
             this.value = intPart + ',' + decPart;
         } else {
             this.value = intPart;
         }
 
-        // LLAMAMOS AL CÁLCULO EN VIVO MIENTRAS ESCRIBE
         liveCalculate();
     });
 
-    // Eventos para recalcular si cambia el margen o el modo
     marginToggle.addEventListener('change', liveCalculate);
-
-    // Botón de Actualizar tasas
     refreshBtn.addEventListener('click', fetchRatesAndEnableLiveCalc);
 
     // Al cargar la página, traemos las tasas por primera vez
