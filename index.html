@@ -26,7 +26,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: 'Outfit', sans-serif;}
         body { background-color: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 10px; padding-top: calc(10px + env(safe-area-inset-top)); background-image: radial-gradient(circle at top, #1e293b 0%, #0b0f19 60%); overflow-x: hidden; }
         
-        .app-container { width: 100%; max-width: 400px; background-color: var(--card); border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); overflow: hidden; border: 1px solid var(--border); position: relative; z-index: 1;}
+        .app-container { width: 100%; max-width: 400px; background-color: var(--card); border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); overflow: hidden; border: 1px solid var(--border); position: relative; z-index: 1;}
 
         .admin-panel { background-color: #1e1b4b; border-bottom: 2px solid #8b5cf6; padding: 10px; display: none; text-align: center; }
         .admin-panel h3 { color: #a78bfa; margin-bottom: 5px; font-size: 0.9rem; font-weight: 700;}
@@ -112,13 +112,13 @@
         /* MAGIA CSS PARA QUE LOS NUMEROS GRANDES NO SE SALGAN */
         .amount-display { display: flex; align-items: baseline; justify-content: center; gap: 6px; width: 100%; padding: 0 5px; overflow: hidden;}
         .amount-display #netDisplay { 
-            font-size: clamp(1.5rem, 7vw, 2.8rem); /* Se adapta al tamaño de la pantalla y longitud */
+            font-size: clamp(1.5rem, 7vw, 2.8rem);
             font-weight: 800; 
             color: var(--text); 
             line-height: 1.1; 
             letter-spacing: -1px; 
             transition: color 0.2s;
-            word-break: break-all; /* Si es muy largo, baja a la siguiente línea */
+            word-break: break-all;
         }
         .amount-display .currency-label { font-size: 1rem; color: var(--accent); font-weight: 700; flex-shrink: 0;}
         .copy-icon { width: 18px; height: 18px; color: var(--muted); transition: color 0.2s; flex-shrink: 0; margin-bottom: 5px;}
@@ -132,10 +132,12 @@
         .bcv-rate-info { font-size: 0.65rem; color: var(--muted); margin-top: 3px; }
         .brecha-badge { margin-top: 8px; background: rgba(16, 185, 129, 0.1); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.2); padding: 3px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; display: flex; align-items: center; gap: 4px;}
 
-        .binance-cta { margin-top: 15px; background: linear-gradient(135deg, rgba(240, 185, 11, 0.1), rgba(240, 185, 11, 0.05)); border: 1px solid rgba(240, 185, 11, 0.3); border-radius: 12px; padding: 12px; text-align: center; }
-        .binance-cta p { font-size: 0.75rem; color: #f8fafc; margin-bottom: 8px; line-height: 1.3; }
-        .btn-binance { display: flex; justify-content: center; align-items: center; gap: 8px; width: 100%; padding: 12px; background-color: var(--binance); color: #000; text-decoration: none; border-radius: 8px; font-weight: 800; font-size: 0.9rem; border: none; cursor: pointer; transition: transform 0.1s, opacity 0.2s; }
-        .btn-binance:active { transform: scale(0.97); }
+        /* BOTÓN DE BINANCE ELEGANTE Y FINO */
+        .binance-cta { margin-top: 15px; background: linear-gradient(135deg, rgba(240, 185, 11, 0.08), rgba(240, 185, 11, 0.03)); border: 1px solid rgba(240, 185, 11, 0.2); border-radius: 10px; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; }
+        .binance-cta p { font-size: 0.75rem; color: var(--muted); margin: 0; line-height: 1.2; }
+        .btn-binance { display: flex; justify-content: center; align-items: center; gap: 6px; padding: 8px 16px; background-color: var(--binance); color: #000; text-decoration: none; border-radius: 8px; font-weight: 800; font-size: 0.8rem; border: none; cursor: pointer; transition: transform 0.1s, opacity 0.2s; flex-shrink: 0;}
+        .btn-binance:active { transform: scale(0.95); }
+        .btn-binance svg { width: 14px; height: 14px; }
 
         .error-msg { color: var(--warn); font-size: 0.8rem; text-align: center; margin-top: 10px; display: none; font-weight: 600;}
         .spinner { display: inline-block; width: 18px; height: 18px; border: 3px solid rgba(0,0,0,0.2); border-radius: 50%; border-top-color: #000; animation: spin 1s linear infinite; vertical-align: middle; }
@@ -268,7 +270,8 @@
             </div>
         </div>
         
-        <button class="btn-main" id="calculateBtn">Calcular</button>
+        <!-- BOTÓN PARA FORZAR ACTUALIZACIÓN (Ya no calcula, solo actualiza tasas) -->
+        <button class="btn-main" id="refreshBtn">Actualizar Tasas</button>
         <div id="errorMsg" class="error-msg"></div>
 
         <!-- TARJETA DE RESULTADOS -->
@@ -295,8 +298,9 @@
                 </div>
             </div>
 
+            <!-- BOTÓN ELEGANTE DE BINANCE -->
             <div class="binance-cta">
-                <p><b>¿Listo para operar?</b> Ve a Binance P2P y ejecuta tu compra o venta.</p>
+                <p><b>¿Listo para operar?</b></p>
                 <button id="goBinanceBtn" class="btn-binance">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 24C18.6274 24 24 18.6274 24 12C24 5.37258 18.6274 0 12 0C5.37258 0 0 5.37258 0 12C0 18.6274 5.37258 24 12 24Z" fill="#000"/><path d="M12 6.5L15.5 10L12 13.5L8.5 10L12 6.5Z" fill="#F0B90B"/><path d="M6.5 12L10 15.5L6.5 19L3 15.5L6.5 12Z" fill="#F0B90B"/><path d="M17.5 12L21 15.5L17.5 19L14 15.5L17.5 12Z" fill="#F0B90B"/><path d="M12 14.5L15.5 18L12 21.5L8.5 18L12 14.5Z" fill="#F0B90B"/></svg>
                     Ir a Binance
@@ -448,7 +452,7 @@
     const amountInput = document.getElementById('amountInput');
     const inputLabel = document.getElementById('inputLabel');
     const inputBadge = document.getElementById('inputBadge');
-    const calculateBtn = document.getElementById('calculateBtn');
+    const refreshBtn = document.getElementById('refreshBtn');
     const errorMsg = document.getElementById('errorMsg');
     const resultCard = document.getElementById('resultCard');
     const rateDisplay = document.getElementById('rateDisplay');
@@ -492,6 +496,10 @@
     const modeVesToUsdt = document.getElementById('modeVesToUsdt');
     const modeUsdtToVes = document.getElementById('modeUsdtToVes');
     let currentMode = 'ves_to_usdt'; // Por defecto
+    
+    // VARIABLES GLOBALES PARA EL CÁLCULO EN TIEMPO REAL
+    let currentBinanceRate = 0;
+    let currentBcvRate = 0;
 
     // LÓGICA DEL MENÚ HAMBURGUESA
     const sidebar = document.getElementById('sidebar');
@@ -523,7 +531,7 @@
         resultCurrency.textContent = "USDT";
         bcvLabel.textContent = "Equivalente a Tasa Oficial BCV";
         
-        resultCard.style.display = 'none'; // Ocultar resultado anterior
+        liveCalculate(); // Recalcular al instante
     });
 
     modeUsdtToVes.addEventListener('click', () => {
@@ -537,7 +545,7 @@
         resultCurrency.textContent = "VES";
         bcvLabel.textContent = "Equivalente a Tasa Oficial BCV (Bolívares)";
         
-        resultCard.style.display = 'none';
+        liveCalculate(); // Recalcular al instante
     });
 
     // SISTEMA TOAST
@@ -671,100 +679,71 @@
             if (response.ok) {
                 const data = await response.json();
                 if (data.bcv_rate) {
-                    // Redondeo a 2 decimales en el ticker superior también
                     const roundedBcv = Math.round(data.bcv_rate * 100) / 100;
                     bcvTickerValue.textContent = `${roundedBcv.toLocaleString('es-VE', {minimumFractionDigits: 2})} Bs`;
                 } else { bcvTickerValue.textContent = "N/D"; }
             }
         } catch (e) { bcvTickerValue.textContent = "Error"; }
     }
-    loadBCVTicker(); 
+    
+    // NUEVA FUNCIÓN: OBTENER TASAS Y HABILITAR EL CÁLCULO EN VIVO
+    async function fetchRatesAndEnableLiveCalc() {
+        refreshBtn.disabled = true;
+        refreshBtn.innerHTML = '<span class="spinner"></span> Actualizando...';
+        errorMsg.style.display = 'none';
 
-    // PANEL DE ADMIN
-    if (window.location.search.includes('admin=true')) {
-        document.getElementById('adminPanel').style.display = 'block';
-        fetch(MI_PROXY + "/stats")
-            .then(async res => {
-                const data = await res.json();
-                if (!res.ok) throw new Error(data.error || "Error");
-                return data;
-            })
-            .then(data => { document.getElementById('adminCalls').textContent = data.cotizave_calls; })
-            .catch(err => { document.getElementById('adminCalls').textContent = "Error: " + err.message; });
+        try {
+            // Consultamos al Worker (que tiene caché de 10 min)
+            const response = await fetch(MI_PROXY);
+            const data = await response.json(); 
+
+            if (!response.ok) { throw new Error(data.error || "Error en el servidor"); }
+            if (!data.binance_rate) throw new Error("No se recibió la tasa");
+
+            // GUARDAMOS LAS TASAS EN MEMORIA GLOBAL (Redondeadas a 2 decimales)
+            currentBinanceRate = Math.round(data.binance_rate * 100) / 100;
+            currentBcvRate = Math.round(data.bcv_rate * 100) / 100;
+
+            saveDailyRate(currentBinanceRate);
+            
+            refreshBtn.textContent = 'Tasas Actualizadas';
+            setTimeout(() => { refreshBtn.textContent = 'Actualizar Tasas'; refreshBtn.disabled = false; }, 2000);
+            
+            // Ejecutamos el cálculo inmediatamente por si ya hay un número escrito
+            liveCalculate();
+
+        } catch (error) {
+            errorMsg.textContent = "Fallo: " + error.message;
+            errorMsg.style.display = 'block';
+            refreshBtn.disabled = false;
+            refreshBtn.textContent = 'Reintentar Actualizar';
+        }
     }
 
-    // CERRAR MODAL DE DONACIONES
-    closeModalBtn.addEventListener('click', () => { paymentModal.style.display = 'none'; });
+    // NUEVA LÓGICA: CÁLCULO EN VIVO (Se dispara al escribir o cambiar margen)
+    function liveCalculate() {
+        // Si no tenemos tasas cargadas aún, no hacemos nada
+        if (currentBinanceRate === 0 || currentBcvRate === 0) return;
 
-    // NUEVA LÓGICA DE FORMATEO DEL INPUT (Permite decimales con coma)
-    amountInput.addEventListener('input', function (e) {
-        let val = this.value.replace(/\./g, ','); // Reemplazar puntos por comas
-        val = val.replace(/[^0-9,]/g, ''); // Eliminar todo lo que no sea número o coma
-        
-        let parts = val.split(',');
-        let intPart = parts[0];
-        let decPart = parts.length > 1 ? parts[1] : null;
-
-        // Formatear la parte entera con puntos de miles
-        if (intPart !== '') {
-            intPart = parseInt(intPart, 10).toLocaleString('es-VE');
-        }
-
-        // Reconstruir el valor final
-        if (decPart !== null) {
-            this.value = intPart + ',' + decPart;
-        } else {
-            this.value = intPart;
-        }
-    });
-
-    // ANIMACIÓN TACHÓMETRO
-    function animateValue(obj, start, end, duration) {
-        let startTimestamp = null;
-        const step = (timestamp) => {
-            if (!startTimestamp) startTimestamp = timestamp;
-            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-            obj.innerHTML = (start + (end - start) * progress).toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-            if (progress < 1) {
-                window.requestAnimationFrame(step);
-            }
-        };
-        window.requestAnimationFrame(step);
-    }
-
-    // CALCULAR (Lógica Inversa y Directa con Redondeo Exacto)
-    calculateBtn.addEventListener('click', async () => {
         // Convertir la coma decimal a punto para que JS pueda hacer la matemática
         const rawValue = amountInput.value.replace(/\./g, '').replace(',', '.');
         const amount = parseFloat(rawValue);
         
         if (!amount || amount <= 0) {
-            errorMsg.textContent = "Por favor, ingresa un monto válido.";
-            errorMsg.style.display = 'block';
+            resultCard.style.display = 'none';
+            errorMsg.style.display = 'none';
             return;
         }
 
         errorMsg.style.display = 'none';
-        resultCard.style.display = 'none';
-        bcvSection.style.display = 'none';
-        brechaDisplay.style.display = 'none';
-        calculateBtn.disabled = true;
-        calculateBtn.innerHTML = '<span class="spinner"></span> Buscando...';
 
         try {
-            const response = await fetch(MI_PROXY);
-            const data = await response.json(); 
-
-            if (!response.ok) { throw new Error(data.error || "Error en el servidor"); }
-            if (!data.binance_rate) throw new Error("No se recibió la tasa de Binance");
-
-            // REDONDEO EXACTO A 2 DECIMALES SEGÚN LO SOLICITADO
-            let rateBinance = Math.round(data.binance_rate * 100) / 100;
+            let rateBinance = currentBinanceRate;
             
             // MARGEN DE SEGURIDAD
             if (marginToggle.checked) {
                 rateBinance = rateBinance * 0.99;
-                rateBinance = Math.round(rateBinance * 100) / 100; // Volver a redondear por si acaso
+                rateBinance = Math.round(rateBinance * 100) / 100;
             }
 
             let finalResult = 0;
@@ -775,34 +754,25 @@
                 finalResult = amount * rateBinance;
             }
 
-            saveDailyRate(rateBinance);
-
             rateDisplay.textContent = `${rateBinance.toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2})} VES`;
             
-            // TACHÓMETRO
-            netDisplay.innerHTML = `0,00`;
-            animateValue(netDisplay, 0, finalResult, 400);
+            // Mostramos el resultado SIN la animación de tachómetro para que se sienta instantáneo
+            netDisplay.textContent = finalResult.toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2});
 
-            if (data.bcv_rate) {
-                // REDONDEO EXACTO A 2 DECIMALES PARA EL BCV
-                const rateBCV = Math.round(data.bcv_rate * 100) / 100;
+            if (currentBcvRate > 0) {
                 let bcvResult = 0;
                 
                 if (currentMode === 'ves_to_usdt') {
-                    bcvResult = amount / rateBCV;
-                    bcvDisplay.innerHTML = `0,00 USD`;
+                    bcvResult = amount / currentBcvRate;
+                    bcvDisplay.textContent = bcvResult.toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' USD';
                 } else {
-                    bcvResult = amount * rateBCV;
-                    bcvDisplay.innerHTML = `0,00 VES`;
+                    bcvResult = amount * currentBcvRate;
+                    bcvDisplay.textContent = bcvResult.toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' VES';
                 }
-                
-                animateValue(bcvDisplay, 0, bcvResult, 400);
-                if(currentMode === 'ves_to_usdt') bcvDisplay.innerHTML += ' USD';
-                else bcvDisplay.innerHTML += ' VES';
 
-                bcvRateDisplay.textContent = `Tasa BCV: ${rateBCV.toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2})} Bs/USD`;
+                bcvRateDisplay.textContent = `Tasa BCV: ${currentBcvRate.toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2})} Bs/USD`;
                 
-                const brecha = ((rateBinance / rateBCV) - 1) * 100;
+                const brecha = ((rateBinance / currentBcvRate) - 1) * 100;
                 brechaValue.textContent = `${brecha > 0 ? '+' : ''}${brecha.toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2})}%`;
                 
                 if (brecha > 0) {
@@ -824,13 +794,58 @@
             resultCard.style.display = 'block';
 
         } catch (error) {
-            errorMsg.textContent = "Fallo: " + error.message;
-            errorMsg.style.display = 'block';
-        } finally {
-            calculateBtn.disabled = false;
-            calculateBtn.textContent = 'Calcular';
+            console.error(error);
         }
+    }
+
+    // PANEL DE ADMIN
+    if (window.location.search.includes('admin=true')) {
+        document.getElementById('adminPanel').style.display = 'block';
+        fetch(MI_PROXY + "/stats")
+            .then(async res => {
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || "Error");
+                return data;
+            })
+            .then(data => { document.getElementById('adminCalls').textContent = data.cotizave_calls; })
+            .catch(err => { document.getElementById('adminCalls').textContent = "Error: " + err.message; });
+    }
+
+    // CERRAR MODAL DE DONACIONES
+    closeModalBtn.addEventListener('click', () => { paymentModal.style.display = 'none'; });
+
+    // NUEVA LÓGICA DE FORMATEO DEL INPUT (Permite decimales con coma)
+    amountInput.addEventListener('input', function (e) {
+        let val = this.value.replace(/\./g, ','); 
+        val = val.replace(/[^0-9,]/g, ''); 
+        
+        let parts = val.split(',');
+        let intPart = parts[0];
+        let decPart = parts.length > 1 ? parts[1] : null;
+
+        if (intPart !== '') {
+            intPart = parseInt(intPart, 10).toLocaleString('es-VE');
+        }
+
+        if (decPart !== null) {
+            this.value = intPart + ',' + decPart;
+        } else {
+            this.value = intPart;
+        }
+
+        // LLAMAMOS AL CÁLCULO EN VIVO MIENTRAS ESCRIBE
+        liveCalculate();
     });
+
+    // Eventos para recalcular si cambia el margen o el modo
+    marginToggle.addEventListener('change', liveCalculate);
+
+    // Botón de Actualizar tasas
+    refreshBtn.addEventListener('click', fetchRatesAndEnableLiveCalc);
+
+    // Al cargar la página, traemos las tasas por primera vez
+    fetchRatesAndEnableLiveCalc();
+    loadBCVTicker(); 
 
     if (window.Capacitor) {
         const installBtn = document.getElementById('installApkBtn');
